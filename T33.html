@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Academic Reading · Test 320</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fff;--border:#e5e7eb;--border-soft:#f3f4f6;--accent:#1e3a5f;--accent-red:#e11d48;--accent-red-hover:#be123c;--text:#1f2937;--muted:#6b7280;--success:#059669;--passage-width:52%;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+  #start-screen{position:fixed;inset:0;background:#f8fafc;display:flex;align-items:center;justify-content:center;z-index:500;}
+  #start-screen.hidden{display:none;}
+  .start-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:40px 44px;max-width:460px;width:92%;box-shadow:0 10px 40px rgba(0,0,0,.08);}
+  .start-card h1{font-size:20px;margin-bottom:4px;font-weight:600;}
+  .start-card .sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .start-card label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;}
+  .start-card input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;margin-bottom:16px;font-family:inherit;}
+  .start-card input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.12);}
+  .start-card button{width:100%;padding:12px;background:var(--accent-red);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;}
+  .start-card button:hover{background:var(--accent-red-hover);}
+  .resume-banner{display:none;background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12.5px;color:#92400e;line-height:1.5;}
+  .resume-banner.show{display:block;}
+  .resume-banner .resume-actions{margin-top:8px;display:flex;gap:8px;}
+  .resume-banner .resume-actions button{width:auto;margin:0;padding:6px 12px;font-size:12px;border-radius:6px;}
+  .resume-banner .resume-actions .btn-ghost{background:#fff;color:#92400e;border:1px solid #fbbf24;}
+  #topbar{background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;flex-shrink:0;z-index:100;}
+  .top-left{display:flex;align-items:center;gap:12px;}
+  .mock-label{font-size:15px;font-weight:500;}
+  #autosave-indicator{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--success);font-weight:500;opacity:0;transition:opacity .4s ease;}
+  #autosave-indicator.show{opacity:1;}
+  #autosave-indicator .dot{width:7px;height:7px;border-radius:50%;background:var(--success);}
+  #autosave-indicator.saving .dot{background:#f59e0b;animation:blink .8s infinite;}
+  #autosave-indicator.saving{color:#f59e0b;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+  #timer-wrap{display:flex;align-items:center;gap:6px;color:var(--accent-red);font-weight:600;}
+  #timer{font-size:18px;font-weight:600;letter-spacing:0.02em;min-width:52px;}
+  #timer.warn{animation:pulse 1s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .top-actions{display:flex;align-items:center;gap:8px;}
+  .icon-btn{width:36px;height:36px;border:none;background:transparent;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;}
+  .icon-btn:hover{background:var(--border-soft);color:var(--text);}
+  .btn-submit{background:#e5e7eb;color:var(--text);border:none;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;}
+  .btn-submit:hover{background:#d1d5db;}
+  .icon-btn.active{background:#fff1f2;color:var(--accent-red);}
+  #notepad-panel{position:fixed;top:56px;right:0;width:320px;height:calc(100vh - 56px - 56px);background:#fff;border-left:1px solid var(--border);box-shadow:-4px 0 24px rgba(0,0,0,.08);z-index:150;display:flex;flex-direction:column;transition:transform .2s ease;}
+  #notepad-panel.hidden{transform:translateX(100%);pointer-events:none;}
+  .notepad-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+  .notepad-title{font-size:15px;font-weight:600;color:var(--accent-red);}
+  #notepad-text{flex:1;border:none;resize:none;padding:14px 16px;font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.55;outline:none;}
+  #main{display:flex;flex:1;overflow:hidden;}
+  #passage-panel{width:var(--passage-width);background:#fff;overflow-y:auto;padding:24px 28px 40px;flex-shrink:0;}
+  .part-header{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:4px;}
+  #passage-panel h2{font-size:22px;font-weight:700;color:var(--accent);margin-bottom:6px;letter-spacing:-0.3px;}
+  .time-note{font-size:12.5px;color:var(--muted);margin-bottom:16px;line-height:1.5;}
+  .passage-title{text-align:center;font-family:'Source Serif 4',Georgia,serif;font-size:18px;font-weight:600;color:var(--accent);margin-bottom:22px;}
+  #passage-panel p{font-family:'Source Serif 4',Georgia,serif;font-size:15px;line-height:1.75;margin-bottom:16px;}
+  #passage-panel p.glossary{font-size:13px;line-height:1.6;color:var(--muted);border-top:1px solid var(--border);padding-top:12px;margin-top:8px;}
+  #passage-panel strong{font-weight:700;color:var(--accent);}
+  #passage-panel em{font-style:italic;}
+  #resizer{width:5px;background:transparent;cursor:col-resize;flex-shrink:0;position:relative;z-index:10;}
+  #resizer::before{content:'';position:absolute;top:0;bottom:0;left:2px;width:1px;background:var(--accent-red);}
+  #resizer:hover::before,#resizer.dragging::before{width:3px;left:1px;}
+  #resizer .handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:28px;background:#fff;border:1px solid var(--accent-red);border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--accent-red);font-size:10px;}
+  #questions-panel{flex:1;overflow-y:auto;padding:20px 24px 80px;background:#fff;}
+  .q-section{margin-bottom:28px;}
+  .q-section-header{font-size:15px;font-weight:600;margin-bottom:8px;}
+  .q-section-intro{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:16px;}
+  .info-box{padding:12px 16px;font-size:13px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:14px;line-height:1.9;}
+  .info-box.notes{font-size:13.5px;line-height:2.1;}
+  .info-box .box-title{display:block;font-weight:600;color:var(--accent);margin-bottom:2px;}
+  .question{padding:12px 0;border-bottom:1px solid var(--border-soft);display:flex;gap:12px;align-items:flex-start;}
+  .question:last-child{border-bottom:none;}
+  .q-num{min-width:26px;height:26px;color:var(--muted);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px;}
+  .q-body{flex:1;}
+  .q-text{font-size:14px;line-height:1.55;margin-bottom:10px;}
+  .tfn-options,.mcq-options{display:flex;flex-direction:column;gap:6px;}
+  .tfn-options.horizontal{flex-direction:row;flex-wrap:wrap;gap:8px;}
+  .tfn-btn,.mcq-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:13.5px;transition:all .12s;}
+  .tfn-btn:hover,.mcq-opt:hover{border-color:#94a3b8;background:#f8fafc;}
+  .tfn-btn.selected,.mcq-opt.selected{border-color:var(--accent-red);background:#fff1f2;}
+  .tfn-btn .radio-dot,.mcq-opt .radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid #cbd5e1;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .tfn-btn.selected .radio-dot,.mcq-opt.selected .radio-dot{border-color:var(--accent-red);}
+  .tfn-btn.selected .radio-dot::after,.mcq-opt.selected .radio-dot::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--accent-red);}
+  .fill-input{border:1.5px solid var(--border);border-radius:6px;padding:7px 12px;font-size:14px;font-family:inherit;width:100%;max-width:220px;transition:border-color .15s;}
+  .fill-input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .fill-input.answered{border-color:var(--success);background:#f0fdf4;}
+  .fill-input.inline{display:inline-block;vertical-align:middle;margin:0 2px;}
+  .dd-select{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 36px 10px 12px;font-size:13.5px;font-family:inherit;background-color:#fff;cursor:pointer;transition:border-color .15s;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 12px center;}
+  .dd-select:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .dd-select.answered{border-color:var(--success);background-color:#f0fdf4;}
+  .pair-hint{font-size:12.5px;color:#b45314;background:#fffbeb;border:1px solid #fcd34d;border-radius:6px;padding:6px 10px;margin-bottom:10px;}
+  #bottombar{border-top:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0;gap:12px;min-height:56px;}
+  .part-tabs{display:flex;gap:8px;flex-shrink:0;}
+  .part-tab{padding:8px 16px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .part-tab:hover{border-color:#94a3b8;color:var(--text);}
+  .part-tab.active{border-color:var(--accent-red);color:var(--accent);box-shadow:0 0 0 1px var(--accent-red);}
+  .part-tab .count{font-weight:400;color:var(--muted);}
+  .q-circles{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;flex:1;padding:0 8px;}
+  .q-circle{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;}
+  .q-circle:hover{border-color:#94a3b8;color:var(--text);}
+  .q-circle.answered{background:var(--success);border-color:var(--success);color:#fff;}
+  .nav-arrows{display:flex;gap:6px;flex-shrink:0;}
+  .nav-arrow{width:36px;height:36px;border:1.5px solid var(--border);border-radius:50%;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:16px;}
+  .nav-arrow:hover{border-color:#94a3b8;color:var(--text);}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;}
+  .modal-overlay.hidden{display:none;}
+  .modal{background:#fff;border-radius:12px;padding:28px 32px;max-width:720px;width:94%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+  .modal h2{font-size:20px;margin-bottom:10px;}
+  .modal p{font-size:14px;line-height:1.6;color:var(--muted);margin-bottom:16px;}
+  .score-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0;}
+  .score-card{background:#f8fafc;border-radius:10px;padding:14px;text-align:center;}
+  .score-card .val{font-size:26px;font-weight:700;color:var(--accent);}
+  .score-card .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+  .modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;}
+  .btn-modal{padding:9px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;}
+  .btn-modal:hover{background:#f8fafc;}
+  .btn-modal.primary{background:var(--accent-red);color:#fff;border-color:var(--accent-red);}
+  .btn-modal.primary:hover{background:var(--accent-red-hover);}
+  .ans-table-wrap{margin:12px 0;max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;}
+  .ans-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .ans-table th{position:sticky;top:0;background:var(--accent);color:#fff;padding:8px 10px;text-align:left;font-weight:600;font-size:11px;}
+  .ans-table td{padding:6px 10px;border-bottom:1px solid var(--border);}
+  .ans-table tr:nth-child(even) td{background:#f8fafc;}
+  .ans-table .ok{color:var(--success);font-weight:600;}
+  .ans-table .bad{color:var(--accent-red);font-weight:600;}
+  .ans-table .blank{color:var(--muted);font-style:italic;}
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px;}
+  .passage-content{display:none;}
+  .passage-content.active{display:block;}
+  mark.hl{background:#fef08a;padding:0 2px;border-radius:2px;}
+  mark.hl-note{background:#bbf7d0;padding:0 2px;border-radius:2px;border-bottom:2px solid #16a34a;}
+  #sel-toolbar{position:fixed;z-index:300;display:none;background:#1e3a5f;color:#fff;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);font-size:13px;font-weight:500;overflow:hidden;white-space:nowrap;}
+  #sel-toolbar button{background:transparent;border:none;color:#fff;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:500;font-family:inherit;}
+  #sel-toolbar button:hover{background:rgba(255,255,255,.15);}
+  #sel-toolbar .sep{display:inline-block;width:1px;height:14px;background:rgba(255,255,255,.35);vertical-align:middle;}
+  @media (max-width:800px){#main{flex-direction:column;}#passage-panel{width:100%!important;height:42vh;border-bottom:1px solid var(--border);}#resizer{display:none;}}
+  #passage-panel p.source-note{font-family:'Inter',system-ui,sans-serif;font-size:12px;font-style:normal;color:var(--muted);text-align:center;margin:-12px 0 20px;line-height:1.5;}
+  .figure{margin:4px 0 20px;}
+  .figure img{width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:6px;}
+  .figure figcaption{font-family:'Inter',system-ui,sans-serif;font-size:12.5px;color:var(--muted);line-height:1.55;margin-top:8px;}
+  .figure .fig-src{font-size:11.5px;opacity:.85;}
+  .dd-select.inline{display:inline-block;width:auto;min-width:130px;padding:6px 32px 6px 10px;vertical-align:middle;margin:0 2px;}
+  .info-box .box-title + .box-title{margin-top:8px;}
+  .q-section .figure{margin:0 0 14px;}
+  .para-label{font-weight:700;color:var(--accent);margin-right:6px;}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+<div id="start-screen">
+  <div class="start-card">
+    <h1>IELTS Academic Reading</h1>
+    <div class="sub">Computer-Delivered Simulation &middot; Test 320</div>
+    <div class="resume-banner" id="resume-banner">
+      <strong>&#9201; Saved session found</strong>
+      <div id="resume-info"></div>
+      <div class="resume-actions">
+        <button onclick="resumeTest()">Resume Test</button>
+        <button class="btn-ghost" onclick="discardSaved()">Start Fresh</button>
+      </div>
+    </div>
+    <label for="cand-name">Candidate Name</label>
+    <input type="text" id="cand-name" placeholder="Enter your full name" autocomplete="off">
+    <label for="cand-num">Candidate Number</label>
+    <input type="text" id="cand-num" placeholder="e.g. 123456" autocomplete="off">
+    <button onclick="startTest()">Start Test</button>
+  </div>
+</div>
+
+<div id="topbar">
+  <div class="top-left">
+    <span class="mock-label">IELTS Academic Reading &middot; Test 320</span>
+    <span id="autosave-indicator"><span class="dot"></span><span id="autosave-text">Saved</span></span>
+  </div>
+  <div id="timer-wrap">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <div id="timer">60:00</div>
+  </div>
+  <div class="top-actions">
+    <button class="icon-btn" id="notepad-btn" title="Notepad" onclick="toggleNotepad()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></button>
+    <button class="icon-btn" title="Full screen" onclick="toggleFullscreen()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
+    <button class="btn-submit" onclick="confirmSubmit()">Submit</button>
+  </div>
+</div>
+
+<div id="notepad-panel" class="hidden">
+  <div class="notepad-header">
+    <span class="notepad-title">Notepad</span>
+    <button class="icon-btn" title="Close" onclick="toggleNotepad()" style="width:28px;height:28px"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <textarea id="notepad-text" placeholder="Type your notes here&hellip;"></textarea>
+</div>
+
+<div id="sel-toolbar">
+  <button type="button" id="sel-note-btn">Note</button><span class="sep"></span><button type="button" id="sel-hl-btn">Highlight</button>
+</div>
+
+<div id="main">
+  <div id="passage-panel">
+
+<div class="passage-content active" id="pc-0">
+<div class="part-header">PART 1</div>
+<h2>READING PASSAGE 1</h2>
+<div class="time-note">You should spend about 20 minutes on Questions 1–13, which are based on Reading Passage 1 below.</div>
+<div class="passage-title">Bluefin Tuna</div>
+<p>Three species of bluefin tuna are found around the world: Northern or Atlantic bluefin tuna, Southern bluefin tuna and Pacific bluefin tuna. Atlantic bluefin tuna is divided into two stocks. The western stock is harvested off the coast of North America by Canada, Japan, and the United States, and the eastern stock is harvested off the coast of Europe and Africa and in the Mediterranean Sea.</p>
+<p>Fisheries for bluefin tuna date back thousands of years in the Mediterranean, but did not emerge in the western Atlantic until the 1950's. Although today they are widely known as the most prized species of tuna, there was no commercial market for western Atlantic bluefin tuna until then. In fact, fishermen regarded giant bluefin tuna as a nuisance because of the damage they caused to fishing gear. However, as sushi and sashimi markets in Japan developed in the 1970's and 1980's, the demand and prices for bluefin tuna increased and so did fishing pressure around the world.</p>
+<p>Since bluefin tuna are late to mature, slow growing, and long-lived, they are especially susceptible to fishing pressure, compared to faster growing, more productive species. Bluefin tuna grow more slowly than other tunas and have a long life span, up to 20 years or more, and generally do not spawn until they are about eight years old. Because many nations harvest bluefin tuna, effective conservation and management of this resource depend on strong international co-operation. The United States has taken many steps to conserve and manage US fisheries for Atlantic bluefin tuna since the early 1980's. It is due in part to these measures and US efforts internationally that Atlantic bluefin tuna are no longer subject to overfishing.</p>
+<p>Today, international fisheries for western Atlantic bluefin tuna are highly regulated. The most recent annual catch level set is expected to support continued growth and recovery of the stock. Strict controls are in place to ensure compliance, on the water, in port, and at the marketplace, through the implementation of the catch documentation scheme, which allows trade tracking for individual shipments of fish.</p>
+<p>Finally, because the western and eastern stocks mix, western Atlantic bluefin tuna are also affected by the fishing pressure in the eastern Atlantic that took place in the eastern Atlantic/Mediterranean during the 1990's and early 2000's. However, in recent years, catches in the eastern Atlantic have been reduced to levels consistent with scientific advice, and new monitoring and control measures have been adopted to address illegal, unreported and unregulated fishing on that stock. Scientists advise that improved stock conservation in the eastern Atlantic would likely benefit the western stock as well.</p>
+<p>The news is not so good for bluefin tuna in other parts of the world. Data recently released shows that there is almost no more bluefin tuna to be fished in some of the oldest fishing grounds, especially in the West Mediterranean. Around Spain's Balearic Islands, catches of bluefin tuna are down to only 15 per cent of what they were just a decade ago. In Australia, there is a similar story and the southern bluefin tuna stock is at historically low levels, with less than 10 per cent of the virgin stock left, and little significant progress in preventing the overharvesting that is driving the species further towards extinction.</p>
+<p>Because of the value of bluefin tuna, scientists are trying to work out ways of farming the species. The vision is to have huge tanks, land-based, having bluefin tuna that are spawning year-round on demand, producing millions of eggs. These eggs would hatch and grow into a plentiful supply of tuna. There are, however, problems associated with rearing bluefin tuna. First of all, the larvae that hatch from the eggs are extremely fragile. Because of their heavy heads, the larvae tend to go downwards. If they hit the bottom of a tank, the shock is too much and they do not survive. After this, a significant problem is the appetite of the bluefin tuna. A bluefin tuna's natural diet consists of lots of other fish. Just supplying the amount of fish needed for bluefin tuna to grow would be difficult and expensive, without even considering the harm to the environment of taking that many wild feed fish from the sea. Right now, there are tuna ranches that capture young tuna in the ocean and then fatten them up in big net-pens. These ranches feed their tuna about 15 pounds of fish, such as sardines or mackerel for each additional pound of tuna that can be sold to consumers. This kind of tuna production is environmentally costly.</p>
+<p>Some scientists have theorised that it will be possible to reduce this ratio or even create tuna feed that does not rely so heavily on other fish as an ingredient. The effect on the taste of the bluefin tuna's flesh though may make the product less valuable and destroy the whole point of producing bluefin tuna cheaply.</p>
+<p>Other experts say that these problems show that bluefin tuna farming is not the path to follow, as farming bluefin tuna just increases the population of a predator species that demands lots of food itself. It might do more good to eat a little lower on the marine food chain. People could eat more mussels or sardines and let more tuna roam free to be sustainably caught within quota systems and premium-priced.</p>
+</div>
+<div class="passage-content" id="pc-1">
+<div class="part-header">PART 2</div>
+<h2>READING PASSAGE 2</h2>
+<div class="time-note">You should spend about 20 minutes on Questions 14–26, which are based on Reading Passage 2 below.</div>
+<div class="passage-title">Rationality Communities</div>
+<p><strong class="para-label">A</strong> Rationality is defined as the quality or state of being reasonable. Being a "rational person" involves basing one's decisions on consideration of facts and logical thinking, rather than on intuition, belief and emotion as is the natural tendency of human beings. The study of rationality is a blend of philosophy, economics, sociology, psychology, evolutionary biology and political science. People who identify as "rationalists" strive to improve their critical thinking and decision-making skills in order to live in a more rational manner.</p>
+<p><strong class="para-label">B</strong> Since the turn of the 21st century, rationality has experienced a rising popularity and several devoted online communities have formed to champion and teach rational thinking. Perhaps the most notable of these is Less Wrong, a community started in 2006 by artificial intelligence researcher Eliezer Yudkowsky and economist Robin Hanson. Any community member can participate by attending regular 'physical' meetups in different cities around the globe or spark debate by posting on its website or forum. User Raemon attempts to define what "the rationalist community" consists of. He outlines two levels of the community as he sees it: the 'Rationalsphere', comprising everyone with an interest in rationality, regardless of their interest in joining a community; and the 'Rationality Community', containing those who want to connect over their interest.</p>
+<p><strong class="para-label">C</strong> He goes on to define features of those two levels. In reference to the 'Rationalsphere', he adds 'overlapping patterns of thought', stating that, although there is no one feature to define people in this camp, they share some habits and patterns, such as being attentive to the unreliability of one's mind or being willing to change one's preconceived ideas. He further highlights three focus areas: truthseeking, impact and what he simply terms as 'human'. The first deals with aiming to improve our thinking and applying that knowledge to better understand the world, while the next concerns applying that new mindset to make a real difference in the world. The final focus area relates to one's own life and how it can be improved along with the lives of those close to us through the application of rationality techniques. The 'Rationality Community' is still centred on these same ideals, yet is able to focus on them more intensely due to being directly involved with a like-minded set of others. The two aforementioned camps along with the focus areas mentioned are active rationality community examples of Yudkowsky's theory that it is possible to improve the quality of our decision-making processes by applying logic and understanding of probability to our day to day lives.</p>
+<p><strong class="para-label">D</strong> The standard process for debate on Less Wrong involves community-generated articles prompting responses from other community members through the Less Wrong voting system. Readers can award points for the usefulness or not of the piece, from which users are awarded 'karma'. The higher this is, the more respected and valued a user's contributions are deemed to be. Through this system on its website and forum, Less Wrong community members debate concepts such as decision making and economic theory, for example, as well as training each other in practical techniques. The project has spawned other rationality communities, including the Center for Applied Rationality, a non-profit organisation in Berkeley, California which runs workshops on critical thinking and setting goals, and offline clubs, such as the New York City Sceptics and Bay Area Rationalist Community.</p>
+<p><strong class="para-label">E</strong> One motivation for the study of rationality techniques is the view that humans are naturally irrational creatures. Science writer David Berreby notes that people generally cannot tell when they are being rational, cannot become more so by willpower alone and often believe their behaviour is rational when, in fact, it is not. He raises the example of court judges, whose remit is to be unbiased authorities of the law. In a research study conducted by German psychologists Englich, Mussweiler and Strack, it was found that judges who rolled a die before adjudicating a case would give a longer sentence if a higher number came up than those who rolled a lower number. This demonstrates that even trained rational thinkers - and judges surely fall into this category - are influenced by natural irrational tendencies.</p>
+<p><strong class="para-label">F</strong> However, not everyone thinks that people are naturally irrational and require "fixing". Dr Steven Mazie, a correspondent for The Economist, believes this idea stems from what he calls a "faddish denial that human beings can think straight". He is of the opinion that humans are rational creatures, despite the current trend to cast them in the opposite light. Other commentators have also called into question the fundamental basis of rationality communities such as Less Wrong - that being irrational is a bad thing. Henry Brighton, professor of computer science at Tilburg University, explains that objective data is a rarity in most real-world situations. As a result, logical formulations are an inappropriate method of decision-making and most important decisions rely, at least partially, on a person's subjective preferences.</p>
+</div>
+<div class="passage-content" id="pc-2">
+<div class="part-header">PART 3</div>
+<h2>READING PASSAGE 3</h2>
+<div class="time-note">You should spend about 20 minutes on Questions 27–40, which are based on Reading Passage 3 below.</div>
+<div class="passage-title">Decline of Cod</div>
+<p><strong class="para-label">A</strong> In 1992, the devastating collapse of the cod stocks off the east coast of Newfoundland forced the Canadian government to take drastic measures and close the fishery. Over 40,000 people lost their jobs, communities are still struggling to recover and the marine ecosystem is still in a state of collapse. The disintegration of this vital fishery sounded a warning bell to governments around the world, who were shocked that a relatively sophisticated, scientifically based fisheries management programme, not unlike their own, could have gone so wrong. Prior to this, the Canadian government had ignored warnings that its fleets were employing destructive fishing practices and had refused to significantly reduce quotas, citing the loss of jobs as too great a concern.</p>
+<p><strong class="para-label">B</strong> In the 1950s Canadian and US east coast waters provided an annual 100,000 tons in cod catches rising to 800,000 by 1970. This over-fishing led to a catch of only 300,000 tons by 1975. Canada and the US reacted by passing legislation to extend their national jurisdictions over marine living resources out to 200 nautical miles and catches naturally declined to 139,000 tons in 1980. However, the Canadians began fishing intensively once more, and catches rose again until, from 1985, the Canadians were landing more than 250,000 tons of northern cod annually. This exploitation ravaged the stocks and by 1990 the catch was so low (29,000 tons) that in 1992 (12,500 tons) Canada had to ban all fishing in east coast waters. In a fishery that had for over a century yielded quarter-million ton catches, there remained a biomass of less than 1,700 tons, and the fisheries department predicted that, even with an immediate recovery, stocks needed at least 15 years before they would be healthy enough to withstand previous levels of fishing.</p>
+<p><strong class="para-label">C</strong> This situation arose from massive investment poured into constructing huge "draggers". Draggers haul enormous nets held open by a combination of massive steel plates and heavy chains and rollers that plough the ocean bottom. They drag up anything in the way, inflicting immense damage, destroying critical habitats and contributing to the destabilisation of the northern cod ecosystem. The draggers targeted huge aggregations of cod while they were spawning, a time when the fish population is highly vulnerable to capture. Excessive trawling on spawning stocks became highly disruptive to the spawning process and ecosystem. In addition, trawling resulted in a physical dispersion of eggs, leading to higher fertilisation failure. Physical and chemical damage to larvae caused by trawling also reduced their chances of survival. These draggers are now banned from Canadian waters.</p>
+<p><strong class="para-label">D</strong> The media in Canada often cite excessive fishing by overseas fleets as the primary cause of the fishing out of the north Atlantic cod stocks. Many nations took fish off the coast of Newfoundland, all used deep-sea trawlers, and many often exceeded established catch quotas and treaty agreements blatantly. There can be little doubt that non-North American fishing was a contributing factor in the cod stock collapse, and that the dynamics that were at work in Canada were all too similar for the foreign vessels and companies. But not all of the blame can be put there, no matter how easy it is to do, as it does not account for the management of the resources.</p>
+<p><strong class="para-label">E</strong> So, who was to blame? As the exploitation of the Newfoundland fishery was so predominantly guided by the government, it could be argued that a fishery is not a private area, as the fisher lacks management rights normally associated with property and common property. The state had appropriated the property, and made all of the management decisions. Fishermen were told who could fish, what they could fish and, essentially, what to do with the fish once they were caught. Viewed from this angle, much of the blame for the collapse of the Newfoundland fisheries can be placed on the government.</p>
+<p><strong class="para-label">F</strong> Following the 1992 ban on the fishing of northern cod and most other species, an estimated 30,000 people, who had already lost their jobs after the 1992 Northern Cod prohibition took effect, were joined by an additional 12,000 fishermen and plant workers. With more than 40,000 people out of work, Newfoundland became an economic disaster area, as processing plants shut down and vessels from the smallest dory to the monster draggers were made idle or sold overseas at bargain prices. Several hundred Newfoundland communities were devastated.</p>
+<p><strong class="para-label">G</strong> Europeans need only look across the North Atlantic to see what could be in store for their cod fishery. In Canada they were too busy making plans, setting expansive goals and then allocating fish, and lots of it, instead of making sound business plans to match fishing with the limited availability of the resource. Cod populations in European waters are now so depleted that scientists have recently warned that all fisheries that target cod in this area should be closed. The Canadian calamity demonstrates that we now have the technological capability to find and annihilate every commercial fish stock in any ocean and do irreparable damage to entire ecosystems in the process. In Canada's case, a $2 billion recovery bill may only be part of the total long-term costs. The costs to individuals and desperate communities now deprived of meaningful and sustainable employment are staggering.</p>
+</div>
+
+
+  </div>
+
+  <div id="resizer"><div class="handle">&#8942;&#8942;</div></div>
+
+  <div id="questions-panel">
+<div id="qs-0">
+<div class="q-section">
+<div class="q-section-header">Questions 1&ndash;3</div>
+<div class="q-section-intro">Complete each sentence with the correct ending, <strong>A&ndash;E</strong>, below.</div>
+<div class="info-box"><span class="box-title">Sentence Endings</span>
+<strong>A</strong> they take a long time to grow to adulthood.<br>
+<strong>B</strong> the fish damaged their equipment.<br>
+<strong>C</strong> the fish are not found in freshwater.<br>
+<strong>D</strong> the fish were suspected to cause various types of cancer.<br>
+<strong>E</strong> there was no significant market for them.
+</div>
+<div class="question" id="q1"><div class="q-num">1</div><div class="q-body"><div class="q-text">Bluefin tuna were not widely fished for outside the Mediterranean in the 1940’s, because</div><select class="dd-select" id="dd-q1" data-opts="A,B,C,D,E" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q1')"></select></div></div>
+<div class="question" id="q2"><div class="q-num">2</div><div class="q-body"><div class="q-text">Fishermen in the past did not want to catch bluefin tuna, because</div><select class="dd-select" id="dd-q2" data-opts="A,B,C,D,E" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q2')"></select></div></div>
+<div class="question" id="q3"><div class="q-num">3</div><div class="q-body"><div class="q-text">Bluefin tuna are extremely vulnerable to over-fishing, because</div><select class="dd-select" id="dd-q3" data-opts="A,B,C,D,E" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q3')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 4&ndash;8</div>
+<div class="q-section-intro">Complete the sentences below. Write <strong>NO MORE THAN THREE WORDS AND/OR A NUMBER</strong> from the text for each answer.</div>
+<div class="info-box notes">&bull; <strong>4</strong> <input class="fill-input inline" id="q4" oninput="markFill('q4')" style="width:190px" placeholder="&hellip;"> between the relevant countries will be needed if bluefin tuna resources are to be managed in a sustainable fashion.<br>
+&bull; Any caught bluefin tuna can be tracked in North America due to the use of the <strong>5</strong> <input class="fill-input inline" id="q5" oninput="markFill('q5')" style="width:220px" placeholder="&hellip;">.<br>
+&bull; <strong>6</strong> <input class="fill-input inline" id="q6" oninput="markFill('q6')" style="width:170px" placeholder="&hellip;"> in the eastern stocks has affected the numbers of the western Atlantic bluefin tuna.<br>
+&bull; Bluefin tuna catches are down to <strong>7</strong> <input class="fill-input inline" id="q7" oninput="markFill('q7')" style="width:120px" placeholder="&hellip;"> of what they were previously near the Balearic Islands.<br>
+&bull; <strong>8</strong> <input class="fill-input inline" id="q8" oninput="markFill('q8')" style="width:130px" placeholder="&hellip;"> is a real danger due to the overharvesting of the southern bluefin tuna.
+</div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 9&ndash;13</div>
+<div class="q-section-intro">Complete the summary using the words in the box below.</div>
+<div class="info-box"><span class="box-title">Word bank</span>eggs &middot; fragility &middot; protecting &middot; strength &middot; sea &middot; reproducing &middot; luxury &middot; juveniles &middot; simple &middot; predatory</div>
+<div class="info-box notes">Scientists are working on how to develop large-scale bluefin tuna farms to rear them from egg to adult, with fish <strong>9</strong> <span id="q9"><select class="dd-select inline" id="dd-q9" data-opts="eggs,fragility,protecting,strength,sea,reproducing,luxury,juveniles,simple,predatory" data-ph="Select&hellip;" onchange="selectDropdown(this,'q9')"></select></span> all year. Obstacles are the <strong>10</strong> <span id="q10"><select class="dd-select inline" id="dd-q10" data-opts="eggs,fragility,protecting,strength,sea,reproducing,luxury,juveniles,simple,predatory" data-ph="Select&hellip;" onchange="selectDropdown(this,'q10')"></select></span> of bluefin larvae, which means they die easily, and the amount of fish needed to feed them until they reach harvest size. Some operating farms capture <strong>11</strong> <span id="q11"><select class="dd-select inline" id="dd-q11" data-opts="eggs,fragility,protecting,strength,sea,reproducing,luxury,juveniles,simple,predatory" data-ph="Select&hellip;" onchange="selectDropdown(this,'q11')"></select></span> to feed up, but this too is environmentally damaging.<br><br>
+One solution is that a non-fish based feed can be used, but this may affect the product&rsquo;s taste. It could be that bluefin tuna are not meant to be farmed and that people should eat fewer <strong>12</strong> <span id="q12"><select class="dd-select inline" id="dd-q12" data-opts="eggs,fragility,protecting,strength,sea,reproducing,luxury,juveniles,simple,predatory" data-ph="Select&hellip;" onchange="selectDropdown(this,'q12')"></select></span> fish and allow the bluefin tuna to become a <strong>13</strong> <span id="q13"><select class="dd-select inline" id="dd-q13" data-opts="eggs,fragility,protecting,strength,sea,reproducing,luxury,juveniles,simple,predatory" data-ph="Select&hellip;" onchange="selectDropdown(this,'q13')"></select></span> meal.
+</div>
+</div>
+</div>
+<div id="qs-1" style="display:none">
+<div class="q-section">
+<div class="q-section-header">Questions 14&ndash;17</div>
+<div class="q-section-intro">The text has six paragraphs, <strong>A&ndash;F</strong>. Which paragraphs mention the following points? Choose the appropriate letter, <strong>A&ndash;F</strong>. You may use any letter more than once.</div>
+<div class="question" id="q14"><div class="q-num">14</div><div class="q-body"><div class="q-text">A reference to people in positions of authority acting irrationally.</div><select class="dd-select" id="dd-q14" data-opts="A,B,C,D,E,F" data-ph="Select a paragraph&hellip;" onchange="selectDropdown(this,'q14')"></select></div></div>
+<div class="question" id="q15"><div class="q-num">15</div><div class="q-body"><div class="q-text">A reference to the idea that thinking rationally will improve the choices a person makes.</div><select class="dd-select" id="dd-q15" data-opts="A,B,C,D,E,F" data-ph="Select a paragraph&hellip;" onchange="selectDropdown(this,'q15')"></select></div></div>
+<div class="question" id="q16"><div class="q-num">16</div><div class="q-body"><div class="q-text">A reference to the factors that may negatively affect people's decisions.</div><select class="dd-select" id="dd-q16" data-opts="A,B,C,D,E,F" data-ph="Select a paragraph&hellip;" onchange="selectDropdown(this,'q16')"></select></div></div>
+<div class="question" id="q17"><div class="q-num">17</div><div class="q-body"><div class="q-text">A reference to people not having sufficient information to make rational decisions.</div><select class="dd-select" id="dd-q17" data-opts="A,B,C,D,E,F" data-ph="Select a paragraph&hellip;" onchange="selectDropdown(this,'q17')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 18&ndash;19</div>
+<div class="q-section-intro">Choose <strong>TWO</strong> letters, <strong>A&ndash;E</strong>. Which two of the following statements are true of the Rationality Community? You may give the letters in either order.</div>
+<div class="info-box"><span class="box-title">Statements about the Rationality Community</span>
+<strong>A</strong> Its active members are known as the 'Rationalsphere'.<br>
+<strong>B</strong> Its members must be focused on understanding and correcting their own thoughts and prejudices.<br>
+<strong>C</strong> It is interested in the practical application of rationalist theory.<br>
+<strong>D</strong> Its goals are rendered more easily attainable thanks to its cooperative nature.<br>
+<strong>E</strong> It originated from Eliezer Yudkowsky's ideas about the potential use of logic to guide daily life.
+</div>
+<div class="question" id="q18"><div class="q-num">18</div><div class="q-body"><div class="q-text">First true statement</div><select class="dd-select" id="dd-q18" data-opts="A,B,C,D,E" data-ph="Select a letter&hellip;" onchange="selectDropdown(this,'q18')"></select></div></div>
+<div class="question" id="q19"><div class="q-num">19</div><div class="q-body"><div class="q-text">Second true statement</div><select class="dd-select" id="dd-q19" data-opts="A,B,C,D,E" data-ph="Select a letter&hellip;" onchange="selectDropdown(this,'q19')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 20&ndash;21</div>
+<div class="q-section-intro">Choose <strong>TWO</strong> letters, <strong>A&ndash;E</strong>. Which two of the following statements are true of Less Wrong? You may give the letters in either order.</div>
+<div class="info-box"><span class="box-title">Statements about Less Wrong</span>
+<strong>A</strong> It expanded from a real world community into a global online network.<br>
+<strong>B</strong> Its interaction centres around the analysis of thoughts and theories written by the site's users.<br>
+<strong>C</strong> Active users are paid a fee for their contributions to the site.<br>
+<strong>D</strong> The site has implemented features which allow members to predict the quality of other users' output.<br>
+<strong>E</strong> The community has recently begun working with others to reach a common goal.
+</div>
+<div class="question" id="q20"><div class="q-num">20</div><div class="q-body"><div class="q-text">First true statement</div><select class="dd-select" id="dd-q20" data-opts="A,B,C,D,E" data-ph="Select a letter&hellip;" onchange="selectDropdown(this,'q20')"></select></div></div>
+<div class="question" id="q21"><div class="q-num">21</div><div class="q-body"><div class="q-text">Second true statement</div><select class="dd-select" id="dd-q21" data-opts="A,B,C,D,E" data-ph="Select a letter&hellip;" onchange="selectDropdown(this,'q21')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 22&ndash;26</div>
+<div class="q-section-intro">Choose the correct person for each statement. Choose the appropriate initials for each answer. You may use any set of initials more than once.</div>
+<div class="info-box"><span class="box-title">People</span>
+<strong>EY</strong> Eliezer Yudkowsky<br>
+<strong>DB</strong> David Berreby<br>
+<strong>EMS</strong> Englich, Mussweiler and Strack<br>
+<strong>SM</strong> Steven Mazie<br>
+<strong>HB</strong> Henry Brighton
+</div>
+<div class="question" id="q22"><div class="q-num">22</div><div class="q-body"><div class="q-text">Believes it is currently fashionable to negatively portray the rationality of people.</div><select class="dd-select" id="dd-q22" data-opts="EY,DB,EMS,SM,HB" data-ph="Select a person&hellip;" onchange="selectDropdown(this,'q22')"></select></div></div>
+<div class="question" id="q23"><div class="q-num">23</div><div class="q-body"><div class="q-text">Regards rationality as something beyond human control.</div><select class="dd-select" id="dd-q23" data-opts="EY,DB,EMS,SM,HB" data-ph="Select a person&hellip;" onchange="selectDropdown(this,'q23')"></select></div></div>
+<div class="question" id="q24"><div class="q-num">24</div><div class="q-body"><div class="q-text">Revealed the ease with which decision-making can be distorted.</div><select class="dd-select" id="dd-q24" data-opts="EY,DB,EMS,SM,HB" data-ph="Select a person&hellip;" onchange="selectDropdown(this,'q24')"></select></div></div>
+<div class="question" id="q25"><div class="q-num">25</div><div class="q-body"><div class="q-text">Believes there is sometimes a benefit to thinking irrationally.</div><select class="dd-select" id="dd-q25" data-opts="EY,DB,EMS,SM,HB" data-ph="Select a person&hellip;" onchange="selectDropdown(this,'q25')"></select></div></div>
+<div class="question" id="q26"><div class="q-num">26</div><div class="q-body"><div class="q-text">Collaborated with an academic from a different field of study.</div><select class="dd-select" id="dd-q26" data-opts="EY,DB,EMS,SM,HB" data-ph="Select a person&hellip;" onchange="selectDropdown(this,'q26')"></select></div></div>
+</div>
+</div>
+<div id="qs-2" style="display:none">
+<div class="q-section">
+<div class="q-section-header">Questions 27&ndash;32</div>
+<div class="q-section-intro">The text has seven paragraphs, <strong>A&ndash;G</strong>. Choose the correct heading for each paragraph. Choose the appropriate number, <strong>i&ndash;xi</strong>. Paragraph A has been done for you.</div>
+<div class="info-box"><span class="box-title">List of Headings</span>
+<strong>i</strong> Factory Closures<br>
+<strong>ii</strong> The Human Cost<br>
+<strong>iii</strong> Government Mismanagement<br>
+<strong>iv</strong> A Lesson Learnt from Canada<br>
+<strong>v</strong> European Techniques<br>
+<strong>vi</strong> Destructive Trawling Technology<br>
+<strong>vii</strong> Lessons to be Learned<br>
+<strong>viii</strong> The Demise of the Northern Cod<br>
+<strong>ix</strong> Canadian Territorial Waters<br>
+<strong>x</strong> The Breaking of Agreements<br>
+<strong>xi</strong> Foreign Over-fishing
+</div>
+<div class="pair-hint"><strong>Example</strong> &nbsp;Paragraph A &rarr; <strong>iv</strong> (A Lesson Learnt from Canada)</div>
+<div class="question" id="q27"><div class="q-num">27</div><div class="q-body"><div class="q-text">Paragraph B</div><select class="dd-select" id="dd-q27" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix,x,xi" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q27')"></select></div></div>
+<div class="question" id="q28"><div class="q-num">28</div><div class="q-body"><div class="q-text">Paragraph C</div><select class="dd-select" id="dd-q28" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix,x,xi" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q28')"></select></div></div>
+<div class="question" id="q29"><div class="q-num">29</div><div class="q-body"><div class="q-text">Paragraph D</div><select class="dd-select" id="dd-q29" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix,x,xi" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q29')"></select></div></div>
+<div class="question" id="q30"><div class="q-num">30</div><div class="q-body"><div class="q-text">Paragraph E</div><select class="dd-select" id="dd-q30" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix,x,xi" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q30')"></select></div></div>
+<div class="question" id="q31"><div class="q-num">31</div><div class="q-body"><div class="q-text">Paragraph F</div><select class="dd-select" id="dd-q31" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix,x,xi" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q31')"></select></div></div>
+<div class="question" id="q32"><div class="q-num">32</div><div class="q-body"><div class="q-text">Paragraph G</div><select class="dd-select" id="dd-q32" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix,x,xi" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q32')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 33&ndash;36</div>
+<div class="q-section-intro">Choose the correct letter, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>.</div>
+<div class="question" id="q33"><div class="q-num">33</div><div class="q-body"><div class="q-text">Why didn’t the Canadian government want to reduce cod catches pre-1992?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q33','A')"><span class="radio-dot"></span>A Worry over possible rising unemployment.</label><label class="mcq-opt" onclick="selectMCQ(this,'q33','B')"><span class="radio-dot"></span>B Worry over the ecological effects.</label><label class="mcq-opt" onclick="selectMCQ(this,'q33','C')"><span class="radio-dot"></span>C Fear that cod prices would rise too much.</label><label class="mcq-opt" onclick="selectMCQ(this,'q33','D')"><span class="radio-dot"></span>D Fear that it was too drastic a measure.</label></div></div></div>
+<div class="question" id="q34"><div class="q-num">34</div><div class="q-body"><div class="q-text">How did Canada and the US respond to the 1975 drop in catches?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q34','A')"><span class="radio-dot"></span>A They levied a tax on foreign cod imports.</label><label class="mcq-opt" onclick="selectMCQ(this,'q34','B')"><span class="radio-dot"></span>B They expanded the marine area under their control.</label><label class="mcq-opt" onclick="selectMCQ(this,'q34','C')"><span class="radio-dot"></span>C They created a new quota system for their fishermen.</label><label class="mcq-opt" onclick="selectMCQ(this,'q34','D')"><span class="radio-dot"></span>D They didn’t do anything.</label></div></div></div>
+<div class="question" id="q35"><div class="q-num">35</div><div class="q-body"><div class="q-text">Who does the writer blame for the collapse of the Newfoundland cod fishery?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q35','A')"><span class="radio-dot"></span>A The Canadian fishing industry.</label><label class="mcq-opt" onclick="selectMCQ(this,'q35','B')"><span class="radio-dot"></span>B The foreign fishing industry.</label><label class="mcq-opt" onclick="selectMCQ(this,'q35','C')"><span class="radio-dot"></span>C The Canadian government.</label><label class="mcq-opt" onclick="selectMCQ(this,'q35','D')"><span class="radio-dot"></span>D The US fishing industry.</label></div></div></div>
+<div class="question" id="q36"><div class="q-num">36</div><div class="q-body"><div class="q-text">What is NOT true of Newfoundland in the years following the 1992 ban on cod fishing?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q36','A')"><span class="radio-dot"></span>A Unemployment continued to rise.</label><label class="mcq-opt" onclick="selectMCQ(this,'q36','B')"><span class="radio-dot"></span>B The ban affected only people who fished cod.</label><label class="mcq-opt" onclick="selectMCQ(this,'q36','C')"><span class="radio-dot"></span>C The loss of cod fishing jobs had a knock-on effect in related sectors.</label><label class="mcq-opt" onclick="selectMCQ(this,'q36','D')"><span class="radio-dot"></span>D Some owners of fishing boats were able to sell them.</label></div></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 37&ndash;40</div>
+<div class="q-section-intro">Do the following statements agree with the views of the writer of the text? Write <strong>YES</strong> if the statement agrees with the writer&rsquo;s views, <strong>NO</strong> if the statement doesn&rsquo;t agree with the writer&rsquo;s views, or <strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this.</div>
+<div class="question" id="q37"><div class="q-num">37</div><div class="q-body"><div class="q-text">Disruption of cod breeding was a major factor in the Newfoundland cod disaster.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q37','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q37','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q37','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q38"><div class="q-num">38</div><div class="q-body"><div class="q-text">Foreign trawlers frequently broke the catch allowances.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q38','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q38','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q38','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q39"><div class="q-num">39</div><div class="q-body"><div class="q-text">There was often conflict between the foreign fishermen and the Canadian authorities.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q39','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q39','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q39','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q40"><div class="q-num">40</div><div class="q-body"><div class="q-text">Cod fishing in Canada is irrelevant to cod fishing in Europe.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q40','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q40','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q40','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+</div>
+</div>
+
+  </div>
+</div>
+
+<div id="bottombar">
+  <div class="part-tabs">
+    <div class="part-tab active" id="ptab-0" onclick="switchPassage(0)">Part 1: <span class="count" id="pcount-0">0 of 13</span></div>
+    <div class="part-tab" id="ptab-1" onclick="switchPassage(1)">Part 2: <span class="count" id="pcount-1">0 of 13</span></div>
+    <div class="part-tab" id="ptab-2" onclick="switchPassage(2)">Part 3: <span class="count" id="pcount-2">0 of 14</span></div>
+  </div>
+  <div class="q-circles" id="q-circles"></div>
+  <div class="nav-arrows">
+    <button class="nav-arrow" onclick="prevQ()">&lsaquo;</button>
+    <button class="nav-arrow" onclick="nextQ()">&rsaquo;</button>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="submit-modal">
+  <div class="modal">
+    <h2>Submit Your Test?</h2>
+    <p>You are about to submit your test. This action cannot be undone.</p>
+    <div class="score-grid" id="score-grid" style="display:none">
+      <div class="score-card"><div class="val" id="sc-answered">0</div><div class="lbl">Answered</div></div>
+      <div class="score-card"><div class="val" id="sc-unanswered">40</div><div class="lbl">Unanswered</div></div>
+      <div class="score-card"><div class="val" id="sc-pct">0%</div><div class="lbl">Completion</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="closeModal()">Cancel</button>
+      <button class="btn-modal primary" onclick="submitTest()">Submit Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="results-modal">
+  <div class="modal">
+    <h2>Test Complete</h2>
+    <p id="results-cand"></p>
+    <div class="score-grid">
+      <div class="score-card"><div class="val" id="r-correct" style="color:var(--success)">&mdash;</div><div class="lbl">Correct</div></div>
+      <div class="score-card"><div class="val" id="r-wrong" style="color:var(--accent-red)">&mdash;</div><div class="lbl">Incorrect</div></div>
+      <div class="score-card"><div class="val" id="r-unanswered">&mdash;</div><div class="lbl">Unanswered</div></div>
+    </div>
+    <div style="margin:14px 0 12px;background:var(--accent);border-radius:12px;padding:18px 22px;text-align:center;color:#fff">
+      <div style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-bottom:4px">IELTS Band Score</div>
+      <div id="r-band" style="font-size:48px;font-weight:700;line-height:1">&mdash;</div>
+      <div id="r-band-label" style="font-size:13px;margin-top:6px;opacity:.85">&mdash;</div>
+    </div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:6px">Your Answers vs Correct Answers</div>
+    <div class="ans-table-wrap"><table class="ans-table"><thead><tr><th>Q</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr></thead><tbody id="ans-table-body"></tbody></table></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:10px">Green = correct &middot; Red = incorrect &middot; Band scores are approximate for Academic Reading.</p>
+    <p id="pdf-status" style="font-size:13px;color:var(--success);margin-top:8px;font-weight:500"></p>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="redownloadPDF()">Download PDF again</button>
+      <button class="btn-modal primary" onclick="document.getElementById('results-modal').classList.add('hidden')">Close &amp; Review</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   ANSWER KEY (Test 320)
+   ============================================================ */
+var ANSWERS = {
+  q1:'E', q2:'B', q3:'A',
+  q4:'strong co-operation', q5:'catch documentation scheme', q6:'fishing pressure', q7:'15 per cent', q8:'extinction',
+  q9:'reproducing', q10:'fragility', q11:'juveniles', q12:'predatory', q13:'luxury',
+  q14:'E', q15:'C', q16:'A', q17:'F',
+  q18:'C', q19:'D', q20:'B', q21:'D',
+  q22:'SM', q23:'DB', q24:'EMS', q25:'HB', q26:'EY',
+  q27:'viii', q28:'vi', q29:'xi', q30:'iii', q31:'ii', q32:'vii',
+  q33:'A', q34:'B', q35:'C', q36:'B',
+  q37:'YES', q38:'YES', q39:'NOT GIVEN', q40:'NO'
+};
+
+var ALT = {
+  q4:['strong co-operation','international co-operation','co-operation','cooperation','strong cooperation','international cooperation'],
+  q5:['catch documentation scheme','documentation scheme'],
+  q6:['fishing pressure','pressure'],
+  q7:['15 per cent','15%','15 percent'],
+  q8:['extinction']
+};
+var LABELS = {
+  q4:'strong / international co-operation', q5:'(catch) documentation scheme', q6:'(fishing) pressure', q7:'15 per cent / 15%',
+  q18:'C / D', q19:'C / D', q20:'B / D', q21:'B / D'
+};
+var GROUPS = {
+  q18:{ids:['q18','q19'], ok:['C','D']}, q19:{ids:['q18','q19'], ok:['C','D']},
+  q20:{ids:['q20','q21'], ok:['B','D']}, q21:{ids:['q20','q21'], ok:['B','D']}
+};
+
+var PART_RANGES = [[1,13],[14,26],[27,40]];
+var userAnswers = {}, currentPassage = 0, submitted = false;
+var candidateName='', candidateNumber='';
+var seconds = 60*60;
+var timerEl = document.getElementById('timer');
+var timerInterval = null;
+
+/* Fill dropdowns */
+(function initSelects(){
+  document.querySelectorAll('select[data-opts],select[data-words]').forEach(function(s){
+    var ph = document.createElement('option');
+    ph.value = ''; ph.disabled = true; ph.selected = true;
+    ph.innerHTML = s.getAttribute('data-ph') || 'Select\u2026';
+    s.appendChild(ph);
+    var words = s.getAttribute('data-words');
+    if(words){
+      words.split(',').forEach(function(p){
+        var kv = p.split(':');
+        var o = document.createElement('option');
+        o.value = kv[0]; o.textContent = kv[0] + ' \u2013 ' + kv[1];
+        s.appendChild(o);
+      });
+    } else {
+      s.getAttribute('data-opts').split(',').forEach(function(v){
+        var o = document.createElement('option');
+        o.value = v; o.textContent = v;
+        s.appendChild(o);
+      });
+    }
+  });
+})();
+
+/* ============================================================
+   AUTO-SAVE
+   ============================================================ */
+var STORAGE_KEY = 'ielts_reading_320_session';
+var autosaveInterval = null;
+var autosaveListenersAdded = false;
+var autosaveIndicator = document.getElementById('autosave-indicator');
+var autosaveText = document.getElementById('autosave-text');
+
+function showAutosaveSaving(){
+  autosaveIndicator.classList.add('show','saving');
+  autosaveText.textContent = 'Saving\u2026';
+}
+function showAutosaveSaved(){
+  autosaveIndicator.classList.add('show');
+  autosaveIndicator.classList.remove('saving');
+  var t = new Date();
+  autosaveText.textContent = 'Saved ' + t.toTimeString().slice(0,8);
+  setTimeout(function(){ autosaveIndicator.classList.remove('show'); }, 2500);
+}
+function getPassageWidth(){
+  var pw = document.getElementById('passage-panel');
+  return pw ? (pw.style.width || pw.offsetWidth + 'px') : '';
+}
+function saveSession(silent){
+  if(submitted) return;
+  if(!silent) showAutosaveSaving();
+  try{
+    var data = {
+      version: 3,
+      timestamp: Date.now(),
+      candidateName: candidateName,
+      candidateNumber: candidateNumber,
+      seconds: seconds,
+      currentPassage: currentPassage,
+      userAnswers: userAnswers,
+      notepad: document.getElementById('notepad-text').value,
+      passageWidth: getPassageWidth(),
+      started: true
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    if(!silent) showAutosaveSaved();
+  }catch(e){ console.warn('Autosave failed:', e); }
+}
+function loadSession(){
+  try{
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return null;
+    var d = JSON.parse(raw);
+    if(!d || !d.started) return null;
+    return d;
+  }catch(e){ return null; }
+}
+function clearSession(){ try{ localStorage.removeItem(STORAGE_KEY); }catch(e){} }
+function formatTime(sec){
+  var m = Math.floor(sec/60), s = sec%60;
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+
+(function checkSavedSession(){
+  var saved = loadSession();
+  if(!saved) return;
+  var banner = document.getElementById('resume-banner');
+  var info = document.getElementById('resume-info');
+  var answered = 0;
+  for(var i=1;i<=40;i++){ if(saved.userAnswers && saved.userAnswers['q'+i]) answered++; }
+  var when = new Date(saved.timestamp).toLocaleString();
+  info.innerHTML = '<strong>' + escapeHtml(saved.candidateName || 'Anonymous') + '</strong> &middot; ' + answered + '/40 answered &middot; ' + formatTime(saved.seconds) + ' remaining<br><span style="opacity:.75">Saved ' + when + '</span>';
+  banner.classList.add('show');
+  document.getElementById('cand-name').value = saved.candidateName || '';
+  document.getElementById('cand-num').value = saved.candidateNumber || '';
+})();
+
+function resumeTest(){
+  var saved = loadSession();
+  if(!saved){ startTest(); return; }
+  candidateName = saved.candidateName || 'Anonymous';
+  candidateNumber = saved.candidateNumber || 'N/A';
+  seconds = saved.seconds || 60*60;
+  userAnswers = saved.userAnswers || {};
+  currentPassage = saved.currentPassage || 0;
+  if(saved.notepad) document.getElementById('notepad-text').value = saved.notepad;
+  if(saved.passageWidth){ document.getElementById('passage-panel').style.width = saved.passageWidth; }
+
+  document.getElementById('start-screen').classList.add('hidden');
+  restoreAnswersUI();
+  buildCircles();
+  updatePartCounts();
+  if(currentPassage !== 0) switchPassage(currentPassage);
+  updateTimerDisplay();
+  startTimer();
+  startAutosave();
+  showAutosaveSaved();
+}
+function discardSaved(){
+  clearSession();
+  document.getElementById('resume-banner').classList.remove('show');
+  document.getElementById('cand-name').value = '';
+  document.getElementById('cand-num').value = '';
+}
+
+function restoreAnswersUI(){
+  for(var id in userAnswers){
+    var val = userAnswers[id];
+    if(!val) continue;
+    var dd = document.getElementById('dd-'+id);
+    if(dd){ dd.value = val; dd.classList.add('answered'); continue; }
+    var fi = document.getElementById(id);
+    if(fi && fi.tagName === 'INPUT'){ fi.value = val; fi.classList.add('answered'); continue; }
+    var tfnWrap = document.querySelector('#'+id+' .tfn-options');
+    if(tfnWrap){
+      tfnWrap.querySelectorAll('.tfn-btn').forEach(function(b){
+        if(b.textContent.trim() === val) b.classList.add('selected');
+      });
+      continue;
+    }
+    var mcqWrap = document.querySelector('#'+id+' .mcq-options');
+    if(mcqWrap){
+      mcqWrap.querySelectorAll('.mcq-opt').forEach(function(l){
+        if(l.textContent.trim().charAt(0) === val) l.classList.add('selected');
+      });
+    }
+  }
+}
+
+function startAutosave(){
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  autosaveInterval = setInterval(function(){ saveSession(false); }, 5000);
+  if(autosaveListenersAdded) return;
+  autosaveListenersAdded = true;
+  document.addEventListener('visibilitychange', function(){ if(document.hidden) saveSession(true); });
+  window.addEventListener('beforeunload', function(){ saveSession(true); });
+}
+
+function startTest(){
+  candidateName = document.getElementById('cand-name').value.trim() || 'Anonymous';
+  candidateNumber = document.getElementById('cand-num').value.trim() || 'N/A';
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('resume-banner').classList.remove('show');
+  clearSession();
+  buildCircles();
+  updatePartCounts();
+  startTimer();
+  startAutosave();
+  saveSession(true);
+}
+function startTimer(){
+  if(timerInterval) clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(function(){
+    if(submitted) return;
+    seconds--;
+    if(seconds <= 0){ clearInterval(timerInterval); submitTest(); return; }
+    updateTimerDisplay();
+  }, 1000);
+}
+function updateTimerDisplay(){
+  timerEl.textContent = formatTime(Math.max(0,seconds));
+  timerEl.classList.toggle('warn', seconds < 300);
+}
+
+function switchPassage(idx){
+  currentPassage = idx;
+  document.querySelectorAll('.part-tab').forEach(function(t,i){ t.classList.toggle('active', i===idx); });
+  document.querySelectorAll('.passage-content').forEach(function(p,i){ p.classList.toggle('active', i===idx); });
+  document.querySelectorAll('#qs-0,#qs-1,#qs-2').forEach(function(q,i){ q.style.display = i===idx ? '' : 'none'; });
+  buildCircles();
+  document.getElementById('questions-panel').scrollTop = 0;
+  document.getElementById('passage-panel').scrollTop = 0;
+  saveSession(true);
+}
+function buildCircles(){
+  var wrap = document.getElementById('q-circles');
+  wrap.innerHTML = '';
+  var range = PART_RANGES[currentPassage];
+  var start = range[0], end = range[1];
+  for(var i=start;i<=end;i++){
+    var d = document.createElement('div');
+    d.className = 'q-circle';
+    d.textContent = i;
+    var a = userAnswers['q'+i];
+    if(a && a.toString().trim()) d.classList.add('answered');
+    d.onclick = (function(n){ return function(){ scrollToQ(n); }; })(i);
+    wrap.appendChild(d);
+  }
+}
+function updatePartCounts(){
+  PART_RANGES.forEach(function(r, idx){
+    var s = r[0], e = r[1], a = 0;
+    for(var i=s;i<=e;i++){ if(userAnswers['q'+i] && userAnswers['q'+i].toString().trim()) a++; }
+    document.getElementById('pcount-'+idx).textContent = a + ' of ' + (e-s+1);
+  });
+}
+function scrollToQ(num){
+  var p = num<=13?0:num<=26?1:2;
+  if(p !== currentPassage) switchPassage(p);
+  setTimeout(function(){
+    var el = document.getElementById('q'+num);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+  },50);
+}
+function prevQ(){ document.getElementById('questions-panel').scrollBy({top:-240,behavior:'smooth'}); }
+function nextQ(){ document.getElementById('questions-panel').scrollBy({top:240,behavior:'smooth'}); }
+
+function selectTFN(btn, qId, val){
+  btn.closest('.tfn-options').querySelectorAll('.tfn-btn').forEach(function(b){ b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectMCQ(label, qId, val){
+  label.closest('.mcq-options').querySelectorAll('.mcq-opt').forEach(function(l){ l.classList.remove('selected'); });
+  label.classList.add('selected');
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectDropdown(sel, qId){
+  var val = sel.value;
+  sel.classList.toggle('answered', !!val);
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function markFill(id){
+  var el = document.getElementById(id);
+  var val = el.value.trim();
+  el.classList.toggle('answered', val.length > 0);
+  userAnswers[id] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+
+/* ============================================================
+   HIGHLIGHT / NOTE TOOLBAR
+   ============================================================ */
+var _savedRange = null;
+function hideSelToolbar(){ var tb=document.getElementById('sel-toolbar'); if(tb) tb.style.display='none'; _savedRange=null; }
+function showSelToolbar(x,y){
+  var tb=document.getElementById('sel-toolbar'); if(!tb) return;
+  tb.style.display='block';
+  var tw=tb.offsetWidth||140, th=tb.offsetHeight||36;
+  var left=x-tw/2, top=y-th-10;
+  if(left+tw>window.innerWidth-8) left=window.innerWidth-tw-8;
+  if(left<8) left=8;
+  if(top<60) top=y+12;
+  tb.style.left=left+'px'; tb.style.top=top+'px';
+}
+function getPassageSelection(){
+  var sel=window.getSelection();
+  if(!sel||sel.isCollapsed||sel.rangeCount===0) return null;
+  var range=sel.getRangeAt(0);
+  var p1=document.getElementById('passage-panel');
+  var p2=document.getElementById('questions-panel');
+  var node=range.commonAncestorContainer;
+  if(!((p1&&p1.contains(node))||(p2&&p2.contains(node)))) return null;
+  if(!sel.toString().trim()) return null;
+  var frag=range.cloneContents();
+  if(frag.querySelector && frag.querySelector('input,select,textarea,button,label')) return null;
+  return {sel:sel,range:range};
+}
+function onPassageMouseUp(e){
+  setTimeout(function(){
+    var data=getPassageSelection();
+    if(!data){ var tb=document.getElementById('sel-toolbar'); if(e&&e.target&&tb&&tb.contains(e.target)) return; hideSelToolbar(); return; }
+    _savedRange=data.range.cloneRange();
+    var rect=data.range.getBoundingClientRect();
+    showSelToolbar(rect.left+rect.width/2, rect.top);
+  },10);
+}
+function applyMark(cls){
+  if(!_savedRange) return;
+  try{ var m=document.createElement('mark'); m.className=cls; _savedRange.surroundContents(m); }
+  catch(e){ try{ var f=_savedRange.extractContents(); var m2=document.createElement('mark'); m2.className=cls; m2.appendChild(f); _savedRange.insertNode(m2); }catch(e2){} }
+  var s=window.getSelection(); if(s) s.removeAllRanges();
+  hideSelToolbar();
+}
+(function(){
+  var hl=document.getElementById('sel-hl-btn');
+  if(hl) hl.addEventListener('mousedown',function(e){e.preventDefault();applyMark('hl');});
+  var nb=document.getElementById('sel-note-btn');
+  if(nb) nb.addEventListener('mousedown',function(e){
+    e.preventDefault();
+    var text=_savedRange?_savedRange.toString().trim():'';
+    applyMark('hl-note');
+    if(text){ var ta=document.getElementById('notepad-text'); if(ta){ ta.value+=(ta.value&&!ta.value.endsWith('\n')?'\n':'')+'\u2022 '+text; saveSession(true); var p=document.getElementById('notepad-panel'); if(p&&p.classList.contains('hidden')) toggleNotepad(); } }
+  });
+  var pp=document.getElementById('passage-panel');
+  if(pp) pp.addEventListener('mouseup',onPassageMouseUp);
+  var qp=document.getElementById('questions-panel');
+  if(qp) qp.addEventListener('mouseup',onPassageMouseUp);
+  document.addEventListener('mousedown',function(e){ var tb=document.getElementById('sel-toolbar'); if(!tb||tb.style.display==='none') return; if(tb.contains(e.target)) return; setTimeout(function(){ var s=window.getSelection(); if(!s||s.isCollapsed) hideSelToolbar(); },150); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') hideSelToolbar(); });
+  if(pp) pp.addEventListener('scroll',hideSelToolbar);
+  if(qp) qp.addEventListener('scroll',hideSelToolbar);
+})();
+
+function toggleNotepad(){
+  var panel=document.getElementById('notepad-panel');
+  var btn=document.getElementById('notepad-btn');
+  panel.classList.toggle('hidden');
+  btn.classList.toggle('active', !panel.classList.contains('hidden'));
+  if(!panel.classList.contains('hidden')) document.getElementById('notepad-text').focus();
+  saveSession(true);
+}
+function toggleFullscreen(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function(){});
+  else document.exitFullscreen().catch(function(){});
+}
+document.getElementById('notepad-text').addEventListener('input', function(){ saveSession(true); });
+
+/* ============================================================
+   SCORING
+   ============================================================ */
+function getBandScore(c){
+  if(c>=39) return {band:'9.0',level:'Expert User'};
+  if(c>=37) return {band:'8.5',level:'Very Good User'};
+  if(c>=35) return {band:'8.0',level:'Very Good User'};
+  if(c>=33) return {band:'7.5',level:'Good User'};
+  if(c>=30) return {band:'7.0',level:'Good User'};
+  if(c>=27) return {band:'6.5',level:'Competent User'};
+  if(c>=23) return {band:'6.0',level:'Competent User'};
+  if(c>=19) return {band:'5.5',level:'Modest User'};
+  if(c>=15) return {band:'5.0',level:'Modest User'};
+  if(c>=13) return {band:'4.5',level:'Limited User'};
+  if(c>=10) return {band:'4.0',level:'Limited User'};
+  return {band:'3.5',level:'Extremely Limited'};
+}
+function normalize(s){
+  return (s||'').toString().trim().toLowerCase().replace(/[()]/g,'').replace(/\s+/g,' ').replace(/\.$/,'');
+}
+function checkCorrect(id){
+  var ans = ANSWERS[id];
+  var user = (userAnswers[id]||'').toString().trim();
+  if(!user) return null;
+  var nU = normalize(user);
+  var G = (typeof GROUPS!=='undefined') ? GROUPS[id] : null;
+  if(G){
+    var me = nU.toUpperCase();
+    if(G.ok.indexOf(me) < 0) return false;
+    var vals = G.ids.map(function(k){ return normalize(userAnswers[k]||'').toUpperCase(); });
+    if(vals.filter(function(v){ return v===me; }).length > 1) return false;
+    return true;
+  }
+  if(ALT[id]){ for(var k=0;k<ALT[id].length;k++){ if(nU === normalize(ALT[id][k])) return true; } }
+  return nU === normalize(ans);
+}
+function correctAnswerLabel(id){
+  if(typeof LABELS!=='undefined' && LABELS[id]) return LABELS[id];
+  return ANSWERS[id];
+}
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function confirmSubmit(){
+  var count=0;
+  for(var i=1;i<=40;i++){ if(userAnswers['q'+i]&&userAnswers['q'+i].toString().trim()) count++; }
+  document.getElementById('sc-answered').textContent=count;
+  document.getElementById('sc-unanswered').textContent=40-count;
+  document.getElementById('sc-pct').textContent=Math.round(count/40*100)+'%';
+  document.getElementById('score-grid').style.display='grid';
+  document.getElementById('submit-modal').classList.remove('hidden');
+}
+function closeModal(){ document.getElementById('submit-modal').classList.add('hidden'); }
+
+function submitTest(){
+  submitted=true;
+  if(timerInterval) clearInterval(timerInterval);
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  document.getElementById('submit-modal').classList.add('hidden');
+  clearSession();
+
+  var correct=0, wrong=0, unanswered=0;
+  var tbody=document.getElementById('ans-table-body');
+  tbody.innerHTML='';
+  var pdfRows=[];
+
+  for(var num=1;num<=40;num++){
+    var id='q'+num;
+    var result=checkCorrect(id);
+    var userRaw=(userAnswers[id]||'').toString().trim();
+    var correctAns=correctAnswerLabel(id);
+
+    var yourCell, resultCell, resText;
+    if(result===null){
+      unanswered++;
+      yourCell='<span class="blank">&mdash;</span>';
+      resultCell='<span class="blank">Unanswered</span>';
+      resText='Unanswered';
+    } else if(result){
+      correct++;
+      yourCell='<span class="ok">'+escapeHtml(userRaw)+'</span>';
+      resultCell='<span class="ok">&#10003; Correct</span>';
+      resText='Correct';
+    } else {
+      wrong++;
+      yourCell='<span class="bad">'+escapeHtml(userRaw||'-')+'</span>';
+      resultCell='<span class="bad">&#10007; Incorrect</span>';
+      resText='Incorrect';
+    }
+
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td style="font-weight:700;color:var(--accent)">'+num+'</td><td>'+yourCell+'</td><td><strong>'+escapeHtml(correctAns)+'</strong></td><td>'+resultCell+'</td>';
+    tbody.appendChild(tr);
+    pdfRows.push([String(num), userRaw||'-', correctAns, resText]);
+  }
+
+  document.getElementById('r-correct').textContent=correct;
+  document.getElementById('r-wrong').textContent=wrong;
+  document.getElementById('r-unanswered').textContent=unanswered;
+  var bs=getBandScore(correct);
+  document.getElementById('r-band').textContent=bs.band;
+  document.getElementById('r-band-label').textContent=bs.level+' \u00B7 '+correct+' / 40 correct';
+  document.getElementById('results-cand').textContent='Candidate: '+candidateName+'  \u00B7  Number: '+candidateNumber;
+  document.getElementById('results-modal').classList.remove('hidden');
+  window._lastPdfData={correct:correct,wrong:wrong,unanswered:unanswered,bs:bs,pdfRows:pdfRows};
+  try{
+    generateResultsPDF(correct,wrong,unanswered,bs,pdfRows);
+    document.getElementById('pdf-status').textContent='Candidate response PDF downloaded.';
+  }catch(e){
+    document.getElementById('pdf-status').textContent='PDF download failed. Use the button below.';
+    document.getElementById('pdf-status').style.color='var(--accent-red)';
+  }
+}
+function redownloadPDF(){
+  if(!window._lastPdfData) return;
+  var d=window._lastPdfData;
+  try{ generateResultsPDF(d.correct,d.wrong,d.unanswered,d.bs,d.pdfRows); }catch(e){}
+}
+
+function generateResultsPDF(correct,wrong,unanswered,bandInfo,rows){
+  var jsPDF=window.jspdf.jsPDF;
+  var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  var pageWidth=doc.internal.pageSize.getWidth();
+  doc.setFillColor(30,58,95); doc.rect(0,0,pageWidth,28,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(16); doc.setFont('helvetica','bold');
+  doc.text('IELTS Academic Reading \u00B7 Test 320',14,12);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Candidate Response Report',14,20);
+  doc.text(new Date().toLocaleString(),pageWidth-14,20,{align:'right'});
+  doc.setTextColor(26,24,20); doc.setFontSize(11); doc.setFont('helvetica','bold');
+  doc.text('Candidate Name:',14,38); doc.setFont('helvetica','normal'); doc.text(candidateName||'Anonymous',52,38);
+  doc.setFont('helvetica','bold'); doc.text('Candidate Number:',14,45); doc.setFont('helvetica','normal'); doc.text(candidateNumber||'-',58,45);
+  doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.text('Score Summary',14,56);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Correct: '+correct+'    Incorrect: '+wrong+'    Unanswered: '+unanswered,14,64);
+  doc.setFont('helvetica','bold'); doc.setTextColor(30,58,95); doc.setFontSize(14);
+  doc.text('Band Score: '+bandInfo.band+'  ('+bandInfo.level+')',14,72);
+  doc.setTextColor(26,24,20); doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text(correct+' / 40 correct',14,79);
+  doc.autoTable({
+    startY:86, head:[['Q','Your Answer','Correct Answer','Result']], body:rows, theme:'grid',
+    styles:{fontSize:8,cellPadding:2.2,overflow:'linebreak',valign:'middle'},
+    headStyles:{fillColor:[30,58,95],textColor:255,fontStyle:'bold',fontSize:8},
+    columnStyles:{0:{cellWidth:18,halign:'center'},1:{cellWidth:50},2:{cellWidth:70},3:{cellWidth:35,halign:'center'}},
+    didParseCell:function(data){
+      if(data.section==='body'&&data.column.index===3){
+        var t=data.cell.raw||'';
+        if(t.indexOf('Correct')!==-1 && t.indexOf('Incorrect')===-1){data.cell.styles.textColor=[5,150,105];data.cell.styles.fontStyle='bold';}
+        else if(t.indexOf('Incorrect')!==-1){data.cell.styles.textColor=[225,29,72];data.cell.styles.fontStyle='bold';}
+        else {data.cell.styles.textColor=[107,114,128];data.cell.styles.fontStyle='italic';}
+      }
+    },
+    margin:{left:14,right:14}
+  });
+  var finalY=doc.lastAutoTable.finalY+12;
+  doc.setFontSize(8); doc.setTextColor(107,114,128);
+  doc.text('This report shows your answers against the official answer key.',14,finalY);
+  var safeName=(candidateName||'Candidate').replace(/[^a-zA-Z0-9]/g,'_').slice(0,20);
+  var safeNum=(candidateNumber||'NA').replace(/[^a-zA-Z0-9]/g,'_').slice(0,15);
+  doc.save('IELTS_Test320_'+safeName+'_'+safeNum+'_'+new Date().toISOString().slice(0,10)+'.pdf');
+}
+
+/* ============================================================
+   RESIZER
+   ============================================================ */
+var resizer=document.getElementById('resizer');
+var passPanel=document.getElementById('passage-panel');
+var isResizing=false,startX,startW;
+resizer.addEventListener('mousedown',function(e){ isResizing=true; startX=e.clientX; startW=passPanel.offsetWidth; resizer.classList.add('dragging'); document.body.style.userSelect='none'; document.body.style.cursor='col-resize'; });
+document.addEventListener('mousemove',function(e){ if(!isResizing) return; var dx=e.clientX-startX; passPanel.style.width=Math.min(Math.max(startW+dx,280),window.innerWidth-320)+'px'; });
+document.addEventListener('mouseup',function(){ if(isResizing){ isResizing=false; resizer.classList.remove('dragging'); document.body.style.userSelect=''; document.body.style.cursor=''; saveSession(true); } });
+
+(function(){
+  var saved = loadSession();
+  if(saved && saved.passageWidth){ document.getElementById('passage-panel').style.width = saved.passageWidth; }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Academic Reading · Test 318</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fff;--border:#e5e7eb;--border-soft:#f3f4f6;--accent:#1e3a5f;--accent-red:#e11d48;--accent-red-hover:#be123c;--text:#1f2937;--muted:#6b7280;--success:#059669;--passage-width:52%;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+  #start-screen{position:fixed;inset:0;background:#f8fafc;display:flex;align-items:center;justify-content:center;z-index:500;}
+  #start-screen.hidden{display:none;}
+  .start-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:40px 44px;max-width:460px;width:92%;box-shadow:0 10px 40px rgba(0,0,0,.08);}
+  .start-card h1{font-size:20px;margin-bottom:4px;font-weight:600;}
+  .start-card .sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .start-card label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;}
+  .start-card input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;margin-bottom:16px;font-family:inherit;}
+  .start-card input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.12);}
+  .start-card button{width:100%;padding:12px;background:var(--accent-red);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;}
+  .start-card button:hover{background:var(--accent-red-hover);}
+  .resume-banner{display:none;background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12.5px;color:#92400e;line-height:1.5;}
+  .resume-banner.show{display:block;}
+  .resume-banner .resume-actions{margin-top:8px;display:flex;gap:8px;}
+  .resume-banner .resume-actions button{width:auto;margin:0;padding:6px 12px;font-size:12px;border-radius:6px;}
+  .resume-banner .resume-actions .btn-ghost{background:#fff;color:#92400e;border:1px solid #fbbf24;}
+  #topbar{background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;flex-shrink:0;z-index:100;}
+  .top-left{display:flex;align-items:center;gap:12px;}
+  .mock-label{font-size:15px;font-weight:500;}
+  #autosave-indicator{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--success);font-weight:500;opacity:0;transition:opacity .4s ease;}
+  #autosave-indicator.show{opacity:1;}
+  #autosave-indicator .dot{width:7px;height:7px;border-radius:50%;background:var(--success);}
+  #autosave-indicator.saving .dot{background:#f59e0b;animation:blink .8s infinite;}
+  #autosave-indicator.saving{color:#f59e0b;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+  #timer-wrap{display:flex;align-items:center;gap:6px;color:var(--accent-red);font-weight:600;}
+  #timer{font-size:18px;font-weight:600;letter-spacing:0.02em;min-width:52px;}
+  #timer.warn{animation:pulse 1s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .top-actions{display:flex;align-items:center;gap:8px;}
+  .icon-btn{width:36px;height:36px;border:none;background:transparent;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;}
+  .icon-btn:hover{background:var(--border-soft);color:var(--text);}
+  .btn-submit{background:#e5e7eb;color:var(--text);border:none;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;}
+  .btn-submit:hover{background:#d1d5db;}
+  .icon-btn.active{background:#fff1f2;color:var(--accent-red);}
+  #notepad-panel{position:fixed;top:56px;right:0;width:320px;height:calc(100vh - 56px - 56px);background:#fff;border-left:1px solid var(--border);box-shadow:-4px 0 24px rgba(0,0,0,.08);z-index:150;display:flex;flex-direction:column;transition:transform .2s ease;}
+  #notepad-panel.hidden{transform:translateX(100%);pointer-events:none;}
+  .notepad-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+  .notepad-title{font-size:15px;font-weight:600;color:var(--accent-red);}
+  #notepad-text{flex:1;border:none;resize:none;padding:14px 16px;font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.55;outline:none;}
+  #main{display:flex;flex:1;overflow:hidden;}
+  #passage-panel{width:var(--passage-width);background:#fff;overflow-y:auto;padding:24px 28px 40px;flex-shrink:0;}
+  .part-header{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:4px;}
+  #passage-panel h2{font-size:22px;font-weight:700;color:var(--accent);margin-bottom:6px;letter-spacing:-0.3px;}
+  .time-note{font-size:12.5px;color:var(--muted);margin-bottom:16px;line-height:1.5;}
+  .passage-title{text-align:center;font-family:'Source Serif 4',Georgia,serif;font-size:18px;font-weight:600;color:var(--accent);margin-bottom:22px;}
+  #passage-panel p{font-family:'Source Serif 4',Georgia,serif;font-size:15px;line-height:1.75;margin-bottom:16px;}
+  #passage-panel strong{font-weight:700;color:var(--accent);}
+  #passage-panel em{font-style:italic;}
+  #resizer{width:5px;background:transparent;cursor:col-resize;flex-shrink:0;position:relative;z-index:10;}
+  #resizer::before{content:'';position:absolute;top:0;bottom:0;left:2px;width:1px;background:var(--accent-red);}
+  #resizer:hover::before,#resizer.dragging::before{width:3px;left:1px;}
+  #resizer .handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:28px;background:#fff;border:1px solid var(--accent-red);border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--accent-red);font-size:10px;}
+  #questions-panel{flex:1;overflow-y:auto;padding:20px 24px 80px;background:#fff;}
+  .q-section{margin-bottom:28px;}
+  .q-section-header{font-size:15px;font-weight:600;margin-bottom:8px;}
+  .q-section-intro{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:16px;}
+  .info-box{padding:12px 16px;font-size:13px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:14px;line-height:1.9;}
+  .info-box.notes{font-size:13.5px;line-height:2.1;}
+  .info-box .box-title{display:block;font-weight:600;color:var(--accent);margin-bottom:2px;}
+  .question{padding:12px 0;border-bottom:1px solid var(--border-soft);display:flex;gap:12px;align-items:flex-start;}
+  .question:last-child{border-bottom:none;}
+  .q-num{min-width:26px;height:26px;color:var(--muted);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px;}
+  .q-body{flex:1;}
+  .q-text{font-size:14px;line-height:1.55;margin-bottom:10px;}
+  .tfn-options,.mcq-options{display:flex;flex-direction:column;gap:6px;}
+  .tfn-options.horizontal{flex-direction:row;flex-wrap:wrap;gap:8px;}
+  .tfn-btn,.mcq-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:13.5px;transition:all .12s;}
+  .tfn-btn:hover,.mcq-opt:hover{border-color:#94a3b8;background:#f8fafc;}
+  .tfn-btn.selected,.mcq-opt.selected{border-color:var(--accent-red);background:#fff1f2;}
+  .tfn-btn .radio-dot,.mcq-opt .radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid #cbd5e1;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .tfn-btn.selected .radio-dot,.mcq-opt.selected .radio-dot{border-color:var(--accent-red);}
+  .tfn-btn.selected .radio-dot::after,.mcq-opt.selected .radio-dot::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--accent-red);}
+  .fill-input{border:1.5px solid var(--border);border-radius:6px;padding:7px 12px;font-size:14px;font-family:inherit;width:100%;max-width:240px;transition:border-color .15s;}
+  .fill-input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .fill-input.answered{border-color:var(--success);background:#f0fdf4;}
+  .fill-input.inline{display:inline-block;vertical-align:middle;margin:0 2px;}
+  .dd-select{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 36px 10px 12px;font-size:13.5px;font-family:inherit;background-color:#fff;cursor:pointer;transition:border-color .15s;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 12px center;}
+  .dd-select:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .dd-select.answered{border-color:var(--success);background-color:#f0fdf4;}
+  #bottombar{border-top:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0;gap:12px;min-height:56px;}
+  .part-tabs{display:flex;gap:8px;flex-shrink:0;}
+  .part-tab{padding:8px 16px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .part-tab:hover{border-color:#94a3b8;color:var(--text);}
+  .part-tab.active{border-color:var(--accent-red);color:var(--accent);box-shadow:0 0 0 1px var(--accent-red);}
+  .part-tab .count{font-weight:400;color:var(--muted);}
+  .q-circles{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;flex:1;padding:0 8px;}
+  .q-circle{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;}
+  .q-circle:hover{border-color:#94a3b8;color:var(--text);}
+  .q-circle.answered{background:var(--success);border-color:var(--success);color:#fff;}
+  .nav-arrows{display:flex;gap:6px;flex-shrink:0;}
+  .nav-arrow{width:36px;height:36px;border:1.5px solid var(--border);border-radius:50%;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:16px;}
+  .nav-arrow:hover{border-color:#94a3b8;color:var(--text);}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;}
+  .modal-overlay.hidden{display:none;}
+  .modal{background:#fff;border-radius:12px;padding:28px 32px;max-width:720px;width:94%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+  .modal h2{font-size:20px;margin-bottom:10px;}
+  .modal p{font-size:14px;line-height:1.6;color:var(--muted);margin-bottom:16px;}
+  .score-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0;}
+  .score-card{background:#f8fafc;border-radius:10px;padding:14px;text-align:center;}
+  .score-card .val{font-size:26px;font-weight:700;color:var(--accent);}
+  .score-card .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+  .modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;}
+  .btn-modal{padding:9px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;}
+  .btn-modal:hover{background:#f8fafc;}
+  .btn-modal.primary{background:var(--accent-red);color:#fff;border-color:var(--accent-red);}
+  .btn-modal.primary:hover{background:var(--accent-red-hover);}
+  .ans-table-wrap{margin:12px 0;max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;}
+  .ans-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .ans-table th{position:sticky;top:0;background:var(--accent);color:#fff;padding:8px 10px;text-align:left;font-weight:600;font-size:11px;}
+  .ans-table td{padding:6px 10px;border-bottom:1px solid var(--border);}
+  .ans-table tr:nth-child(even) td{background:#f8fafc;}
+  .ans-table .ok{color:var(--success);font-weight:600;}
+  .ans-table .bad{color:var(--accent-red);font-weight:600;}
+  .ans-table .blank{color:var(--muted);font-style:italic;}
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px;}
+  .passage-content{display:none;}
+  .passage-content.active{display:block;}
+  mark.hl{background:#fef08a;padding:0 2px;border-radius:2px;}
+  mark.hl-note{background:#bbf7d0;padding:0 2px;border-radius:2px;border-bottom:2px solid #16a34a;}
+  #sel-toolbar{position:fixed;z-index:300;display:none;background:#1e3a5f;color:#fff;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);font-size:13px;font-weight:500;overflow:hidden;white-space:nowrap;}
+  #sel-toolbar button{background:transparent;border:none;color:#fff;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:500;font-family:inherit;}
+  #sel-toolbar button:hover{background:rgba(255,255,255,.15);}
+  #sel-toolbar .sep{display:inline-block;width:1px;height:14px;background:rgba(255,255,255,.35);vertical-align:middle;}
+  @media (max-width:800px){#main{flex-direction:column;}#passage-panel{width:100%!important;height:42vh;border-bottom:1px solid var(--border);}#resizer{display:none;}}
+  .para-label{font-weight:700;color:var(--accent);margin-right:6px;}
+  .table-box{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;font-size:13px;}
+  .table-box table{width:100%;border-collapse:collapse;}
+  .table-box th{background:var(--accent);color:#fff;padding:8px 10px;text-align:left;font-weight:600;}
+  .table-box td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .table-box tr:nth-child(even) td{background:#f8fafc;}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+<div id="start-screen">
+  <div class="start-card">
+    <h1>IELTS Academic Reading</h1>
+    <div class="sub">Computer-Delivered Simulation &middot; Test 318</div>
+    <div class="resume-banner" id="resume-banner">
+      <strong>&#9201; Saved session found</strong>
+      <div id="resume-info"></div>
+      <div class="resume-actions">
+        <button onclick="resumeTest()">Resume Test</button>
+        <button class="btn-ghost" onclick="discardSaved()">Start Fresh</button>
+      </div>
+    </div>
+    <label for="cand-name">Candidate Name</label>
+    <input type="text" id="cand-name" placeholder="Enter your full name" autocomplete="off">
+    <label for="cand-num">Candidate Number</label>
+    <input type="text" id="cand-num" placeholder="e.g. 123456" autocomplete="off">
+    <button onclick="startTest()">Start Test</button>
+  </div>
+</div>
+
+<div id="topbar">
+  <div class="top-left">
+    <span class="mock-label">IELTS Academic Reading &middot; Test 318</span>
+    <span id="autosave-indicator"><span class="dot"></span><span id="autosave-text">Saved</span></span>
+  </div>
+  <div id="timer-wrap">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <div id="timer">60:00</div>
+  </div>
+  <div class="top-actions">
+    <button class="icon-btn" id="notepad-btn" title="Notepad" onclick="toggleNotepad()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></button>
+    <button class="icon-btn" title="Full screen" onclick="toggleFullscreen()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
+    <button class="btn-submit" onclick="confirmSubmit()">Submit</button>
+  </div>
+</div>
+
+<div id="notepad-panel" class="hidden">
+  <div class="notepad-header">
+    <span class="notepad-title">Notepad</span>
+    <button class="icon-btn" title="Close" onclick="toggleNotepad()" style="width:28px;height:28px"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <textarea id="notepad-text" placeholder="Type your notes here&hellip;"></textarea>
+</div>
+
+<div id="sel-toolbar">
+  <button type="button" id="sel-note-btn">Note</button><span class="sep"></span><button type="button" id="sel-hl-btn">Highlight</button>
+</div>
+
+<div id="main">
+  <div id="passage-panel">
+    <div class="passage-content active" id="pc-0">
+      <div class="part-header">PART 1</div>
+      <h2>READING PASSAGE 1</h2>
+      <div class="time-note">You should spend about 20 minutes on Questions 1&ndash;13, which are based on Reading Passage 1 below.</div>
+      <div class="passage-title">The Adolescents</div>
+      <p><strong class="para-label">A</strong> The American Academy of Pediatrics recognizes three stages of adolescence. These are early, middle and late adolescence, and each has its own developmental tasks. Teenagers move through these tasks at their own speed depending on their physical development and hormone levels. Although these stages are common to all teenagers, each child will go through them in his or her own highly individual ways.</p>
+      <p><strong class="para-label">B</strong> During the early years young people make the first attempts to leave the dependent, secure role of a child and to establish themselves as unique individuals, independent of their parents. Early adolescence is marked by rapid physical growth and maturation. The focus of adolescents’ self-concepts is thus often on their physical self and their evaluation of their physical acceptability. Early adolescence is also a period of intense conformity to peers. ‘Getting along,’ not being different, and being accepted seem somehow pressing to the early adolescent. The worst possibility, from the view of the early adolescent, is to be seen by peers as ‘different’.</p>
+      <p><strong class="para-label">C</strong> Middle adolescence is marked by the emergence of new thinking skills. The intellectual world of the young person is suddenly greatly expanded. Their concerns about peers are more directed toward their opposite sexed peers. It is also during this period that the move to establish psychological independence from one’s parents accelerates. Delinquency behavior may emerge since parental views are no longer seen as absolutely correct by adolescents. Despite some delinquent behavior, middle adolescence is a period during which young people are oriented toward what is right and proper. They are developing a sense of behavioral maturity and learning to control their impulsiveness.</p>
+      <p><strong class="para-label">D</strong> Late adolescence is marked by the final preparations for adult roles. The developmental demands of late adolescence often extend into the period that we think of as young adulthood. Late adolescents attempt to crystallize their vocational goals and to establish a sense of personal identity. Their needs for peer approval are diminished and they are largely psychologically independent from their parents. The shift to adulthood is nearly complete.</p>
+      <p><strong class="para-label">E</strong> Some years ago, Professor Robert Havighurst of the University of Chicago proposed that stages in human development can best be thought of in terms of the developmental tasks that are part of the normal transition. He identified eleven developmental tasks associated with the adolescent transition. One developmental task an adolescent needs to achieve is to adjust to a new physical sense of self. At no other time since birth does an individual undergo such rapid and profound physical changes as during early adolescence. Puberty is marked by sudden rapid growth in height and weight. Also, the young person experiences the emergence and accentuation of those physical traits that make him or her a boy or girl. The effect of this rapid change is that young adolescent often becomes focused on his or her body.</p>
+      <p><strong class="para-label">F</strong> Before adolescence, children’s thinking is dominated by a need to have a concrete example for any problem that they solve. Their thinking is constrained to what is real and physical. During adolescence, young people begin to recognize and understand abstractions. The adolescent must adjust to increased cognitive demands at school. Adults see high school in part as a place where adolescents prepare for adult roles and responsibilities and in part as preparatory for further education. School curricula are frequently dominated by the inclusion of more abstract, demanding material, regardless of whether the adolescents have achieved formal thought. Since not all adolescents make the intellectual transition at the same rate, demands for abstract thinking prior to achievement of that ability may be frustrating.</p>
+      <p><strong class="para-label">G</strong> During adolescence, as teens develop increasingly complex knowledge systems and a sense of self, they also adopt an integrated set of values and morals. During the early stages of moral development, parents provide their child with a structured set of rules of what is right and wrong, what is acceptable and unacceptable. Eventually, the adolescent must assess the parents’ values as they come into conflict with values expressed by peers and other segments of society. To reconcile differences, the adolescent restructures those beliefs into a personal ideology.</p>
+      <p><strong class="para-label">H</strong> The adolescent must develop expanded verbal skills. As adolescents mature intellectually, as they face increased school demands, and as they prepare for adult roles, they must develop new verbal skills to accommodate more complex concepts and tasks. Their limited language of childhood is no longer adequate. Adolescents may appear less competent because of their inability to express themselves meaningfully.</p>
+      <p><strong class="para-label">I</strong> The adolescent must establish emotional and psychological independence from his or her parents. Childhood is marked by a strong dependence on one’s parents. Adolescents may yearn to keep that safe, secure, supportive, dependent relationship. Yet, to be an adult implies a sense of independence, of autonomy, of being one’s own person. Adolescents may vacillate between their desire for dependence and their need to be independent. In an attempt to assert their need for independence and individuality, adolescents may respond with what appears to be hostility and lack of cooperation.</p>
+      <p><strong class="para-label">J</strong> Adolescents do not progress through these multiple developmental tasks separately. At any given time, adolescents may be dealing with several. Further, the centrality of specific developmental tasks varies with early, middle, and late periods of the transition.</p>
+    </div>
+
+    <div class="passage-content" id="pc-1">
+      <div class="part-header">PART 2</div>
+      <h2>READING PASSAGE 2</h2>
+      <div class="time-note">You should spend about 20 minutes on Questions 14&ndash;26, which are based on Reading Passage 2 below.</div>
+      <div class="passage-title">Human Migration</div>
+      <p><strong class="para-label">A</strong> DURING successive waves of globalisation in the three centuries leading up to the first world war, migration of labour was consistently one of the biggest drivers of economic change. Since 1945 the world has experienced a new era of accelerating globalisation, and the international movement of labour is proving once again to be of the greatest economic and social significance. As a new study by Barry Chiswick of the University of Illinois at Chicago and Timothy Hatton of the University of Essex makes plain, it is economic factors that have been uppermost throughout the history of migration.</p>
+      <p><strong class="para-label">B</strong> For many years after the discovery of America, the flow of free migrants from Europe was steady but quite small: transport costs were high, conditions harsh and the dangers of migration great. In 1650 a free migrant’s passage to North America cost nearly half a year’s wages for a farm labourer in southern England. Slavery predominated until the slave trade was stopped in the first half of the 19th century. By around 1800, North America and the Caribbean islands had received some 8m immigrants. Of these, about 7m were African slaves.</p>
+      <p><strong class="para-label">C</strong> The first era of mass voluntary migration was between 1850 and 1913. Over 1m people a year were drawn to the new world by the turn of the 20th century. Growing prosperity, falling transport costs and lower risk all pushed in the same direction. Between 1914 and 1945, war, global depression and government policy reduced migration. During some years in the 1930s, people returning to Europe from the United States, even though comparatively few, actually outnumbered immigrants going the other way. After the second world war the cost of travel fell steeply. But now the pattern changed. Before long Europe declined as a source of immigration and grew as a destination. Emigration from developing countries expanded rapidly: incomes there rose enough to make emigration feasible, but not enough to make it pointless. Many governments began trying to control immigration. Numbers, legal and illegal, surged nonetheless, as economics had its way.</p>
+      <p><strong class="para-label">D</strong> Migration, it is safe to assume, is in the interests of (voluntary) migrants: they would not move otherwise. The evidence suggests that it is also very much in the overall interests of the receiving countries. But, as Mr Chiswick and Mr Hatton point out, there are losers in those countries. The increase in the supply of labour means that the wages of competing workers may fall, at least to start with.</p>
+      <p><strong class="para-label">E</strong> The economic conditions now seem propitious for an enormous further expansion of migration. On the face of it, this will be much like that of a century ago. As before, the main expansionary pressures are rising incomes in the rich countries and rising incomes in the poor ones. (This second point is often neglected: as poor countries get a little less poor, emigration tends to increase, because people acquire the means to move.) The study emphasises, however, two crucial differences between then and now.</p>
+      <p><strong class="para-label">F</strong> One is that, in the first decade of the 20th century, the receiving countries needed lots of unskilled workers in industry and farming. In the first decade of the 21st century, in contrast, opportunities for unskilled workers are dwindling. In the United States, wages of unskilled workers are falling. The fall is enough to hurt the workers concerned, but not to deter new immigrants.</p>
+      <p><strong class="para-label">G</strong> And the other big difference between now and a century ago? It is that the affected rich-country workers are in a stronger position to complain, and get something done. The most likely result is that a trend that is already well established will continue: countries will try to restrict the immigration of unskilled workers, giving preference to workers with skills.</p>
+      <p><strong class="para-label">H</strong> This does help, in one way, quite apart from narrowing the rich countries’ shortage of skilled workers: it reduces the pressure to make low wages even lower. However, the idea has drawbacks too. It turns away many of the poorest people who want to migrate, which is hard to justify in humanitarian terms. Also, it pushes others from this group into illegal immigration, which exposes them to dangers, makes integration more difficult and may even make the wages of low-paid workers even lower than if the same migrants entered legally. On top of all this is the loss of skilled workers in the sending countries. Already some of the world’s poorest nations lose almost all the doctors they train to jobs in Europe or North America. Money immigrants send home offsets some of that loss, but not all.</p>
+      <p><strong class="para-label">I</strong> Today’s migration, much more than the migration of old, poses some insoluble dilemmas. Belief in individual freedom suggests that rich countries should adopt more liberal immigration rules, both for unskilled migrants and skilled ones. With or without such rules, more migrants are coming. And in either case, the question of compensation for the losers, in rich countries and poor countries alike, will demand some attention.</p>
+    </div>
+
+    <div class="passage-content" id="pc-2">
+      <div class="part-header">PART 3</div>
+      <h2>READING PASSAGE 3</h2>
+      <div class="time-note">You should spend about 20 minutes on Questions 27&ndash;40, which are based on Reading Passage 3 below.</div>
+      <div class="passage-title">The Hemp Revival</div>
+      <p>The hemp plant, one of the world’s oldest industrial resources, is back. The rediscovery of this renewable resource is making it the fibre of choice for future textiles, personal care products, building materials, paper and fuel.</p>
+      <p>Hemp has been grown for paper, textiles, food and medicine throughout human history. The earliest known woven fabric, made of hemp, dates back to the eighth millennium (8000-7000 BC). The majority of all sails, clothes, tents, rugs, towels, paper, rope, twine, art canvas, paints, varnishes and lighting oil were made from hemp. Hemp seeds were regularly used as a source of food and protein for centuries.</p>
+      <p>Hemp’s drastic decline in use and importance within a matter of fifty years is widely considered to have been brought about by the timber and petrochemical industries in America. By the mid-1930s, changes in technology were beginning to impact on the hemp industry. Mechanical stripping equipment and machines to conserve hemp’s high-cellulose pulp became available and affordable. Timber and paper holding companies stood to lose billions of dollars if hemp were to be grown on a large scale. A resurgence of the hemp industry also threatened the emerging petro-chemical companies which had patented the chemicals for pulp processing. Newspaper articles began to appear, linking hemp with violent crime. The term used, however, was ‘marijuana’ to distance it from hemp used for industrial purposes. Because few people realised that marijuana and hemp came from the same plant species, virtually nobody suspected that the Marijuana Prohibition of 1938 would destroy the hemp industry.</p>
+      <p>Supporting the theory that marijuana was banned to destroy the hemp industry, were two articles written just before the Marijuana Prohibition, claiming that hemp was on the verge of becoming a super crop. These articles, which appeared in well-respected magazines, praised the usefulness and potential of hemp. ‘Hemp can be used to produce more than 25,000 products’, and ‘hemp will prove, for both farmer and public, the most profitable and desirable crop that can be grown.’ This was the first time that ‘billion dollar’ was used to describe the value of a crop. Less than one year after these articles were written, the Marijuana Prohibition took effect. To what extent a conspiracy was involved is still being debated, but the important thing is that for thousands of years, hemp was used extensively. Then over a short period, it became illegal in many parts of the world.</p>
+      <p>Now, however, the focus is on the development of hemp as an industrial resource. Initially, a distinction needs to be made between the two types of hemp. ‘Cannabis has evolved into two basic species. Plants grown for fibre and seed are universally called hemp. Cannabis grown for its drug content is commonly called marijuana or drug cannabis. Drug-type cannabis varies widely in THC content from approximately 1-2% in unselected strains to 10% in the best modern varieties.’ (as cited from Watson 1994). Hemp contains virtually none of the active ingredients of drug-type cannabis (THC). It is not feasible to ‘get high’ on hemp, and most marijuana produces very low-quality fibre. Hemp should never be confused with marijuana, as their roles cannot be reversed.</p>
+      <p>It is evident that hemp is an extraordinary fibre. Both stems and seeds can be utilised. Most significantly, hemp can be grown without pesticides and herbicides. The plant also has the ability to suppress weeds and soil-borne diseases. Based on the hemp industries which have been established overseas, there is a large demand for hemp products and hemp is proving to be a highly profitable industry. On an annual basis, one acre of hemp will produce as much fibre as 2 to 3 acres of cotton. The fibre is stronger and softer than cotton, lasts twice as long and will not mildew. Cotton grows only in warm climates and requires more water and more fertiliser than hemp as well as large quantities of pesticide and herbicide.</p>
+      <p>Hemp can also be used to produce fibreboard that is stronger and lighter than wood, and is fire retardant. Unlike paper from wood pulp, hemp paper contains no dioxin, or other toxic residue, and a single acre of hemp can produce the same amount of paper as four acres of trees. The trees take 20 years to harvest and hemp takes a single season. In warm climates hemp can be harvested two or even three times a year. On an annual basis, one acre of hemp will produce as much paper as 2 to 4 acres of trees. From tissue paper to cardboard, all types of paper products can be produced from hemp. The quality of hemp paper is superior to tree-based paper. Hemp paper will last hundreds of years without degrading and it can be recycled many more times than tree-based paper.</p>
+      <p>Today, industrialised nations around the world are waking up to the enormous potential of hemp. While some countries, like China and India, have never had laws against hemp cultivation, others are legalising industrial hemp after many years of lumping it together with marijuana. The products and fabrics that are emerging from the international hemp industry are finding strong demand in an eco-aware global community. Hemp is indeed an agricultural crop for the twenty-first century.</p>
+    </div>
+
+  </div>
+
+  <div id="resizer"><div class="handle">&#8942;&#8942;</div></div>
+
+  <div id="questions-panel">
+<div id="qs-0">
+<div class="q-section">
+<div class="q-section-header">Questions 1&ndash;6</div>
+<div class="q-section-intro">Match the following characteristics with the correct stages of the adolescent. Choose the correct letter, <strong>A</strong>, <strong>B</strong> or <strong>C</strong>.</div>
+<div class="info-box"><strong>A</strong> early adolescence<br><strong>B</strong> middle adolescence<br><strong>C</strong> later adolescence</div>
+<div class="question" id="q1"><div class="q-num">1</div><div class="q-body"><div class="q-text">Interested in the opposite sex</div><select class="dd-select" id="dd-q1" data-opts="A,B,C" data-ph="Select a stage&hellip;" onchange="selectDropdown(this,'q1')"></select></div></div>
+<div class="question" id="q2"><div class="q-num">2</div><div class="q-body"><div class="q-text">Exposure to danger</div><select class="dd-select" id="dd-q2" data-opts="A,B,C" data-ph="Select a stage&hellip;" onchange="selectDropdown(this,'q2')"></select></div></div>
+<div class="question" id="q3"><div class="q-num">3</div><div class="q-body"><div class="q-text">The same as others</div><select class="dd-select" id="dd-q3" data-opts="A,B,C" data-ph="Select a stage&hellip;" onchange="selectDropdown(this,'q3')"></select></div></div>
+<div class="question" id="q4"><div class="q-num">4</div><div class="q-body"><div class="q-text">Beginning to form individual thinking without family context</div><select class="dd-select" id="dd-q4" data-opts="A,B,C" data-ph="Select a stage&hellip;" onchange="selectDropdown(this,'q4')"></select></div></div>
+<div class="question" id="q5"><div class="q-num">5</div><div class="q-body"><div class="q-text">Less need the approval of friends</div><select class="dd-select" id="dd-q5" data-opts="A,B,C" data-ph="Select a stage&hellip;" onchange="selectDropdown(this,'q5')"></select></div></div>
+<div class="question" id="q6"><div class="q-num">6</div><div class="q-body"><div class="q-text">Intellectual booming</div><select class="dd-select" id="dd-q6" data-opts="A,B,C" data-ph="Select a stage&hellip;" onchange="selectDropdown(this,'q6')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 7&ndash;10</div>
+<div class="q-section-intro">Complete each sentence with the correct ending, <strong>A&ndash;F</strong>.</div>
+<div class="info-box"><strong>A</strong> form personal identity with a set of morals and values<br><strong>B</strong> develops a stable and productive peer relationships<br><strong>C</strong> are designed to be more challenging than some can accept<br><strong>D</strong> varies from people to people<br><strong>E</strong> focuses on creating a self-image<br><strong>F</strong> become an extension of their parents</div>
+<div class="question" id="q7"><div class="q-num">7</div><div class="q-body"><div class="q-text">One of Havighurst’s research</div><select class="dd-select" id="dd-q7" data-opts="A,B,C,D,E,F" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q7')"></select></div></div>
+<div class="question" id="q8"><div class="q-num">8</div><div class="q-body"><div class="q-text">High School Courses</div><select class="dd-select" id="dd-q8" data-opts="A,B,C,D,E,F" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q8')"></select></div></div>
+<div class="question" id="q9"><div class="q-num">9</div><div class="q-body"><div class="q-text">Adolescence is a time when young people</div><select class="dd-select" id="dd-q9" data-opts="A,B,C,D,E,F" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q9')"></select></div></div>
+<div class="question" id="q10"><div class="q-num">10</div><div class="q-body"><div class="q-text">The developmental speed of thinking patterns</div><select class="dd-select" id="dd-q10" data-opts="A,B,C,D,E,F" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q10')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 11&ndash;13</div>
+<div class="q-section-intro">Do the following statements agree with the information given in the Reading Passage? Write <strong>TRUE</strong> if the statement is true, <strong>FALSE</strong> if the statement is false, or <strong>NOT GIVEN</strong> if the information is not given in the passage.</div>
+<div class="question" id="q11"><div class="q-num">11</div><div class="q-body"><div class="q-text">The adolescent lacks the ability to think abstractly.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q11','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q11','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q11','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q12"><div class="q-num">12</div><div class="q-body"><div class="q-text">Adolescents may have a deficit in their language ability.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q12','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q12','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q12','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q13"><div class="q-num">13</div><div class="q-body"><div class="q-text">The adolescent experiences a transition from reliance on his parents to independence.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q13','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q13','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q13','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+</div>
+</div>
+<div id="qs-1" style="display:none">
+<div class="q-section">
+<div class="q-section-header">Questions 14&ndash;18</div>
+<div class="q-section-intro">Complete the notes below. Choose <strong>ONE OR TWO WORDS</strong> from the passage for each answer.</div>
+<div class="info-box notes">Until the early 19th century the majority of migrants to North America were <strong>14</strong> <input class="fill-input inline" id="q14" oninput="markFill('q14')" style="width:160px" placeholder="&hellip;">.<br>However, in the second half of the 19th century, <strong>15</strong> <input class="fill-input inline" id="q15" oninput="markFill('q15')" style="width:160px" placeholder="&hellip;"> and cheaper travel meant that more people could afford to emigrate voluntarily.<br>At the beginning of the 20th century, immigrants to receiving countries found jobs as <strong>16</strong> <input class="fill-input inline" id="q16" oninput="markFill('q16')" style="width:150px" placeholder="&hellip;"> in factories and on farms.<br>After the second world war there was a great increase in emigrants from <strong>17</strong> <input class="fill-input inline" id="q17" oninput="markFill('q17')" style="width:160px" placeholder="&hellip;">.<br>Nowadays, receiving countries generally prefer immigrants <strong>18</strong> <input class="fill-input inline" id="q18" oninput="markFill('q18')" style="width:130px" placeholder="&hellip;">.</div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 19&ndash;24</div>
+<div class="q-section-intro">Which paragraphs in the passage contain the following information? Write the correct letter, <strong>A&ndash;I</strong>.</div>
+<div class="question" id="q19"><div class="q-num">19</div><div class="q-body"><div class="q-text">changing departure points and destinations for migrants</div><select class="dd-select" id="dd-q19" data-opts="A,B,C,D,E,F,G,H,I" data-ph="Select a paragraph&hellip;" onchange="selectDropdown(this,'q19')"></select></div></div>
+<div class="question" id="q20"><div class="q-num">20</div><div class="q-body"><div class="q-text">disadvantages of present immigration policies</div><select class="dd-select" id="dd-q20" data-opts="A,B,C,D,E,F,G,H,I" data-ph="Select a paragraph&hellip;" onchange="selectDropdown(this,'q20')"></select></div></div>
+<div class="question" id="q21"><div class="q-num">21</div><div class="q-body"><div class="q-text">the immigrants who rich countries find more acceptable</div><select class="dd-select" id="dd-q21" data-opts="A,B,C,D,E,F,G,H,I" data-ph="Select a paragraph&hellip;" onchange="selectDropdown(this,'q21')"></select></div></div>
+<div class="question" id="q22"><div class="q-num">22</div><div class="q-body"><div class="q-text">how earning more money affects migration</div><select class="dd-select" id="dd-q22" data-opts="A,B,C,D,E,F,G,H,I" data-ph="Select a paragraph&hellip;" onchange="selectDropdown(this,'q22')"></select></div></div>
+<div class="question" id="q23"><div class="q-num">23</div><div class="q-body"><div class="q-text">migration was mainly compulsory</div><select class="dd-select" id="dd-q23" data-opts="A,B,C,D,E,F,G,H,I" data-ph="Select a paragraph&hellip;" onchange="selectDropdown(this,'q23')"></select></div></div>
+<div class="question" id="q24"><div class="q-num">24</div><div class="q-body"><div class="q-text">changing the laws on immigration</div><select class="dd-select" id="dd-q24" data-opts="A,B,C,D,E,F,G,H,I" data-ph="Select a paragraph&hellip;" onchange="selectDropdown(this,'q24')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 25&ndash;26</div>
+<div class="q-section-intro">Choose the correct letter, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>.</div>
+<div class="question" id="q25"><div class="q-num">25</div><div class="q-body"><div class="q-text">Pressure to migrate is increasing now because</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q25','A')"><span class="radio-dot"></span>A economic conditions have become more desperate.</label><label class="mcq-opt" onclick="selectMCQ(this,'q25','B')"><span class="radio-dot"></span>B immigration restrictions are being relaxed.</label><label class="mcq-opt" onclick="selectMCQ(this,'q25','C')"><span class="radio-dot"></span>C people generally earn more.</label><label class="mcq-opt" onclick="selectMCQ(this,'q25','D')"><span class="radio-dot"></span>D there is a greater need for unskilled workers.</label></div></div></div>
+<div class="question" id="q26"><div class="q-num">26</div><div class="q-body"><div class="q-text">Lower incomes for unskilled workers in receiving countries have</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q26','A')"><span class="radio-dot"></span>A encouraged countries to import skilled workers.</label><label class="mcq-opt" onclick="selectMCQ(this,'q26','B')"><span class="radio-dot"></span>B led to protests about immigration.</label><label class="mcq-opt" onclick="selectMCQ(this,'q26','C')"><span class="radio-dot"></span>C reduced the amount of money immigrants send home.</label><label class="mcq-opt" onclick="selectMCQ(this,'q26','D')"><span class="radio-dot"></span>D provided opportunities for immigrants in manufacturing and agriculture.</label></div></div></div>
+</div>
+</div>
+<div id="qs-2" style="display:none">
+<div class="q-section">
+<div class="q-section-header">Questions 27&ndash;31</div>
+<div class="q-section-intro">Choose the following letters (<strong>A&ndash;F</strong>) to show the sequence of events according to the passage. The first event, <strong>C</strong>, is given as an example.</div>
+<div class="info-box"><strong>A</strong> Timber and petro-chemical industries threatened<br><strong>B</strong> Articles praise hemp as a potential billion dollar crop<br><strong>C</strong> Widespread cultivation of hemp <em>(Example)</em><br><strong>D</strong> Prohibition of marijuana<br><strong>E</strong> Newspaper articles link hemp to violent crime<br><strong>F</strong> Development of stripping machines</div>
+<div class="question" id="q27"><div class="q-num">27</div><div class="q-body"><div class="q-text">Event 1 (after the example)</div><select class="dd-select" id="dd-q27" data-opts="A,B,C,D,E,F" data-ph="Select an event&hellip;" onchange="selectDropdown(this,'q27')"></select></div></div>
+<div class="question" id="q28"><div class="q-num">28</div><div class="q-body"><div class="q-text">Event 2</div><select class="dd-select" id="dd-q28" data-opts="A,B,C,D,E,F" data-ph="Select an event&hellip;" onchange="selectDropdown(this,'q28')"></select></div></div>
+<div class="question" id="q29"><div class="q-num">29</div><div class="q-body"><div class="q-text">Event 3</div><select class="dd-select" id="dd-q29" data-opts="A,B,C,D,E,F" data-ph="Select an event&hellip;" onchange="selectDropdown(this,'q29')"></select></div></div>
+<div class="question" id="q30"><div class="q-num">30</div><div class="q-body"><div class="q-text">Event 4</div><select class="dd-select" id="dd-q30" data-opts="A,B,C,D,E,F" data-ph="Select an event&hellip;" onchange="selectDropdown(this,'q30')"></select></div></div>
+<div class="question" id="q31"><div class="q-num">31</div><div class="q-body"><div class="q-text">Event 5</div><select class="dd-select" id="dd-q31" data-opts="A,B,C,D,E,F" data-ph="Select an event&hellip;" onchange="selectDropdown(this,'q31')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 32&ndash;33</div>
+<div class="q-section-intro">Complete the following using <strong>NO MORE THAN THREE WORDS</strong> from the passage.</div>
+<div class="table-box"><table><thead><tr><th></th><th>Hemp</th><th>Marijuana</th></tr></thead><tbody><tr><td><strong>Fibre</strong></td><td>strong and durable</td><td><strong>32</strong> <input class="fill-input inline" id="q32" oninput="markFill('q32')" style="width:150px" placeholder="&hellip;"></td></tr><tr><td><strong>Drug Content</strong></td><td><strong>33</strong> <input class="fill-input inline" id="q33" oninput="markFill('q33')" style="width:150px" placeholder="&hellip;"></td><td>up to 10% THC</td></tr></tbody></table></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 34&ndash;39</div>
+<div class="q-section-intro">From the information given in the passage, classify the following as characteristic of:</div>
+<div class="info-box"><strong>A</strong> Hemp<br><strong>B</strong> Wood<br><strong>C</strong> Cotton</div>
+<div class="question" id="q34"><div class="q-num">34</div><div class="q-body"><div class="q-text">mildew-resistant</div><select class="dd-select" id="dd-q34" data-opts="A,B,C" data-ph="Select A, B or C&hellip;" onchange="selectDropdown(this,'q34')"></select></div></div>
+<div class="question" id="q35"><div class="q-num">35</div><div class="q-body"><div class="q-text">dioxin is a by-product of processing</div><select class="dd-select" id="dd-q35" data-opts="A,B,C" data-ph="Select A, B or C&hellip;" onchange="selectDropdown(this,'q35')"></select></div></div>
+<div class="question" id="q36"><div class="q-num">36</div><div class="q-body"><div class="q-text">can be harvested more than once a year</div><select class="dd-select" id="dd-q36" data-opts="A,B,C" data-ph="Select A, B or C&hellip;" onchange="selectDropdown(this,'q36')"></select></div></div>
+<div class="question" id="q37"><div class="q-num">37</div><div class="q-body"><div class="q-text">large amounts of fertiliser needed</div><select class="dd-select" id="dd-q37" data-opts="A,B,C" data-ph="Select A, B or C&hellip;" onchange="selectDropdown(this,'q37')"></select></div></div>
+<div class="question" id="q38"><div class="q-num">38</div><div class="q-body"><div class="q-text">fire-retardant properties</div><select class="dd-select" id="dd-q38" data-opts="A,B,C" data-ph="Select A, B or C&hellip;" onchange="selectDropdown(this,'q38')"></select></div></div>
+<div class="question" id="q39"><div class="q-num">39</div><div class="q-body"><div class="q-text">requires mild temperature</div><select class="dd-select" id="dd-q39" data-opts="A,B,C" data-ph="Select A, B or C&hellip;" onchange="selectDropdown(this,'q39')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Question 40</div>
+<div class="q-section-intro">Choose the correct answer, <strong>A&ndash;D</strong>.</div>
+<div class="question" id="q40"><div class="q-num">40</div><div class="q-body"><div class="q-text">The main purpose of this article is&amp;hellip;</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q40','A')"><span class="radio-dot"></span>A to criticise government policy on hemp.</label><label class="mcq-opt" onclick="selectMCQ(this,'q40','B')"><span class="radio-dot"></span>B to show the economic benefits of hemp.</label><label class="mcq-opt" onclick="selectMCQ(this,'q40','C')"><span class="radio-dot"></span>C to compare hemp and marijuana.</label><label class="mcq-opt" onclick="selectMCQ(this,'q40','D')"><span class="radio-dot"></span>D to promote research into new uses of hemp.</label></div></div></div>
+</div>
+</div>
+  </div>
+</div>
+
+<div id="bottombar">
+  <div class="part-tabs">
+    <div class="part-tab active" id="ptab-0" onclick="switchPassage(0)">Part 1: <span class="count" id="pcount-0">0 of 13</span></div>
+    <div class="part-tab" id="ptab-1" onclick="switchPassage(1)">Part 2: <span class="count" id="pcount-1">0 of 13</span></div>
+    <div class="part-tab" id="ptab-2" onclick="switchPassage(2)">Part 3: <span class="count" id="pcount-2">0 of 14</span></div>
+  </div>
+  <div class="q-circles" id="q-circles"></div>
+  <div class="nav-arrows">
+    <button class="nav-arrow" onclick="prevQ()">&lsaquo;</button>
+    <button class="nav-arrow" onclick="nextQ()">&rsaquo;</button>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="submit-modal">
+  <div class="modal">
+    <h2>Submit Your Test?</h2>
+    <p>You are about to submit your test. This action cannot be undone.</p>
+    <div class="score-grid" id="score-grid" style="display:none">
+      <div class="score-card"><div class="val" id="sc-answered">0</div><div class="lbl">Answered</div></div>
+      <div class="score-card"><div class="val" id="sc-unanswered">40</div><div class="lbl">Unanswered</div></div>
+      <div class="score-card"><div class="val" id="sc-pct">0%</div><div class="lbl">Completion</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="closeModal()">Cancel</button>
+      <button class="btn-modal primary" onclick="submitTest()">Submit Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="results-modal">
+  <div class="modal">
+    <h2>Test Complete</h2>
+    <p id="results-cand"></p>
+    <div class="score-grid">
+      <div class="score-card"><div class="val" id="r-correct" style="color:var(--success)">&mdash;</div><div class="lbl">Correct</div></div>
+      <div class="score-card"><div class="val" id="r-wrong" style="color:var(--accent-red)">&mdash;</div><div class="lbl">Incorrect</div></div>
+      <div class="score-card"><div class="val" id="r-unanswered">&mdash;</div><div class="lbl">Unanswered</div></div>
+    </div>
+    <div style="margin:14px 0 12px;background:var(--accent);border-radius:12px;padding:18px 22px;text-align:center;color:#fff">
+      <div style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-bottom:4px">IELTS Band Score</div>
+      <div id="r-band" style="font-size:48px;font-weight:700;line-height:1">&mdash;</div>
+      <div id="r-band-label" style="font-size:13px;margin-top:6px;opacity:.85">&mdash;</div>
+    </div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:6px">Your Answers vs Correct Answers</div>
+    <div class="ans-table-wrap"><table class="ans-table"><thead><tr><th>Q</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr></thead><tbody id="ans-table-body"></tbody></table></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:10px">Green = correct &middot; Red = incorrect &middot; Band scores are approximate for Academic Reading.</p>
+    <p id="pdf-status" style="font-size:13px;color:var(--success);margin-top:8px;font-weight:500"></p>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="redownloadPDF()">Download PDF again</button>
+      <button class="btn-modal primary" onclick="document.getElementById('results-modal').classList.add('hidden')">Close &amp; Review</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var ANSWERS = {
+  q1:'B', q2:'A', q3:'A', q4:'A', q5:'C', q6:'B', q7:'E', q8:'C', q9:'A', q10:'D',
+  q11:'FALSE', q12:'TRUE', q13:'TRUE',
+  q14:'slaves', q15:'growing prosperity', q16:'unskilled workers', q17:'developing countries', q18:'with skills',
+  q19:'C', q20:'H', q21:'G', q22:'E', q23:'B', q24:'I', q25:'C', q26:'B',
+  q27:'F', q28:'A', q29:'E', q30:'B', q31:'D',
+  q32:'low quality', q33:'no THC',
+  q34:'A', q35:'B', q36:'A', q37:'C', q38:'A', q39:'C', q40:'B'
+};
+
+var ALT = {
+  q14:['slaves','african slaves','slave','africans slaves'],
+  q15:['growing prosperity','rising incomes','prosperity'],
+  q16:['unskilled workers','unskilled'],
+  q17:['developing countries','developing nations'],
+  q18:['with skills','skilled workers','workers with skills'],
+  q32:['low quality','low-quality','very low quality','very low-quality'],
+  q33:['no thc','virtually no thc','virtually none','no active ingredients']
+};
+
+var PART_RANGES = [[1,13],[14,26],[27,40]];
+var userAnswers = {}, currentPassage = 0, submitted = false;
+var candidateName='', candidateNumber='';
+var seconds = 60*60;
+var timerEl = document.getElementById('timer');
+var timerInterval = null;
+
+(function initSelects(){
+  document.querySelectorAll('select[data-opts]').forEach(function(s){
+    var ph = document.createElement('option');
+    ph.value = ''; ph.disabled = true; ph.selected = true;
+    ph.innerHTML = s.getAttribute('data-ph') || 'Select\u2026';
+    s.appendChild(ph);
+    s.getAttribute('data-opts').split(',').forEach(function(v){
+      var o = document.createElement('option');
+      o.value = v; o.textContent = v;
+      s.appendChild(o);
+    });
+  });
+})();
+
+var STORAGE_KEY = 'ielts_reading_318_session';
+var autosaveInterval = null;
+var autosaveListenersAdded = false;
+var autosaveIndicator = document.getElementById('autosave-indicator');
+var autosaveText = document.getElementById('autosave-text');
+
+function showAutosaveSaving(){ autosaveIndicator.classList.add('show','saving'); autosaveText.textContent = 'Saving\u2026'; }
+function showAutosaveSaved(){
+  autosaveIndicator.classList.add('show'); autosaveIndicator.classList.remove('saving');
+  var t = new Date(); autosaveText.textContent = 'Saved ' + t.toTimeString().slice(0,8);
+  setTimeout(function(){ autosaveIndicator.classList.remove('show'); }, 2500);
+}
+function getPassageWidth(){ var pw = document.getElementById('passage-panel'); return pw ? (pw.style.width || pw.offsetWidth + 'px') : ''; }
+function saveSession(silent){
+  if(submitted) return;
+  if(!silent) showAutosaveSaving();
+  try{
+    var data = { version:3, timestamp:Date.now(), candidateName:candidateName, candidateNumber:candidateNumber,
+      seconds:seconds, currentPassage:currentPassage, userAnswers:userAnswers,
+      notepad:document.getElementById('notepad-text').value, passageWidth:getPassageWidth(), started:true };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    if(!silent) showAutosaveSaved();
+  }catch(e){}
+}
+function loadSession(){ try{ var raw=localStorage.getItem(STORAGE_KEY); if(!raw) return null; var d=JSON.parse(raw); return (d&&d.started)?d:null; }catch(e){ return null; } }
+function clearSession(){ try{ localStorage.removeItem(STORAGE_KEY); }catch(e){} }
+function formatTime(sec){ var m=Math.floor(sec/60),s=sec%60; return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'); }
+
+(function checkSavedSession(){
+  var saved = loadSession(); if(!saved) return;
+  var banner = document.getElementById('resume-banner');
+  var info = document.getElementById('resume-info');
+  var answered = 0;
+  for(var i=1;i<=40;i++){ if(saved.userAnswers && saved.userAnswers['q'+i]) answered++; }
+  var when = new Date(saved.timestamp).toLocaleString();
+  info.innerHTML = '<strong>' + escapeHtml(saved.candidateName || 'Anonymous') + '</strong> &middot; ' + answered + '/40 answered &middot; ' + formatTime(saved.seconds) + ' remaining<br><span style="opacity:.75">Saved ' + when + '</span>';
+  banner.classList.add('show');
+  document.getElementById('cand-name').value = saved.candidateName || '';
+  document.getElementById('cand-num').value = saved.candidateNumber || '';
+})();
+
+function resumeTest(){
+  var saved = loadSession(); if(!saved){ startTest(); return; }
+  candidateName = saved.candidateName || 'Anonymous';
+  candidateNumber = saved.candidateNumber || 'N/A';
+  seconds = saved.seconds || 60*60;
+  userAnswers = saved.userAnswers || {};
+  currentPassage = saved.currentPassage || 0;
+  if(saved.notepad) document.getElementById('notepad-text').value = saved.notepad;
+  if(saved.passageWidth) document.getElementById('passage-panel').style.width = saved.passageWidth;
+  document.getElementById('start-screen').classList.add('hidden');
+  restoreAnswersUI(); buildCircles(); updatePartCounts();
+  if(currentPassage !== 0) switchPassage(currentPassage);
+  updateTimerDisplay(); startTimer(); startAutosave(); showAutosaveSaved();
+}
+function discardSaved(){ clearSession(); document.getElementById('resume-banner').classList.remove('show'); document.getElementById('cand-name').value=''; document.getElementById('cand-num').value=''; }
+
+function restoreAnswersUI(){
+  for(var id in userAnswers){
+    var val = userAnswers[id]; if(!val) continue;
+    var dd = document.getElementById('dd-'+id);
+    if(dd){ dd.value=val; dd.classList.add('answered'); continue; }
+    var fi = document.getElementById(id);
+    if(fi && fi.tagName==='INPUT'){ fi.value=val; fi.classList.add('answered'); continue; }
+    var tfnWrap = document.querySelector('#'+id+' .tfn-options');
+    if(tfnWrap){ tfnWrap.querySelectorAll('.tfn-btn').forEach(function(b){ if(b.textContent.trim()===val) b.classList.add('selected'); }); continue; }
+    var mcqWrap = document.querySelector('#'+id+' .mcq-options');
+    if(mcqWrap){ mcqWrap.querySelectorAll('.mcq-opt').forEach(function(l){ if(l.textContent.trim().charAt(0)===val) l.classList.add('selected'); }); }
+  }
+}
+
+function startAutosave(){
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  autosaveInterval = setInterval(function(){ saveSession(false); }, 5000);
+  if(autosaveListenersAdded) return;
+  autosaveListenersAdded = true;
+  document.addEventListener('visibilitychange', function(){ if(document.hidden) saveSession(true); });
+  window.addEventListener('beforeunload', function(){ saveSession(true); });
+}
+
+function startTest(){
+  candidateName = document.getElementById('cand-name').value.trim() || 'Anonymous';
+  candidateNumber = document.getElementById('cand-num').value.trim() || 'N/A';
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('resume-banner').classList.remove('show');
+  clearSession(); buildCircles(); updatePartCounts(); startTimer(); startAutosave(); saveSession(true);
+}
+function startTimer(){
+  if(timerInterval) clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(function(){ if(submitted) return; seconds--; if(seconds<=0){ clearInterval(timerInterval); submitTest(); return; } updateTimerDisplay(); }, 1000);
+}
+function updateTimerDisplay(){ timerEl.textContent = formatTime(Math.max(0,seconds)); timerEl.classList.toggle('warn', seconds < 300); }
+
+function switchPassage(idx){
+  currentPassage = idx;
+  document.querySelectorAll('.part-tab').forEach(function(t,i){ t.classList.toggle('active', i===idx); });
+  document.querySelectorAll('.passage-content').forEach(function(p,i){ p.classList.toggle('active', i===idx); });
+  document.querySelectorAll('#qs-0,#qs-1,#qs-2').forEach(function(q,i){ q.style.display = i===idx ? '' : 'none'; });
+  buildCircles();
+  document.getElementById('questions-panel').scrollTop = 0;
+  document.getElementById('passage-panel').scrollTop = 0;
+  saveSession(true);
+}
+function buildCircles(){
+  var wrap = document.getElementById('q-circles'); wrap.innerHTML = '';
+  var range = PART_RANGES[currentPassage];
+  for(var i=range[0];i<=range[1];i++){
+    var d = document.createElement('div'); d.className = 'q-circle'; d.textContent = i;
+    if(userAnswers['q'+i] && userAnswers['q'+i].toString().trim()) d.classList.add('answered');
+    d.onclick = (function(n){ return function(){ scrollToQ(n); }; })(i);
+    wrap.appendChild(d);
+  }
+}
+function updatePartCounts(){
+  PART_RANGES.forEach(function(r, idx){
+    var a=0; for(var i=r[0];i<=r[1];i++){ if(userAnswers['q'+i] && userAnswers['q'+i].toString().trim()) a++; }
+    document.getElementById('pcount-'+idx).textContent = a + ' of ' + (r[1]-r[0]+1);
+  });
+}
+function scrollToQ(num){
+  var p = num<=13?0:num<=26?1:2;
+  if(p !== currentPassage) switchPassage(p);
+  setTimeout(function(){ var el=document.getElementById('q'+num); if(el) el.scrollIntoView({behavior:'smooth',block:'center'}); },50);
+}
+function prevQ(){ document.getElementById('questions-panel').scrollBy({top:-240,behavior:'smooth'}); }
+function nextQ(){ document.getElementById('questions-panel').scrollBy({top:240,behavior:'smooth'}); }
+
+function selectTFN(btn, qId, val){ btn.closest('.tfn-options').querySelectorAll('.tfn-btn').forEach(function(b){ b.classList.remove('selected'); }); btn.classList.add('selected'); userAnswers[qId]=val; updatePartCounts(); buildCircles(); saveSession(true); }
+function selectMCQ(label, qId, val){ label.closest('.mcq-options').querySelectorAll('.mcq-opt').forEach(function(l){ l.classList.remove('selected'); }); label.classList.add('selected'); userAnswers[qId]=val; updatePartCounts(); buildCircles(); saveSession(true); }
+function selectDropdown(sel, qId){ var val=sel.value; sel.classList.toggle('answered',!!val); userAnswers[qId]=val; updatePartCounts(); buildCircles(); saveSession(true); }
+function markFill(id){ var el=document.getElementById(id); var val=el.value.trim(); el.classList.toggle('answered',val.length>0); userAnswers[id]=val; updatePartCounts(); buildCircles(); saveSession(true); }
+
+var _savedRange = null;
+function hideSelToolbar(){ var tb=document.getElementById('sel-toolbar'); if(tb) tb.style.display='none'; _savedRange=null; }
+function showSelToolbar(x,y){ var tb=document.getElementById('sel-toolbar'); if(!tb) return; tb.style.display='block'; var tw=tb.offsetWidth||140, th=tb.offsetHeight||36; var left=x-tw/2, top=y-th-10; if(left+tw>window.innerWidth-8) left=window.innerWidth-tw-8; if(left<8) left=8; if(top<60) top=y+12; tb.style.left=left+'px'; tb.style.top=top+'px'; }
+function getPassageSelection(){ var sel=window.getSelection(); if(!sel||sel.isCollapsed||sel.rangeCount===0) return null; var range=sel.getRangeAt(0); var p1=document.getElementById('passage-panel'); var p2=document.getElementById('questions-panel'); var node=range.commonAncestorContainer; if(!((p1&&p1.contains(node))||(p2&&p2.contains(node)))) return null; if(!sel.toString().trim()) return null; var frag=range.cloneContents(); if(frag.querySelector && frag.querySelector('input,select,textarea,button,label')) return null; return {sel:sel,range:range}; }
+function onPassageMouseUp(e){ setTimeout(function(){ var data=getPassageSelection(); if(!data){ var tb=document.getElementById('sel-toolbar'); if(e&&e.target&&tb&&tb.contains(e.target)) return; hideSelToolbar(); return; } _savedRange=data.range.cloneRange(); var rect=data.range.getBoundingClientRect(); showSelToolbar(rect.left+rect.width/2, rect.top); },10); }
+function applyMark(cls){ if(!_savedRange) return; try{ var m=document.createElement('mark'); m.className=cls; _savedRange.surroundContents(m); }catch(e){ try{ var f=_savedRange.extractContents(); var m2=document.createElement('mark'); m2.className=cls; m2.appendChild(f); _savedRange.insertNode(m2); }catch(e2){} } var s=window.getSelection(); if(s) s.removeAllRanges(); hideSelToolbar(); }
+(function(){ var hl=document.getElementById('sel-hl-btn'); if(hl) hl.addEventListener('mousedown',function(e){e.preventDefault();applyMark('hl');}); var nb=document.getElementById('sel-note-btn'); if(nb) nb.addEventListener('mousedown',function(e){ e.preventDefault(); var text=_savedRange?_savedRange.toString().trim():''; applyMark('hl-note'); if(text){ var ta=document.getElementById('notepad-text'); if(ta){ ta.value+=(ta.value&&!ta.value.endsWith('\n')?'\n':'')+'\u2022 '+text; saveSession(true); var p=document.getElementById('notepad-panel'); if(p&&p.classList.contains('hidden')) toggleNotepad(); } } }); var pp=document.getElementById('passage-panel'); if(pp) pp.addEventListener('mouseup',onPassageMouseUp); var qp=document.getElementById('questions-panel'); if(qp) qp.addEventListener('mouseup',onPassageMouseUp); document.addEventListener('mousedown',function(e){ var tb=document.getElementById('sel-toolbar'); if(!tb||tb.style.display==='none') return; if(tb.contains(e.target)) return; setTimeout(function(){ var s=window.getSelection(); if(!s||s.isCollapsed) hideSelToolbar(); },150); }); document.addEventListener('keydown',function(e){ if(e.key==='Escape') hideSelToolbar(); }); if(pp) pp.addEventListener('scroll',hideSelToolbar); if(qp) qp.addEventListener('scroll',hideSelToolbar); })();
+
+function toggleNotepad(){ var panel=document.getElementById('notepad-panel'); var btn=document.getElementById('notepad-btn'); panel.classList.toggle('hidden'); btn.classList.toggle('active', !panel.classList.contains('hidden')); if(!panel.classList.contains('hidden')) document.getElementById('notepad-text').focus(); saveSession(true); }
+function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function(){}); else document.exitFullscreen().catch(function(){}); }
+document.getElementById('notepad-text').addEventListener('input', function(){ saveSession(true); });
+
+function getBandScore(c){ if(c>=39) return {band:'9.0',level:'Expert User'}; if(c>=37) return {band:'8.5',level:'Very Good User'}; if(c>=35) return {band:'8.0',level:'Very Good User'}; if(c>=33) return {band:'7.5',level:'Good User'}; if(c>=30) return {band:'7.0',level:'Good User'}; if(c>=27) return {band:'6.5',level:'Competent User'}; if(c>=23) return {band:'6.0',level:'Competent User'}; if(c>=19) return {band:'5.5',level:'Modest User'}; if(c>=15) return {band:'5.0',level:'Modest User'}; if(c>=13) return {band:'4.5',level:'Limited User'}; if(c>=10) return {band:'4.0',level:'Limited User'}; return {band:'3.5',level:'Extremely Limited'}; }
+function normalize(s){ return (s||'').toString().trim().toLowerCase().replace(/[()]/g,'').replace(/\s+/g,' ').replace(/\.$/,''); }
+function checkCorrect(id){
+  var ans=ANSWERS[id]; var user=(userAnswers[id]||'').toString().trim(); if(!user) return null;
+  var nU=normalize(user); if(ALT[id]){ for(var k=0;k<ALT[id].length;k++){ if(nU===normalize(ALT[id][k])) return true; } }
+  return nU===normalize(ans);
+}
+function correctAnswerLabel(id){
+  return ANSWERS[id];
+}
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function confirmSubmit(){ var count=0; for(var i=1;i<=40;i++){ if(userAnswers['q'+i]&&userAnswers['q'+i].toString().trim()) count++; } document.getElementById('sc-answered').textContent=count; document.getElementById('sc-unanswered').textContent=40-count; document.getElementById('sc-pct').textContent=Math.round(count/40*100)+'%'; document.getElementById('score-grid').style.display='grid'; document.getElementById('submit-modal').classList.remove('hidden'); }
+function closeModal(){ document.getElementById('submit-modal').classList.add('hidden'); }
+
+function submitTest(){
+  submitted=true; if(timerInterval) clearInterval(timerInterval); if(autosaveInterval) clearInterval(autosaveInterval);
+  document.getElementById('submit-modal').classList.add('hidden'); clearSession();
+  var correct=0, wrong=0, unanswered=0;
+  var tbody=document.getElementById('ans-table-body'); tbody.innerHTML='';
+  var pdfRows=[];
+  for(var num=1;num<=40;num++){
+    var id='q'+num; var result=checkCorrect(id); var userRaw=(userAnswers[id]||'').toString().trim(); var correctAns=correctAnswerLabel(id);
+    var yourCell, resultCell, resText;
+    if(result===null){ unanswered++; yourCell='<span class="blank">&mdash;</span>'; resultCell='<span class="blank">Unanswered</span>'; resText='Unanswered'; }
+    else if(result){ correct++; yourCell='<span class="ok">'+escapeHtml(userRaw)+'</span>'; resultCell='<span class="ok">&#10003; Correct</span>'; resText='Correct'; }
+    else { wrong++; yourCell='<span class="bad">'+escapeHtml(userRaw||'-')+'</span>'; resultCell='<span class="bad">&#10007; Incorrect</span>'; resText='Incorrect'; }
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td style="font-weight:700;color:var(--accent)">'+num+'</td><td>'+yourCell+'</td><td><strong>'+escapeHtml(correctAns)+'</strong></td><td>'+resultCell+'</td>';
+    tbody.appendChild(tr); pdfRows.push([String(num), userRaw||'-', correctAns, resText]);
+  }
+  document.getElementById('r-correct').textContent=correct;
+  document.getElementById('r-wrong').textContent=wrong;
+  document.getElementById('r-unanswered').textContent=unanswered;
+  var bs=getBandScore(correct);
+  document.getElementById('r-band').textContent=bs.band;
+  document.getElementById('r-band-label').textContent=bs.level+' \u00B7 '+correct+' / 40 correct';
+  document.getElementById('results-cand').textContent='Candidate: '+candidateName+'  \u00B7  Number: '+candidateNumber;
+  document.getElementById('results-modal').classList.remove('hidden');
+  window._lastPdfData={correct:correct,wrong:wrong,unanswered:unanswered,bs:bs,pdfRows:pdfRows};
+  try{ generateResultsPDF(correct,wrong,unanswered,bs,pdfRows); document.getElementById('pdf-status').textContent='Candidate response PDF downloaded.'; }
+  catch(e){ document.getElementById('pdf-status').textContent='PDF download failed. Use the button below.'; document.getElementById('pdf-status').style.color='var(--accent-red)'; }
+}
+function redownloadPDF(){ if(!window._lastPdfData) return; var d=window._lastPdfData; try{ generateResultsPDF(d.correct,d.wrong,d.unanswered,d.bs,d.pdfRows); }catch(e){} }
+
+function generateResultsPDF(correct,wrong,unanswered,bandInfo,rows){
+  var jsPDF=window.jspdf.jsPDF; var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  var pageWidth=doc.internal.pageSize.getWidth();
+  doc.setFillColor(30,58,95); doc.rect(0,0,pageWidth,28,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(16); doc.setFont('helvetica','bold');
+  doc.text('IELTS Academic Reading \u00B7 Test 318',14,12);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Candidate Response Report',14,20); doc.text(new Date().toLocaleString(),pageWidth-14,20,{align:'right'});
+  doc.setTextColor(26,24,20); doc.setFontSize(11); doc.setFont('helvetica','bold');
+  doc.text('Candidate Name:',14,38); doc.setFont('helvetica','normal'); doc.text(candidateName||'Anonymous',52,38);
+  doc.setFont('helvetica','bold'); doc.text('Candidate Number:',14,45); doc.setFont('helvetica','normal'); doc.text(candidateNumber||'-',58,45);
+  doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.text('Score Summary',14,56);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Correct: '+correct+'    Incorrect: '+wrong+'    Unanswered: '+unanswered,14,64);
+  doc.setFont('helvetica','bold'); doc.setTextColor(30,58,95); doc.setFontSize(14);
+  doc.text('Band Score: '+bandInfo.band+'  ('+bandInfo.level+')',14,72);
+  doc.setTextColor(26,24,20); doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text(correct+' / 40 correct',14,79);
+  doc.autoTable({ startY:86, head:[['Q','Your Answer','Correct Answer','Result']], body:rows, theme:'grid',
+    styles:{fontSize:8,cellPadding:2.2,overflow:'linebreak',valign:'middle'},
+    headStyles:{fillColor:[30,58,95],textColor:255,fontStyle:'bold',fontSize:8},
+    columnStyles:{0:{cellWidth:18,halign:'center'},1:{cellWidth:50},2:{cellWidth:70},3:{cellWidth:35,halign:'center'}},
+    didParseCell:function(data){ if(data.section==='body'&&data.column.index===3){ var t=data.cell.raw||''; if(t.indexOf('Correct')!==-1 && t.indexOf('Incorrect')===-1){data.cell.styles.textColor=[5,150,105];data.cell.styles.fontStyle='bold';} else if(t.indexOf('Incorrect')!==-1){data.cell.styles.textColor=[225,29,72];data.cell.styles.fontStyle='bold';} else {data.cell.styles.textColor=[107,114,128];data.cell.styles.fontStyle='italic';} } },
+    margin:{left:14,right:14} });
+  var finalY=doc.lastAutoTable.finalY+12;
+  doc.setFontSize(8); doc.setTextColor(107,114,128);
+  doc.text('This report shows your answers against the official answer key.',14,finalY);
+  var safeName=(candidateName||'Candidate').replace(/[^a-zA-Z0-9]/g,'_').slice(0,20);
+  var safeNum=(candidateNumber||'NA').replace(/[^a-zA-Z0-9]/g,'_').slice(0,15);
+  doc.save('IELTS_Test318_'+safeName+'_'+safeNum+'_'+new Date().toISOString().slice(0,10)+'.pdf');
+}
+
+var resizer=document.getElementById('resizer');
+var passPanel=document.getElementById('passage-panel');
+var isResizing=false,startX,startW;
+resizer.addEventListener('mousedown',function(e){ isResizing=true; startX=e.clientX; startW=passPanel.offsetWidth; resizer.classList.add('dragging'); document.body.style.userSelect='none'; document.body.style.cursor='col-resize'; });
+document.addEventListener('mousemove',function(e){ if(!isResizing) return; var dx=e.clientX-startX; passPanel.style.width=Math.min(Math.max(startW+dx,280),window.innerWidth-320)+'px'; });
+document.addEventListener('mouseup',function(){ if(isResizing){ isResizing=false; resizer.classList.remove('dragging'); document.body.style.userSelect=''; document.body.style.cursor=''; saveSession(true); } });
+(function(){ var saved=loadSession(); if(saved&&saved.passageWidth) document.getElementById('passage-panel').style.width=saved.passageWidth; })();
+</script>
+</body>
+</html>

@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Academic Writing · Task 2 Question Bank</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2eb;
+    --surface: #fffef9;
+    --border: #d6cfc0;
+    --accent: #2d5a8e;
+    --accent-light: #e8f0fa;
+    --danger: #b94040;
+    --success: #2e7d5e;
+    --text: #1a1814;
+    --muted: #6b6456;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  #topbar {
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    height: 50px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,.25);
+    z-index: 100;
+  }
+  #topbar .logo { font-weight: 600; font-size: 14px; letter-spacing: .03em; }
+  #topbar .logo span { opacity: .7; font-weight: 300; }
+  #timer-wrap { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  #timer {
+    font-family: 'Source Serif 4', serif;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: .05em;
+    min-width: 58px;
+    text-align: right;
+  }
+  #timer.warn { color: #ffb3b3; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.55} }
+  .top-actions { display: flex; gap: 8px; align-items: center; }
+  .btn-top {
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.3);
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .btn-top:hover { background: rgba(255,255,255,.28); }
+  .btn-top.primary { background: #fff; color: var(--accent); border-color: #fff; font-weight: 600; }
+  .autosave-badge {
+    font-size: 11px;
+    opacity: .85;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    background: rgba(255,255,255,.12);
+    border-radius: 4px;
+  }
+  .autosave-badge .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #7dcea0;
+    box-shadow: 0 0 4px #7dcea0;
+  }
+  .autosave-badge.saving .dot { background: #f4d03f; box-shadow: 0 0 4px #f4d03f; }
+  #main {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    background: var(--bg);
+  }
+  .task-panel {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+  .prompt-side {
+    width: 48%;
+    min-width: 300px;
+    max-width: none;
+    flex-shrink: 0;
+    background: var(--surface);
+    overflow-y: auto;
+    padding: 20px 22px;
+  }
+  .resizer {
+    width: 6px;
+    flex-shrink: 0;
+    background: var(--border);
+    cursor: col-resize;
+    position: relative;
+    transition: background 0.15s;
+    z-index: 10;
+  }
+  .resizer:hover,
+  .resizer.dragging {
+    background: var(--accent);
+  }
+  .resizer::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2px;
+    height: 32px;
+    border-radius: 1px;
+    background: rgba(255,255,255,.55);
+    pointer-events: none;
+  }
+  .write-side {
+    flex: 1;
+    min-width: 280px;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 18px;
+    overflow: hidden;
+  }
+  .prompt-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .prompt-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+  .prompt-box {
+    background: var(--accent-light);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 14.5px;
+    line-height: 1.55;
+    margin-bottom: 16px;
+  }
+  .prompt-note {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .word-req {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+  .chart-wrap {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    margin-top: 8px;
+  }
+  .task-chart-image {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: #fff;
+    object-fit: contain;
+  }
+  .chart-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 10px;
+    color: var(--accent);
+    font-family: 'Source Serif 4', serif;
+  }
+  .editor-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+  }
+  .word-count {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .word-count strong { color: var(--accent); font-size: 15px; }
+  .word-count.ok strong { color: var(--success); }
+  .word-count.low strong { color: var(--danger); }
+  textarea.write-area {
+    flex: 1;
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    line-height: 1.65;
+    resize: none;
+    background: #fff;
+    color: var(--text);
+    spellcheck: false;
+    -webkit-spellcheck: false;
+  }
+  textarea.write-area::spelling-error,
+  textarea.write-area::grammar-error {
+    text-decoration: none !important;
+    background: transparent !important;
+  }
+  textarea.write-area:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(45,90,142,.12);
+  }
+  #bottombar {
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    flex-shrink: 0;
+    gap: 12px;
+  }
+  .btn-nav {
+    padding: 6px 14px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: #fff;
+  }
+  .btn-nav:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-nav.submit {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .btn-nav.danger {
+    color: var(--danger);
+    border-color: #e0b0b0;
+  }
+  .btn-nav.danger:hover {
+    background: #fdf2f2;
+    border-color: var(--danger);
+  }
+  .status-text { font-size: 12px; color: var(--muted); }
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .modal-overlay.hidden { display: none; }
+  #candidate-modal { background: var(--bg); }
+  .modal {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 24px 28px;
+    max-width: 560px;
+    width: 94%;
+    max-height: 88vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,.3);
+  }
+  .modal h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: var(--accent);
+  }
+  .score-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .score-card {
+    background: var(--accent-light);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  .score-card .val {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    font-family: 'Source Serif 4', serif;
+  }
+  .score-card .lbl {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    margin-top: 2px;
+  }
+  .modal-btns {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 14px;
+  }
+  .answer-preview {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    max-height: 160px;
+    overflow-y: auto;
+    font-family: 'Source Serif 4', serif;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: 8px;
+    white-space: pre-wrap;
+  }
+
+  #picker-modal.solid { background: var(--bg); }
+  textarea.write-area[readonly] { background: #faf8f3; }
+  .prompt-box p { margin-bottom: 10px; }
+  .prompt-box p:last-child { margin-bottom: 0; }
+  .modal.wide { max-width: 960px; display: flex; flex-direction: column; overflow: hidden; }
+  .picker-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-shrink: 0; }
+  .picker-head h2 { margin-bottom: 4px; }
+  .picker-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 10px; line-height: 1.45; }
+  .picker-actions { display: flex; gap: 8px; flex-shrink: 0; }
+  .pick-list { overflow-y: auto; min-height: 0; flex: 1; padding-right: 4px; }
+  .pick-cat { font-family: 'Source Serif 4', serif; font-size: 15px; font-weight: 600; color: var(--accent); margin: 14px 0 8px; }
+  .pick-cat:first-child { margin-top: 4px; }
+  .pick-q {
+    display: flex; gap: 10px; align-items: flex-start; width: 100%; text-align: left;
+    background: #fff; border: 1px solid var(--border); border-radius: 8px;
+    padding: 9px 12px; margin-bottom: 6px; cursor: pointer;
+    font: inherit; font-size: 13px; line-height: 1.45; color: var(--text);
+  }
+  .pick-q:hover { border-color: var(--accent); background: var(--accent-light); }
+  .pick-q.current { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(45,90,142,.18); }
+  .pick-num { flex-shrink: 0; font-weight: 600; color: var(--accent); min-width: 20px; }
+  .pick-text { flex: 1; }
+  .badge { flex-shrink: 0; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+  .badge.progress { background: #fff3d6; color: #8a6100; }
+  .badge.done { background: #dff3e8; color: var(--success); }
+  .pick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 10px; margin-bottom: 4px; }
+  .pick-tile {
+    position: relative; display: flex; flex-direction: column; align-items: center; text-align: center;
+    background: #fff; border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 10px 12px; cursor: pointer; font: inherit; color: var(--text);
+    transition: transform .12s, box-shadow .12s, border-color .12s, background .12s;
+  }
+  .pick-tile:hover { border-color: var(--accent); background: var(--accent-light); transform: translateY(-2px); box-shadow: 0 6px 14px rgba(45,90,142,.14); }
+  .pick-tile.current { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(45,90,142,.2); }
+  .pick-tile.done { background: #f6fbf8; }
+  .tile-num {
+    position: absolute; top: 8px; left: 10px; font-size: 11px; font-weight: 600; color: var(--muted);
+  }
+  .tile-icon {
+    width: 58px; height: 58px; border-radius: 50%; background: var(--accent-light); color: var(--accent);
+    display: flex; align-items: center; justify-content: center; margin-bottom: 10px;
+  }
+  .pick-tile:hover .tile-icon { background: #fff; }
+  .tile-icon svg { width: 32px; height: 32px; }
+  .tile-name { font-family: 'Source Serif 4', serif; font-size: 14px; font-weight: 600; line-height: 1.25; margin-bottom: 3px; }
+  .tile-type { font-size: 11.5px; color: var(--muted); margin-bottom: 8px; }
+  .tile-badge { margin-top: auto; font-size: 10.5px; line-height: 1.3; white-space: normal; }
+  .tile-state-dot { position: absolute; top: 9px; right: 10px; width: 8px; height: 8px; border-radius: 50%; }
+  .tile-state-dot.progress { background: #e0a100; }
+  .tile-state-dot.done { background: var(--success); }
+</style>
+<style id="modern-theme">
+  :root {
+    --font: 'Plus Jakarta Sans','DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --bg: #f1f4fb; --surface: #ffffff; --border: #e3e7f2;
+    --accent: #2563eb; --accent-2: #7c3aed; --accent-rgb: 37,99,235;
+    --accent-light: #e8f0ff; --accent-dark: #1e40af;
+    --danger: #e11d48; --success: #059669; --text: #0f172a; --muted: #64748b;
+  }
+  body { font-family: var(--font); background: linear-gradient(180deg,#f6f8fe 0%,#eceff9 100%); color: var(--text); }
+
+  /* ---- top bar ---- */
+  #topbar {
+    height: 58px; padding: 0 22px;
+    background: linear-gradient(110deg, var(--accent) 0%, var(--accent-2) 100%);
+    box-shadow: 0 8px 28px rgba(var(--accent-rgb), .38);
+    transition: background .35s;
+  }
+  #topbar .logo { font-weight: 800; font-size: 15px; letter-spacing: .01em; }
+  #topbar .logo::before {
+    content: ""; display: inline-block; vertical-align: middle; margin: -3px 10px 0 0;
+    width: 32px; height: 32px; border-radius: 11px;
+    background: rgba(255,255,255,.22) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20h9'/%3E%3Cpath d='M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z'/%3E%3C/svg%3E") center/18px no-repeat;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.3);
+  }
+  #topbar .logo span { opacity: .85; font-weight: 500; }
+  #timer-wrap {
+    background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.3);
+    padding: 5px 6px 5px 16px; border-radius: 999px; gap: 10px; backdrop-filter: blur(6px);
+  }
+  #timer {
+    font-family: var(--font); font-variant-numeric: tabular-nums; font-weight: 800; font-size: 19px;
+    background: #fff; color: var(--accent-dark); padding: 3px 14px; border-radius: 999px; min-width: 80px; text-align: center;
+  }
+  #timer.warn { background: #ffe4e6; color: #be123c; animation: pulse 1s infinite; }
+  .btn-top { border-radius: 999px; padding: 8px 16px; font-size: 12.5px; font-weight: 600; font-family: var(--font); transition: transform .12s, background .12s; }
+  .btn-top:hover { transform: translateY(-1px); }
+  .btn-top.primary { color: var(--accent-dark); box-shadow: 0 6px 16px rgba(0,0,0,.18); }
+  .autosave-badge { border-radius: 999px; padding: 5px 12px; font-weight: 600; background: rgba(255,255,255,.16); }
+
+  /* ---- panels ---- */
+  .prompt-side { background: #fff; padding: 26px 30px; box-shadow: 6px 0 30px rgba(15,23,42,.05); }
+  .write-side { padding: 22px 28px; }
+  .resizer { width: 8px; background: #e4e8f4; }
+  .resizer:hover, .resizer.dragging { background: var(--accent); }
+  .prompt-label {
+    display: inline-flex; align-items: center; gap: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: .09em;
+    color: var(--accent-dark); background: var(--accent-light); padding: 6px 13px; border-radius: 999px; margin-bottom: 12px;
+  }
+  .prompt-label::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .prompt-title {
+    font-family: var(--font); font-size: 27px; font-weight: 800; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 14px;
+    color: var(--accent);
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .word-req {
+    background: linear-gradient(90deg, var(--accent), var(--accent-2)); font-size: 11.5px; font-weight: 700;
+    padding: 6px 15px; box-shadow: 0 6px 14px rgba(var(--accent-rgb), .3);
+  }
+  .prompt-note { font-size: 13px; }
+  .prompt-box {
+    background: linear-gradient(135deg, var(--accent-light), #fff 85%);
+    border: 1px solid rgba(var(--accent-rgb), .18); border-left: 5px solid var(--accent);
+    border-radius: 16px; padding: 18px 22px; font-size: 15.5px; line-height: 1.7;
+    box-shadow: 0 10px 28px rgba(var(--accent-rgb), .09);
+  }
+  .chart-wrap { background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 16px; box-shadow: 0 12px 34px rgba(15,23,42,.08); }
+  .task-chart-image { border: none; border-radius: 12px; }
+  .chart-title { font-family: var(--font); font-weight: 700; font-size: 13px; color: var(--accent-dark); }
+
+  .word-count {
+    background: #fff; border: 1px solid var(--border); padding: 6px 15px; border-radius: 999px;
+    font-weight: 600; font-size: 12.5px; box-shadow: 0 4px 12px rgba(15,23,42,.05);
+  }
+  .word-count strong { color: var(--accent); font-size: 15px; }
+  .word-count.ok { background: #ecfdf5; border-color: #a7f3d0; }
+  .word-count.low { background: #fff1f2; border-color: #fecdd3; }
+  textarea.write-area {
+    border: 2px solid var(--border); border-radius: 20px; padding: 22px 24px; font-size: 16px; line-height: 1.8;
+    box-shadow: 0 12px 34px rgba(15,23,42,.06);
+  }
+  textarea.write-area:focus { border-color: var(--accent); box-shadow: 0 0 0 5px rgba(var(--accent-rgb), .15), 0 12px 34px rgba(15,23,42,.06); }
+  textarea.write-area[readonly] { background: #f8fafc; }
+
+  /* ---- bottom bar & buttons ---- */
+  #bottombar { background: rgba(255,255,255,.88); backdrop-filter: blur(12px); border-top: 1px solid var(--border); padding: 12px 22px; }
+  .status-text { font-weight: 600; font-size: 12.5px; }
+  .btn-nav {
+    font-family: var(--font); border-radius: 999px; padding: 9px 18px; font-size: 12.5px; font-weight: 600;
+    border: 1.5px solid var(--border); color: var(--text); background: #fff; transition: transform .12s, box-shadow .12s, border-color .12s;
+  }
+  .btn-nav:hover { border-color: var(--accent); color: var(--accent-dark); transform: translateY(-1px); box-shadow: 0 6px 14px rgba(15,23,42,.08); }
+  .btn-nav.submit {
+    background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: #fff; border: none;
+    box-shadow: 0 8px 18px rgba(var(--accent-rgb), .38);
+  }
+  .btn-nav.submit:hover { color: #fff; filter: brightness(1.07); box-shadow: 0 10px 22px rgba(var(--accent-rgb), .45); }
+  .btn-nav.danger { color: var(--danger); border-color: #fecdd3; background: #fff; }
+  .btn-nav.danger:hover { background: #fff1f2; border-color: var(--danger); color: var(--danger); }
+
+  /* ---- modals ---- */
+  .modal-overlay { background: rgba(15,23,42,.5); backdrop-filter: blur(7px); }
+  #candidate-modal, #picker-modal.solid {
+    backdrop-filter: none;
+    background:
+      radial-gradient(900px 520px at 8% 0%, rgba(37,99,235,.24), transparent 60%),
+      radial-gradient(800px 520px at 100% 8%, rgba(219,39,119,.2), transparent 55%),
+      radial-gradient(900px 640px at 55% 108%, rgba(13,148,136,.24), transparent 60%),
+      #f4f6fc;
+  }
+  .modal { background: #fff; border-radius: 26px; padding: 30px 34px; box-shadow: 0 34px 90px rgba(15,23,42,.38); }
+  .modal h2 { font-family: var(--font); font-weight: 800; font-size: 23px; letter-spacing: -.01em; color: var(--accent-dark); }
+  #candidate-modal .modal h2 {
+    font-size: 28px; display: inline-block;
+    background: linear-gradient(90deg,#2563eb,#7c3aed 55%,#db2777); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  #candidate-modal input {
+    border: 2px solid var(--border) !important; border-radius: 14px !important; padding: 13px 15px !important;
+    font-family: var(--font) !important; background: #f8fafc; transition: border-color .15s, box-shadow .15s;
+  }
+  #candidate-modal input:focus { outline: none; border-color: #7c3aed !important; box-shadow: 0 0 0 4px rgba(124,58,237,.15); background: #fff; }
+  #candidate-modal label { color: #5b21b6 !important; letter-spacing: .02em; }
+  .score-card { background: linear-gradient(135deg, var(--accent-light), #fff); border: 1px solid rgba(var(--accent-rgb), .16); border-radius: 18px; padding: 16px; }
+  .score-card .val { font-family: var(--font); font-weight: 800; font-size: 32px; color: var(--accent); }
+  .score-card .lbl { font-weight: 700; color: var(--accent-dark); }
+  .answer-preview { border-radius: 14px; border-color: var(--border); background: #f8fafc; }
+
+  /* ---- picker ---- */
+  .modal.wide { max-width: 1020px; }
+  .picker-head h2 {
+    font-size: 30px; display: inline-block;
+    background: linear-gradient(90deg,#2563eb,#7c3aed 50%,#db2777); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .picker-sub { font-size: 13.5px; }
+  .pg-wrap { margin: 12px 0 4px; }
+  .pg-bar { height: 10px; border-radius: 999px; background: #e8ecf6; overflow: hidden; display: flex; }
+  .pg-bar .done { background: linear-gradient(90deg,#10b981,#34d399); }
+  .pg-bar .prog { background: linear-gradient(90deg,#f59e0b,#fbbf24); }
+  .pg-text { font-size: 12px; font-weight: 600; color: var(--muted); margin-top: 7px; }
+  .pick-cat {
+    display: flex; align-items: center; gap: 11px; font-family: var(--font); font-size: 17px; font-weight: 800;
+    color: var(--text); margin: 24px 0 13px;
+  }
+  .pick-cat:first-child { margin-top: 10px; }
+  .pick-cat .cat-dot {
+    width: 32px; height: 32px; border-radius: 11px; color: #fff; font-size: 13px; font-weight: 800;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--c), var(--c2)); box-shadow: 0 8px 16px rgba(var(--c-rgb), .35);
+  }
+  .pick-cat .cat-count { margin-left: auto; font-size: 11.5px; font-weight: 700; color: var(--cd); background: var(--cl); padding: 4px 12px; border-radius: 999px; }
+  .pick-grid { grid-template-columns: repeat(auto-fill, minmax(176px, 1fr)); gap: 14px; }
+  .pick-tile {
+    overflow: hidden; border: 1px solid #e8ecf6; border-radius: 20px; padding: 22px 12px 15px; background: #fff;
+    box-shadow: 0 6px 18px rgba(15,23,42,.06); font-family: var(--font);
+    transition: transform .15s, box-shadow .15s, border-color .15s, background .15s;
+  }
+  .pick-tile::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 5px; background: linear-gradient(90deg, var(--c), var(--c2)); }
+  .pick-tile:hover {
+    transform: translateY(-5px); border-color: var(--c); background: linear-gradient(180deg, #fff 30%, var(--cl));
+    box-shadow: 0 16px 34px rgba(var(--c-rgb), .26);
+  }
+  .pick-tile.current { border-color: var(--c); box-shadow: 0 0 0 3px rgba(var(--c-rgb), .28), 0 12px 28px rgba(var(--c-rgb), .2); }
+  .pick-tile.done { background: linear-gradient(180deg, #fff 40%, #ecfdf5); }
+  .tile-num {
+    top: 13px; left: 11px; width: 23px; height: 23px; border-radius: 8px; background: var(--cl); color: var(--cd);
+    display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800;
+  }
+  .tile-icon {
+    width: 66px; height: 66px; border-radius: 22px; margin-bottom: 13px; color: #fff;
+    background: linear-gradient(135deg, var(--c), var(--c2)); box-shadow: 0 12px 22px rgba(var(--c-rgb), .38);
+    transition: transform .2s;
+  }
+  .pick-tile:hover .tile-icon { background: linear-gradient(135deg, var(--c), var(--c2)); transform: scale(1.08) rotate(-4deg); }
+  .tile-icon svg { width: 35px; height: 35px; }
+  .tile-name { font-family: var(--font); font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 6px; }
+  .tile-type { font-size: 11px; font-weight: 700; color: var(--cd); background: var(--cl); padding: 3px 11px; border-radius: 999px; margin-bottom: 10px; }
+  .badge { font-family: var(--font); }
+  .badge.progress { background: #fef3c7; color: #92400e; }
+  .badge.done { background: #d1fae5; color: #065f46; }
+  .tile-state-dot { top: 13px; right: 12px; width: 9px; height: 9px; box-shadow: 0 0 0 3px rgba(255,255,255,.9); }
+</style>
+</head>
+<body>
+<div id="topbar">
+  <div class="logo">IELTS <span>Academic Writing · Practice Test</span></div>
+  <div id="timer-wrap">
+    <span style="opacity:.8;font-size:12px">Time remaining</span>
+    <div id="timer">40:00</div>
+  </div>
+  <div class="top-actions">
+    <div class="autosave-badge" id="autosaveBadge" title="Answers are saved automatically in this browser">
+      <span class="dot"></span>
+      <span id="autosaveLabel">Autosaved</span>
+    </div>
+    <button class="btn-top" onclick="confirmSubmit()">Review &amp; Submit</button>
+    <button class="btn-top primary" onclick="confirmSubmit()">Submit Test</button>
+  </div>
+</div>
+
+<div id="main">
+  <div class="task-panel" id="task-2">
+    <div class="prompt-side" id="promptSide">
+      <div class="prompt-label" id="qLabel">Writing Task 2</div>
+      <div class="prompt-title" id="qTitle">No question selected</div>
+      <div class="word-req">Write at least 250 words</div>
+      <div class="prompt-note">You should spend about <strong>40 minutes</strong> on this task.</div>
+      <div class="prompt-box" id="qBox"></div>
+      <div class="prompt-note" style="margin-top:12px">
+        Give reasons for your answer and include any relevant examples from your own knowledge or experience.
+      </div>
+    </div>
+    <div class="resizer" data-task="2" title="Drag to resize"></div>
+    <div class="write-side">
+      <div class="editor-header">
+        <div class="prompt-label">Your response · Task 2</div>
+        <div class="word-count" id="wc">Words: <strong>0</strong> / 250 minimum</div>
+      </div>
+      <textarea class="write-area" id="answer" placeholder="Write your Task 2 essay here (at least 250 words)…" oninput="onAnswerInput()" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false"></textarea>
+    </div>
+  </div>
+</div>
+
+<div id="bottombar">
+  <div class="status-text" id="statusText">No question selected</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn-nav danger" onclick="confirmClearSave()" title="Clear all autosaved answers from this browser">Clear autosave</button>
+    <button class="btn-nav" onclick="openPicker(true)">Change question</button>
+    <button class="btn-nav submit" onclick="confirmSubmit()">Submit Writing Test</button>
+  </div>
+</div>
+
+<!-- Candidate modal -->
+<div class="modal-overlay" id="candidate-modal">
+  <div class="modal">
+    <h2>Candidate Details</h2>
+    <p style="font-size:13.5px;color:var(--muted);margin-bottom:14px">Enter your details before starting the Writing test. Answers are autosaved locally in this browser so a refresh or accidental close will not lose your work.</p>
+    <div style="margin-bottom:12px">
+      <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--accent)">Full Name</label>
+      <input type="text" id="candName" placeholder="e.g. John Smith" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit">
+    </div>
+    <div style="margin-bottom:16px">
+      <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--accent)">Roll / Candidate Number</label>
+      <input type="text" id="candRoll" placeholder="e.g. 123456" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit">
+    </div>
+    <div class="modal-btns">
+      <button class="btn-nav submit" onclick="saveCandidate()">Continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- Question picker modal -->
+<div class="modal-overlay hidden" id="picker-modal">
+  <div class="modal wide">
+    <div class="picker-head">
+      <div>
+        <h2>Choose a question</h2>
+        <p class="picker-sub" id="pickerSub"></p>
+        <div class="pg-wrap" id="pgWrap"></div>
+      </div>
+      <div class="picker-actions">
+        <button class="btn-nav" onclick="pickRandom()">Random question</button>
+        <button class="btn-nav" id="pickerClose" onclick="closePicker()">Close</button>
+      </div>
+    </div>
+    <div class="pick-list" id="pickList"></div>
+  </div>
+</div>
+
+<!-- Submit confirm modal -->
+<div class="modal-overlay hidden" id="submit-modal">
+  <div class="modal">
+    <h2>Submit Writing Test?</h2>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:8px">Review your word count before submitting.</p>
+    <div class="score-grid">
+      <div class="score-card">
+        <div class="val" id="sc-words">0</div>
+        <div class="lbl">Task 2 words</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:var(--muted)" id="sc-warning"></div>
+    <div class="modal-btns">
+      <button class="btn-nav" onclick="closeModal()">Continue writing</button>
+      <button class="btn-nav submit" onclick="submitTest()">Submit now</button>
+    </div>
+  </div>
+</div>
+
+<!-- Results modal -->
+<div class="modal-overlay hidden" id="results-modal">
+  <div class="modal">
+    <h2>Writing Test Submitted</h2>
+    <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px">
+      A PDF of your Task 2 response has been downloaded. Official IELTS Writing is marked by trained examiners. Below is a practice summary of your response.
+    </p>
+    <div class="score-grid">
+      <div class="score-card">
+        <div class="val" id="r-words">—</div>
+        <div class="lbl">Task 2 words</div>
+      </div>
+    </div>
+    <div style="margin:10px 0 6px;font-size:13px;font-weight:600" id="r-question">Task 2 response</div>
+    <div class="answer-preview" id="prev"></div>
+    <div style="margin-top:14px;padding:12px;background:var(--accent-light);border-radius:8px;font-size:12.5px;line-height:1.5">
+      <strong>Next steps for real practice:</strong> Use the official IELTS Writing band descriptors for Task Achievement / Response, Coherence &amp; Cohesion, Lexical Resource, and Grammatical Range &amp; Accuracy to self-assess your response.
+    </div>
+    <div class="modal-btns">
+      <button class="btn-nav" onclick="document.getElementById('results-modal').classList.add('hidden')">Close</button>
+      <button class="btn-nav submit" onclick="document.getElementById('results-modal').classList.add('hidden'); openPicker(true)">Choose another question</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+/* ---------- Question bank (IELTS Writing Task 2) ---------- */
+const BANK = [
+  { name: 'Agree or Disagree',
+    qs: [
+      ["Today, the high sales of popular consumer goods reflect the power of advertising rather than the real needs of the society in which they are sold. To what extent do you agree or disagree?"],
+      ["Some people believe that unpaid community service should be a compulsory part of high school programmes, for example, working for a charity, improving the neighbourhood or teaching sports to younger children. To what extent do you agree or disagree?"],
+      ["Some people believe that nowadays we have too many choices. To what extent do you agree or disagree with this statement?"],
+      ["In the future, nobody will buy printed newspapers or books because they will be able to read everything they want online without paying. To what extent do you agree or disagree?"],
+      ["It is important for everyone, including young people, to save money for their future. To what extent do you agree or disagree with this statement?"]
+    ] },
+  { name: 'Advantages and Disadvantages',
+    qs: [
+      ["Some parents buy their children a large number of toys to play with. What are the advantages and disadvantages for children of having a large number of toys?"],
+      ["It is important for people to take risks, both in their professional and personal lives. Do you think the advantages of taking risks outweigh the disadvantages?"],
+      ["Nowadays, it is easier for young people to obtain a credit card than it was in the past. What are the advantages and disadvantages of this development?"],
+      ["Health services are a basic necessity. However, private companies have made them quite costly for ordinary individuals. What are the advantages and disadvantages of private companies providing health services?"],
+      ["Many people argue that restaurants should be required to disclose the nutritional information of the dishes they serve. Discuss the advantages and disadvantages of this requirement."]
+    ] },
+  { name: 'Causes and Solutions',
+    qs: [
+      ["Environmental damage is a problem in most countries.", "What are the causes of this damage?", "What should be done about this problem?"],
+      ["Fewer young people play sports these days.", "Why is this the case?", "What can be done to encourage more young people to participate in sports?"],
+      ["Recent research suggests that the majority of criminals who are sent to prison commit crimes again after they are released.", "Why is this the case?", "What can be done to solve this problem?"],
+      ["Children are now facing educational, social and commercial pressures.", "What are the causes of these pressures?", "What measures can be taken to reduce them?"],
+      ["Many students find it difficult to focus or pay attention at school nowadays.", "What are the reasons for this?", "What can be done to solve this problem?"]
+    ] },
+  { name: 'Problems and Solutions',
+    qs: [
+      ["The world has many towns and cities that were constructed in previous centuries and were more suitable and liveable for people at that time than they are today.", "What problems does this cause?", "What can be done to solve these problems?"],
+      ["More and more people in developing countries are purchasing cars for the first time.", "What problems does this cause?", "What are the possible solutions?"],
+      ["Living in large cities today poses many problems for people.", "What are these problems?", "Should governments encourage more people to live in smaller towns?"],
+      ["Many people try to balance work with other parts of their lives. However, this is very difficult to do.", "What problems are associated with this?", "What is the best way to achieve a better balance?"],
+      ["Many people who care for the elderly do not have enough time to look after them.", "What problems are related to this?", "What are some possible solutions?"]
+    ] },
+  { name: 'Two-Part Questions',
+    qs: [
+      ["Many aspects of the way people dress today are influenced by global fashion trends.", "How has global fashion become such a strong influence on people’s lives?", "Do you think this is a positive or negative development?"],
+      ["In many workplaces, creativity and imagination are becoming more valued than technical expertise.", "Why is this the case?", "Is this a positive or negative development?"],
+      ["Fewer and fewer people today write by hand using a pen or pencil.", "What are the reasons for this?", "Is this a positive or negative development?"],
+      ["The rise of social media platforms has made it easier for people to express their frustrations and complaints publicly.", "What are the consequences of this trend?", "Are there any benefits to expressing complaints on social media?"],
+      ["Some countries have introduced laws to limit the working hours that employers can require from employees.", "Why have these laws been introduced?", "Is this a positive or negative trend?"]
+    ] },
+  { name: 'Positive or Negative Development',
+    qs: [
+      ["Countries are becoming more and more similar because people are able to buy the same products anywhere in the world.", "Do you think this is a positive or negative development?"],
+      ["In recent years, many small local shops have closed because customers travel to large shopping centres or malls to do their shopping.", "Is this a positive or negative development?"],
+      ["In their advertising, businesses nowadays usually emphasise that their products are new in some way.", "Why is this the case?", "Do you think this is a positive or negative development?"],
+      ["Some children spend hours every day on their smartphones.", "Why is this the case?", "Do you think this is a positive or negative development?"],
+      ["Nowadays, a growing number of people with health problems are trying alternative medicines and treatments instead of visiting their usual doctor.", "Do you think this is a positive or negative development?"]
+    ] },
+  { name: 'Discuss Both Views and Give Your Opinion',
+    qs: [
+      ["Some people think that parents should teach children how to be good members of society. Others, however, believe that school is the place to learn this.", "Discuss both these views and give your own opinion."],
+      ["Some people say that History is one of the most important school subjects. Others think that, in today’s world, subjects like Science and Technology are more important than History.", "Discuss both these views and give your own opinion."],
+      ["Some people think that competition at work, at school and in daily life is a good thing. Others believe that we should try to cooperate more rather than compete against each other.", "Discuss both these views and give your own opinion."],
+      ["Some people believe that there should be fixed punishments for each type of crime. Others, however, argue that the circumstances of an individual crime and the motivation for committing it should always be taken into account when deciding on the punishment.", "Discuss both these views and give your own opinion."],
+      ["Some people prefer to spend their lives doing the same things and avoiding change. Others, however, think that change is always a good thing.", "Discuss both these views and give your own opinion."]
+    ] }
+];
+
+
+const SUBJ = [
+  ['Advertising Power','Community Service','Too Many Choices','Printed Media','Saving Money'],
+  ['Children’s Toys','Taking Risks','Credit Cards','Private Healthcare','Nutrition Labels'],
+  ['Environmental Damage','Youth Sports','Reoffending','Child Pressures','Student Focus'],
+  ['Ageing Cities','First-Time Cars','City Living','Work–Life Balance','Elderly Care'],
+  ['Global Fashion','Creativity at Work','Handwriting','Online Complaints','Working-Hour Laws'],
+  ['Global Sameness','Local Shops','“New” Advertising','Kids & Smartphones','Alternative Medicine'],
+  ['Teaching Values','History vs Science','Competition','Fixed Punishments','Embracing Change']
+];
+const TYPE_SHORT = ['Agree / Disagree','Pros & Cons','Causes & Solutions','Problems & Solutions','Two-Part','Positive / Negative','Both Views'];
+
+const QUESTIONS = [];
+BANK.forEach((c, ci) => c.qs.forEach((lines, qi) => QUESTIONS.push({
+  id: (ci + 1) + '-' + (qi + 1), catIdx: ci, cat: c.name, subj: SUBJ[ci][qi], typ: TYPE_SHORT[ci], n: qi + 1, of: c.qs.length, lines
+})));
+const QMAP = {};
+QUESTIONS.forEach(q => { QMAP[q.id] = q; });
+
+
+/* ---------- Category themes & icons ---------- */
+const THEMES = [
+  { c:'#2563eb', c2:'#7c3aed', rgb:'37,99,235',  light:'#e8f0ff', dark:'#1e40af' },  // Agree / Disagree
+  { c:'#ea580c', c2:'#e11d48', rgb:'234,88,12',  light:'#fff1e6', dark:'#9a3412' },  // Advantages & Disadvantages
+  { c:'#db2777', c2:'#f43f5e', rgb:'219,39,119', light:'#fde8f3', dark:'#9d174d' },  // Causes & Solutions
+  { c:'#0d9488', c2:'#0e7490', rgb:'13,148,136', light:'#dcf7f3', dark:'#115e59' },  // Problems & Solutions
+  { c:'#15803d', c2:'#0d9488', rgb:'21,128,61',  light:'#e3f8ea', dark:'#166534' },  // Two-Part
+  { c:'#7c3aed', c2:'#c026d3', rgb:'124,58,237', light:'#f0e9ff', dark:'#5b21b6' },  // Positive or Negative
+  { c:'#4f46e5', c2:'#0ea5e9', rgb:'79,70,229',  light:'#e6e8ff', dark:'#3730a3' }   // Both Views
+];
+function applyTheme(idx) {
+  const t = THEMES[idx] || THEMES[0];
+  const r = document.documentElement.style;
+  r.setProperty('--accent', t.c);
+  r.setProperty('--accent-2', t.c2);
+  r.setProperty('--accent-rgb', t.rgb);
+  r.setProperty('--accent-light', t.light);
+  r.setProperty('--accent-dark', t.dark);
+}
+function setTileTheme(el, t) {
+  el.style.setProperty('--c', t.c);
+  el.style.setProperty('--c2', t.c2);
+  el.style.setProperty('--c-rgb', t.rgb);
+  el.style.setProperty('--cl', t.light);
+  el.style.setProperty('--cd', t.dark);
+}
+const SV = '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+const ICONS = [
+  SV+'<path d="M16 4v24M8 28h16"/><path d="M6 9h20"/><path d="M6 9l-3 9a4 4 0 0 0 6 0z"/><path d="M26 9l-3 9a4 4 0 0 0 6 0z"/></svg>',                       // scales
+  SV+'<circle cx="10" cy="10" r="6"/><path d="M7 10h6M10 7v6"/><circle cx="22" cy="22" r="6"/><path d="M19 22h6"/></svg>',                                    // plus / minus
+  SV+'<circle cx="6" cy="16" r="3"/><path d="M9 16h6"/><path d="M15 16l8-8M15 16l8 8"/><circle cx="26" cy="7" r="2.5"/><circle cx="26" cy="25" r="2.5"/></svg>', // cause → effects
+  SV+'<path d="M16 4a8 8 0 0 0-4 15v3h8v-3a8 8 0 0 0-4-15z"/><path d="M12 27h8M13 24.5h6"/></svg>',                                                       // light bulb
+  SV+'<path d="M4 6h15a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-8l-4 4v-4H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" transform="translate(1 0)"/><path d="M24 12h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-1v3l-4-3h-5"/></svg>', // two bubbles
+  SV+'<path d="M4 22l7-8 5 5 9-11"/><path d="M19 8h6v6"/><path d="M4 28h24"/></svg>',                                                                      // trend
+  SV+'<circle cx="12" cy="16" r="8"/><circle cx="20" cy="16" r="8"/></svg>'                                                                                  // overlapping views
+];
+function iconFor(q) { return ICONS[q.catIdx] || ICONS[0]; }
+
+/* ---------- State ---------- */
+const STORAGE_KEY = 'ielts_t2_bank_v1';
+const TOTAL_SECONDS = 40 * 60;   // per question
+const MIN_WORDS = 250;
+
+let store = loadStore();         // { candidate, active, q: { [id]: {answer, seconds, submitted, savedAt} } }
+let curId = null;                // currently open question id
+let submitted = false;           // is the current question submitted?
+let seconds = TOTAL_SECONDS;
+let candidateName = '';
+let candidateRoll = '';
+let timerInterval = null;
+let saveTimeout = null;
+
+const timerEl = document.getElementById('timer');
+const autosaveBadge = document.getElementById('autosaveBadge');
+const autosaveLabel = document.getElementById('autosaveLabel');
+const answerEl = document.getElementById('answer');
+
+function formatTime(sec) {
+  return String(Math.floor(sec / 60)).padStart(2, '0') + ':' + String(sec % 60).padStart(2, '0');
+}
+
+/* ---------- Storage ---------- */
+function emptyStore() { return { candidate: null, active: null, q: {} }; }
+
+function loadStore() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return emptyStore();
+    return Object.assign(emptyStore(), JSON.parse(raw));
+  } catch (e) {
+    return emptyStore();
+  }
+}
+
+function persist() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+    return true;
+  } catch (e) {
+    console.warn('Autosave failed', e);
+    return false;
+  }
+}
+
+// Write the live state of the open question into the store
+function captureCurrent() {
+  if (!curId || submitted) return true;
+  store.q[curId] = { answer: answerEl.value, seconds, submitted: false, savedAt: Date.now() };
+  store.active = curId;
+  store.candidate = { name: candidateName, roll: candidateRoll };
+  return persist();
+}
+
+function saveToLocal() {
+  if (submitted || !curId) return;
+  autosaveBadge.classList.add('saving');
+  autosaveLabel.textContent = 'Saving…';
+  const ok = captureCurrent();
+  setTimeout(() => {
+    autosaveBadge.classList.remove('saving');
+    if (!ok) { autosaveLabel.textContent = 'Save failed'; return; }
+    const d = new Date();
+    autosaveLabel.textContent = 'Saved ' + d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+  }, 280);
+}
+
+function scheduleSave() {
+  if (saveTimeout) clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(saveToLocal, 400);
+}
+
+/* ---------- Header / logo ---------- */
+function setLogo() {
+  const logo = document.querySelector('#topbar .logo');
+  if (!logo) return;
+  logo.textContent = 'IELTS ';
+  const sp = document.createElement('span');
+  sp.textContent = 'Academic Writing · Practice Test';
+  logo.appendChild(sp);
+  if (candidateName) logo.appendChild(document.createTextNode(' · ' + candidateName + ' (' + candidateRoll + ')'));
+}
+
+/* ---------- Candidate ---------- */
+function saveCandidate() {
+  const name = document.getElementById('candName').value.trim();
+  const roll = document.getElementById('candRoll').value.trim();
+  if (!name) {
+    alert('Please enter your full name.');
+    document.getElementById('candName').focus();
+    return;
+  }
+  if (!roll) {
+    alert('Please enter your roll / candidate number.');
+    document.getElementById('candRoll').focus();
+    return;
+  }
+  candidateName = name;
+  candidateRoll = roll;
+  store.candidate = { name, roll };
+  persist();
+  document.getElementById('candidate-modal').classList.add('hidden');
+  setLogo();
+  openPicker(false);
+}
+
+/* ---------- Timer ---------- */
+function stopTimer() {
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+}
+
+function startTimer() {
+  if (timerInterval) return;
+  timerInterval = setInterval(() => {
+    if (submitted) return;
+    seconds--;
+    if (seconds <= 0) {
+      stopTimer();
+      submitTest();
+      return;
+    }
+    timerEl.textContent = formatTime(seconds);
+    timerEl.classList.toggle('warn', seconds < 300);
+    // Persist timer every 15 seconds
+    if (seconds % 15 === 0) saveToLocal();
+  }, 1000);
+}
+
+/* ---------- Question display ---------- */
+function renderQuestion(q) {
+  document.getElementById('qLabel').textContent = 'Writing Task 2 · Question ' + q.n + ' of ' + q.of;
+  document.getElementById('qTitle').textContent = q.cat;
+  const box = document.getElementById('qBox');
+  box.textContent = '';
+  q.lines.forEach(line => {
+    const p = document.createElement('p');
+    p.textContent = line;
+    box.appendChild(p);
+  });
+  document.getElementById('promptSide').scrollTop = 0;
+}
+
+function renderNoQuestion() {
+  document.getElementById('qLabel').textContent = 'Writing Task 2';
+  document.getElementById('qTitle').textContent = 'No question selected';
+  document.getElementById('qBox').textContent = '';
+}
+
+function startQuestion(id) {
+  const q = QMAP[id];
+  if (!q) return;
+  if (curId && !submitted) captureCurrent();   // keep progress on the question we are leaving
+  stopTimer();
+
+  const saved = store.q[id];
+  curId = id;
+  submitted = !!(saved && saved.submitted);
+  seconds = (saved && typeof saved.seconds === 'number' && saved.seconds > 0)
+    ? Math.min(saved.seconds, TOTAL_SECONDS) : TOTAL_SECONDS;
+  answerEl.value = saved && saved.answer ? saved.answer : '';
+  answerEl.readOnly = submitted;
+
+  renderQuestion(q);
+  applyTheme(q.catIdx);
+  updateWordCount();
+  store.active = id;
+  persist();
+
+  if (submitted) {
+    timerEl.textContent = '00:00';
+    timerEl.classList.remove('warn');
+  } else {
+    timerEl.textContent = formatTime(seconds);
+    timerEl.classList.toggle('warn', seconds < 300);
+    startTimer();
+  }
+}
+
+/* ---------- Picker ---------- */
+function wordsOf(text) { return countWords(text || ''); }
+
+function snippet(q) {
+  const t = q.lines[0];
+  return t.length > 130 ? t.slice(0, 127).trimEnd() + '…' : t;
+}
+
+
+function renderProgressBar() {
+  const wrap = document.getElementById('pgWrap');
+  if (!wrap) return;
+  let done = 0, prog = 0;
+  QUESTIONS.forEach(q => {
+    const st = store.q[q.id];
+    if (!st) return;
+    if (st.submitted) done++;
+    else if (wordsOf(st.answer) > 0 || st.seconds < TOTAL_SECONDS) prog++;
+  });
+  const total = QUESTIONS.length;
+  wrap.textContent = '';
+  const bar = document.createElement('div');
+  bar.className = 'pg-bar';
+  const d = document.createElement('span'); d.className = 'done'; d.style.width = (done / total * 100) + '%';
+  const p = document.createElement('span'); p.className = 'prog'; p.style.width = (prog / total * 100) + '%';
+  bar.appendChild(d); bar.appendChild(p);
+  const txt = document.createElement('div');
+  txt.className = 'pg-text';
+  txt.textContent = done + ' submitted · ' + prog + ' in progress · ' + (total - done - prog) + ' not started';
+  wrap.appendChild(bar);
+  wrap.appendChild(txt);
+}
+
+function renderPicker() {
+  captureCurrent();   // so the badges show up-to-date progress
+  document.getElementById('pickerSub').textContent =
+    QUESTIONS.length + ' questions · each one is its own 40-minute test with its own saved answer and timer.';
+  const list = document.getElementById('pickList');
+  list.textContent = '';
+  renderProgressBar();
+  BANK.forEach((c, ci) => {
+    const th = THEMES[ci];
+    const h = document.createElement('div');
+    h.className = 'pick-cat';
+    setTileTheme(h, th);
+    const dot = document.createElement('span');
+    dot.className = 'cat-dot';
+    dot.textContent = ci + 1;
+    const nm = document.createElement('span');
+    nm.textContent = c.name;
+    const cnt = document.createElement('span');
+    cnt.className = 'cat-count';
+    cnt.textContent = c.qs.length + (c.qs.length === 1 ? ' question' : ' questions');
+    h.appendChild(dot);
+    h.appendChild(nm);
+    h.appendChild(cnt);
+    list.appendChild(h);
+
+    const grid = document.createElement('div');
+    grid.className = 'pick-grid';
+    setTileTheme(grid, th);
+    list.appendChild(grid);
+
+    QUESTIONS.filter(q => q.catIdx === ci).forEach(q => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'pick-tile' + (q.id === curId ? ' current' : '');
+      b.title = q.lines.join(' ');
+      b.onclick = () => pickQuestion(q.id);
+
+      const num = document.createElement('span');
+      num.className = 'tile-num';
+      num.textContent = q.n;
+      const ico = document.createElement('span');
+      ico.className = 'tile-icon';
+      ico.innerHTML = iconFor(q);          // static, built-in SVG strings only
+      const name = document.createElement('span');
+      name.className = 'tile-name';
+      name.textContent = q.subj;
+      const type = document.createElement('span');
+      type.className = 'tile-type';
+      type.textContent = q.typ;
+      b.appendChild(num);
+      b.appendChild(ico);
+      b.appendChild(name);
+      b.appendChild(type);
+
+      const st = store.q[q.id];
+      if (st) {
+        const w = wordsOf(st.answer);
+        const badge = document.createElement('span');
+        const dot = document.createElement('span');
+        if (st.submitted) {
+          badge.className = 'badge done tile-badge';
+          badge.textContent = 'Submitted · ' + w + ' words';
+          dot.className = 'tile-state-dot done';
+          b.classList.add('done');
+          b.appendChild(dot);
+          b.appendChild(badge);
+        } else if (w > 0 || st.seconds < TOTAL_SECONDS) {
+          badge.className = 'badge progress tile-badge';
+          badge.textContent = 'In progress · ' + w + ' words · ' + formatTime(st.seconds) + ' left';
+          dot.className = 'tile-state-dot progress';
+          b.appendChild(dot);
+          b.appendChild(badge);
+        }
+      }
+      grid.appendChild(b);
+    });
+  });
+}
+
+function openPicker(canClose) {
+  renderPicker();
+  const m = document.getElementById('picker-modal');
+  m.classList.toggle('solid', !canClose);
+  document.getElementById('pickerClose').style.display = canClose ? '' : 'none';
+  m.classList.remove('hidden');
+  document.getElementById('pickList').scrollTop = 0;
+}
+
+function closePicker() {
+  document.getElementById('picker-modal').classList.add('hidden');
+}
+
+function pickQuestion(id) {
+  const saved = store.q[id];
+  if (saved && saved.submitted) {
+    if (!confirm('You have already submitted this question. Start it again? Your previous answer will be cleared.')) return;
+    delete store.q[id];
+  }
+  closePicker();
+  if (id === curId && !submitted) return;   // already open – just close the picker
+  startQuestion(id);
+}
+
+function pickRandom() {
+  const fresh = QUESTIONS.filter(q => !store.q[q.id]);
+  const notDone = QUESTIONS.filter(q => !(store.q[q.id] && store.q[q.id].submitted));
+  const pool = fresh.length ? fresh : (notDone.length ? notDone : QUESTIONS);
+  pickQuestion(pool[Math.floor(Math.random() * pool.length)].id);
+}
+
+/* ---------- Clear ---------- */
+function confirmClearSave() {
+  if (!confirm('Clear all autosaved answers (for every question) and candidate details from this browser? This cannot be undone.')) return;
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  autosaveLabel.textContent = 'Autosave cleared';
+  store = emptyStore();
+  curId = null;
+  submitted = false;
+  stopTimer();
+  seconds = TOTAL_SECONDS;
+  answerEl.value = '';
+  answerEl.readOnly = false;
+  candidateName = '';
+  candidateRoll = '';
+  timerEl.textContent = formatTime(TOTAL_SECONDS);
+  timerEl.classList.remove('warn');
+  setLogo();
+  renderNoQuestion();
+  applyTheme(0);
+  updateWordCount();
+  ['picker-modal', 'submit-modal', 'results-modal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  document.getElementById('candidate-modal').classList.remove('hidden');
+}
+
+/* ---------- Word count / status ---------- */
+function countWords(text) {
+  return text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+}
+
+function updateWordCount() {
+  const wc = document.getElementById('wc');
+  const n = countWords(answerEl.value);
+  wc.innerHTML = 'Words: <strong>' + n + '</strong> / ' + MIN_WORDS + ' minimum';
+  wc.classList.toggle('ok', n >= MIN_WORDS);
+  wc.classList.toggle('low', n > 0 && n < MIN_WORDS);
+  updateStatus();
+}
+
+function onAnswerInput() {
+  updateWordCount();
+  scheduleSave();
+}
+
+function updateStatus() {
+  const el = document.getElementById('statusText');
+  if (!curId) { el.textContent = 'No question selected'; return; }
+  const q = QMAP[curId];
+  el.textContent = 'Task 2 · ' + q.cat + ' · Q' + q.n + ' · ' + countWords(answerEl.value) + ' words written' + (submitted ? ' · submitted' : '');
+}
+
+/* ---------- Submit ---------- */
+function showResults() {
+  const q = QMAP[curId];
+  const a = answerEl.value;
+  document.getElementById('r-words').textContent = countWords(a);
+  document.getElementById('r-question').textContent = q.cat + ' · Question ' + q.n + ' – your response';
+  document.getElementById('prev').textContent = a.trim() || '(No response)';
+  document.getElementById('results-modal').classList.remove('hidden');
+}
+
+function confirmSubmit() {
+  if (!candidateName) {
+    document.getElementById('candidate-modal').classList.remove('hidden');
+    return;
+  }
+  if (!curId) {
+    openPicker(false);
+    return;
+  }
+  if (submitted) {          // already submitted – just show the summary again
+    showResults();
+    return;
+  }
+  const n = countWords(answerEl.value);
+  document.getElementById('sc-words').textContent = n;
+  const under = n < MIN_WORDS;
+  const warnEl = document.getElementById('sc-warning');
+  warnEl.textContent = under ? 'Task 2 is under ' + MIN_WORDS + ' words.' : 'Task 2 meets the minimum word count.';
+  warnEl.style.color = under ? 'var(--danger)' : 'var(--success)';
+  document.getElementById('submit-modal').classList.remove('hidden');
+}
+
+function closeModal() {
+  document.getElementById('submit-modal').classList.add('hidden');
+}
+
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function getTimestamp() {
+  const d = new Date();
+  return d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate()) + '_' + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds());
+}
+
+function safeName(str) {
+  return (str || 'Candidate').replace(/[^a-zA-Z0-9_\- ]/g, '').replace(/\s+/g, '_').substring(0, 40);
+}
+
+function buildPdf(doc, q, answerText) {
+  const n = countWords(answerText);
+  const now = new Date().toLocaleString();
+  const margin = 20;
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const maxWidth = pageWidth - margin * 2;
+  let y = 22;
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(45, 90, 142);
+  doc.text('IELTS Academic Writing – Practice Test', margin, y);
+  y += 8;
+
+  doc.setFontSize(12);
+  doc.setTextColor(0, 0, 0);
+  doc.text('Task 2 – ' + q.cat + ' (Question ' + q.n + ')', margin, y);
+  y += 10;
+
+  doc.setDrawColor(180, 180, 180);
+  doc.line(margin, y, pageWidth - margin, y);
+  y += 10;
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(60, 60, 60);
+  doc.text('Candidate Name : ' + candidateName, margin, y); y += 6;
+  doc.text('Roll / ID      : ' + candidateRoll, margin, y); y += 6;
+  doc.text('Submitted      : ' + now, margin, y); y += 6;
+  doc.text('Word Count     : ' + n, margin, y); y += 10;
+
+  doc.setDrawColor(180, 180, 180);
+  doc.line(margin, y, pageWidth - margin, y);
+  y += 9;
+
+  // The question itself
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(45, 90, 142);
+  doc.text('QUESTION', margin, y);
+  y += 6;
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(10.5);
+  doc.setTextColor(40, 40, 40);
+  q.lines.forEach(line => {
+    doc.splitTextToSize(line, maxWidth).forEach(l => {
+      doc.text(l, margin, y);
+      y += 5.5;
+    });
+    y += 2;
+  });
+  y += 2;
+  doc.setDrawColor(180, 180, 180);
+  doc.line(margin, y, pageWidth - margin, y);
+  y += 9;
+
+  // The response
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(45, 90, 142);
+  doc.text('YOUR RESPONSE', margin, y);
+  y += 8;
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(11);
+  doc.setTextColor(20, 20, 20);
+  const body = (answerText || '').trim() || '(No response written)';
+  const lineHeight = 6.5;
+  const lines = doc.splitTextToSize(body, maxWidth);
+
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const bottomMargin = 20;
+  for (let i = 0; i < lines.length; i++) {
+    if (y + lineHeight > pageHeight - bottomMargin) {
+      doc.addPage();
+      y = 22;
+      doc.setFontSize(9);
+      doc.setTextColor(120, 120, 120);
+      doc.text('Task 2 (continued)', margin, y);
+      y += 10;
+      doc.setFontSize(11);
+      doc.setTextColor(20, 20, 20);
+    }
+    doc.text(lines[i], margin, y);
+    y += lineHeight;
+  }
+
+  y = pageHeight - 12;
+  doc.setFontSize(8);
+  doc.setTextColor(140, 140, 140);
+  doc.text('End of Task 2  ·  Page ' + doc.internal.getNumberOfPages(), margin, y);
+}
+
+function submitTest() {
+  document.getElementById('submit-modal').classList.add('hidden');
+  if (!curId || submitted) return;
+  stopTimer();
+  submitted = true;
+  answerEl.readOnly = true;
+
+  const q = QMAP[curId];
+  const a = answerEl.value;
+
+  const ts = getTimestamp();
+  const base = safeName(candidateName) + '_' + safeName(candidateRoll);
+  const filename = base + '_Writing_Task2_Q' + q.id + '_' + ts + '.pdf';
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    buildPdf(doc, q, a);
+    doc.save(filename);
+  } catch (e) {
+    console.warn('PDF generation failed', e);
+    alert('Your answer was submitted, but the PDF could not be created (the PDF library may not have loaded). A copy of your answer is shown on the next screen.');
+  }
+
+  // Keep a final snapshot of this question as submitted
+  store.q[curId] = { answer: a, seconds, submitted: true, savedAt: Date.now() };
+  store.active = curId;
+  persist();
+
+  updateStatus();
+  showResults();
+}
+
+/* ---------- Disable copy / cut / paste / context menu in the writing area ---------- */
+(function blockClipboard() {
+  const el = answerEl;
+  if (!el) return;
+  ['copy', 'cut', 'paste', 'contextmenu', 'drop', 'dragover'].forEach(evt => {
+    el.addEventListener(evt, e => { e.preventDefault(); return false; });
+  });
+  el.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && ['c','v','x','C','V','X'].includes(e.key)) {
+      e.preventDefault();
+      return false;
+    }
+  });
+})();
+
+/* ---------- Restore previous session ---------- */
+(function restoreSession() {
+  renderNoQuestion();
+  updateWordCount();
+
+  const c = store.candidate;
+  if (c && c.name && c.roll) {
+    candidateName = c.name;
+    candidateRoll = c.roll;
+    document.getElementById('candName').value = candidateName;
+    document.getElementById('candRoll').value = candidateRoll;
+    document.getElementById('candidate-modal').classList.add('hidden');
+    setLogo();
+
+    if (store.active && QMAP[store.active]) {
+      startQuestion(store.active);
+      const st = store.q[store.active];
+      if (st && st.savedAt) {
+        autosaveLabel.textContent = 'Restored · last saved ' + new Date(st.savedAt).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+      }
+    } else {
+      openPicker(false);
+    }
+  }
+})();
+
+/* ---------- Vertical resizable split between prompt and answer panels ---------- */
+(function initResizers() {
+  const MIN_LEFT = 280;
+  const MIN_RIGHT = 280;
+  let active = null;
+
+  function onMove(e) {
+    if (!active) return;
+    const { panel, prompt } = active;
+    const rect = panel.getBoundingClientRect();
+    let newW = e.clientX - rect.left;
+    const maxW = rect.width - MIN_RIGHT - 6;
+    if (newW < MIN_LEFT) newW = MIN_LEFT;
+    if (newW > maxW) newW = maxW;
+    prompt.style.width = newW + 'px';
+  }
+
+  function onUp() {
+    if (!active) return;
+    active.resizer.classList.remove('dragging');
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+    active = null;
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+  }
+
+  document.querySelectorAll('.resizer').forEach(resizer => {
+    resizer.addEventListener('mousedown', e => {
+      e.preventDefault();
+      const panel = resizer.closest('.task-panel');
+      const prompt = panel.querySelector('.prompt-side');
+      active = { resizer, panel, prompt };
+      resizer.classList.add('dragging');
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  });
+})();
+
+/* ---------- Save on page hide / unload as a final safeguard ---------- */
+window.addEventListener('beforeunload', () => {
+  if (!submitted) captureCurrent();
+});
+window.addEventListener('pagehide', () => {
+  if (!submitted) captureCurrent();
+});
+</script>
+
+</body>
+</html>

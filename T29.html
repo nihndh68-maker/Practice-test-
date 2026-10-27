@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Academic Reading · Test 316</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fff;--border:#e5e7eb;--border-soft:#f3f4f6;--accent:#1e3a5f;--accent-red:#e11d48;--accent-red-hover:#be123c;--text:#1f2937;--muted:#6b7280;--success:#059669;--passage-width:52%;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+  #start-screen{position:fixed;inset:0;background:#f8fafc;display:flex;align-items:center;justify-content:center;z-index:500;}
+  #start-screen.hidden{display:none;}
+  .start-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:40px 44px;max-width:460px;width:92%;box-shadow:0 10px 40px rgba(0,0,0,.08);}
+  .start-card h1{font-size:20px;margin-bottom:4px;font-weight:600;}
+  .start-card .sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .start-card label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;}
+  .start-card input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;margin-bottom:16px;font-family:inherit;}
+  .start-card input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.12);}
+  .start-card button{width:100%;padding:12px;background:var(--accent-red);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;}
+  .start-card button:hover{background:var(--accent-red-hover);}
+  .resume-banner{display:none;background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12.5px;color:#92400e;line-height:1.5;}
+  .resume-banner.show{display:block;}
+  .resume-banner .resume-actions{margin-top:8px;display:flex;gap:8px;}
+  .resume-banner .resume-actions button{width:auto;margin:0;padding:6px 12px;font-size:12px;border-radius:6px;}
+  .resume-banner .resume-actions .btn-ghost{background:#fff;color:#92400e;border:1px solid #fbbf24;}
+  #topbar{background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;flex-shrink:0;z-index:100;}
+  .top-left{display:flex;align-items:center;gap:12px;}
+  .mock-label{font-size:15px;font-weight:500;}
+  #autosave-indicator{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--success);font-weight:500;opacity:0;transition:opacity .4s ease;}
+  #autosave-indicator.show{opacity:1;}
+  #autosave-indicator .dot{width:7px;height:7px;border-radius:50%;background:var(--success);}
+  #autosave-indicator.saving .dot{background:#f59e0b;animation:blink .8s infinite;}
+  #autosave-indicator.saving{color:#f59e0b;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+  #timer-wrap{display:flex;align-items:center;gap:6px;color:var(--accent-red);font-weight:600;}
+  #timer{font-size:18px;font-weight:600;letter-spacing:0.02em;min-width:52px;}
+  #timer.warn{animation:pulse 1s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .top-actions{display:flex;align-items:center;gap:8px;}
+  .icon-btn{width:36px;height:36px;border:none;background:transparent;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;}
+  .icon-btn:hover{background:var(--border-soft);color:var(--text);}
+  .btn-submit{background:#e5e7eb;color:var(--text);border:none;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;}
+  .btn-submit:hover{background:#d1d5db;}
+  .icon-btn.active{background:#fff1f2;color:var(--accent-red);}
+  #notepad-panel{position:fixed;top:56px;right:0;width:320px;height:calc(100vh - 56px - 56px);background:#fff;border-left:1px solid var(--border);box-shadow:-4px 0 24px rgba(0,0,0,.08);z-index:150;display:flex;flex-direction:column;transition:transform .2s ease;}
+  #notepad-panel.hidden{transform:translateX(100%);pointer-events:none;}
+  .notepad-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+  .notepad-title{font-size:15px;font-weight:600;color:var(--accent-red);}
+  #notepad-text{flex:1;border:none;resize:none;padding:14px 16px;font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.55;outline:none;}
+  #main{display:flex;flex:1;overflow:hidden;}
+  #passage-panel{width:var(--passage-width);background:#fff;overflow-y:auto;padding:24px 28px 40px;flex-shrink:0;}
+  .part-header{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:4px;}
+  #passage-panel h2{font-size:22px;font-weight:700;color:var(--accent);margin-bottom:6px;letter-spacing:-0.3px;}
+  .time-note{font-size:12.5px;color:var(--muted);margin-bottom:16px;line-height:1.5;}
+  .passage-title{text-align:center;font-family:'Source Serif 4',Georgia,serif;font-size:18px;font-weight:600;color:var(--accent);margin-bottom:22px;}
+  #passage-panel p{font-family:'Source Serif 4',Georgia,serif;font-size:15px;line-height:1.75;margin-bottom:16px;}
+  #passage-panel p.glossary{font-size:13px;line-height:1.6;color:var(--muted);border-top:1px solid var(--border);padding-top:12px;margin-top:8px;}
+  #passage-panel strong{font-weight:700;color:var(--accent);}
+  #passage-panel em{font-style:italic;}
+  #resizer{width:5px;background:transparent;cursor:col-resize;flex-shrink:0;position:relative;z-index:10;}
+  #resizer::before{content:'';position:absolute;top:0;bottom:0;left:2px;width:1px;background:var(--accent-red);}
+  #resizer:hover::before,#resizer.dragging::before{width:3px;left:1px;}
+  #resizer .handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:28px;background:#fff;border:1px solid var(--accent-red);border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--accent-red);font-size:10px;}
+  #questions-panel{flex:1;overflow-y:auto;padding:20px 24px 80px;background:#fff;}
+  .q-section{margin-bottom:28px;}
+  .q-section-header{font-size:15px;font-weight:600;margin-bottom:8px;}
+  .q-section-intro{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:16px;}
+  .info-box{padding:12px 16px;font-size:13px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:14px;line-height:1.9;}
+  .info-box.notes{font-size:13.5px;line-height:2.1;}
+  .info-box .box-title{display:block;font-weight:600;color:var(--accent);margin-bottom:2px;}
+  .question{padding:12px 0;border-bottom:1px solid var(--border-soft);display:flex;gap:12px;align-items:flex-start;}
+  .question:last-child{border-bottom:none;}
+  .q-num{min-width:26px;height:26px;color:var(--muted);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px;}
+  .q-body{flex:1;}
+  .q-text{font-size:14px;line-height:1.55;margin-bottom:10px;}
+  .tfn-options,.mcq-options{display:flex;flex-direction:column;gap:6px;}
+  .tfn-options.horizontal{flex-direction:row;flex-wrap:wrap;gap:8px;}
+  .tfn-btn,.mcq-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:13.5px;transition:all .12s;}
+  .tfn-btn:hover,.mcq-opt:hover{border-color:#94a3b8;background:#f8fafc;}
+  .tfn-btn.selected,.mcq-opt.selected{border-color:var(--accent-red);background:#fff1f2;}
+  .tfn-btn .radio-dot,.mcq-opt .radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid #cbd5e1;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .tfn-btn.selected .radio-dot,.mcq-opt.selected .radio-dot{border-color:var(--accent-red);}
+  .tfn-btn.selected .radio-dot::after,.mcq-opt.selected .radio-dot::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--accent-red);}
+  .fill-input{border:1.5px solid var(--border);border-radius:6px;padding:7px 12px;font-size:14px;font-family:inherit;width:100%;max-width:220px;transition:border-color .15s;}
+  .fill-input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .fill-input.answered{border-color:var(--success);background:#f0fdf4;}
+  .fill-input.inline{display:inline-block;vertical-align:middle;margin:0 2px;}
+  .dd-select{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 36px 10px 12px;font-size:13.5px;font-family:inherit;background-color:#fff;cursor:pointer;transition:border-color .15s;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 12px center;}
+  .dd-select:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .dd-select.answered{border-color:var(--success);background-color:#f0fdf4;}
+  .pair-hint{font-size:12.5px;color:#b45314;background:#fffbeb;border:1px solid #fcd34d;border-radius:6px;padding:6px 10px;margin-bottom:10px;}
+  #bottombar{border-top:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0;gap:12px;min-height:56px;}
+  .part-tabs{display:flex;gap:8px;flex-shrink:0;}
+  .part-tab{padding:8px 16px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .part-tab:hover{border-color:#94a3b8;color:var(--text);}
+  .part-tab.active{border-color:var(--accent-red);color:var(--accent);box-shadow:0 0 0 1px var(--accent-red);}
+  .part-tab .count{font-weight:400;color:var(--muted);}
+  .q-circles{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;flex:1;padding:0 8px;}
+  .q-circle{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;}
+  .q-circle:hover{border-color:#94a3b8;color:var(--text);}
+  .q-circle.answered{background:var(--success);border-color:var(--success);color:#fff;}
+  .nav-arrows{display:flex;gap:6px;flex-shrink:0;}
+  .nav-arrow{width:36px;height:36px;border:1.5px solid var(--border);border-radius:50%;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:16px;}
+  .nav-arrow:hover{border-color:#94a3b8;color:var(--text);}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;}
+  .modal-overlay.hidden{display:none;}
+  .modal{background:#fff;border-radius:12px;padding:28px 32px;max-width:720px;width:94%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+  .modal h2{font-size:20px;margin-bottom:10px;}
+  .modal p{font-size:14px;line-height:1.6;color:var(--muted);margin-bottom:16px;}
+  .score-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0;}
+  .score-card{background:#f8fafc;border-radius:10px;padding:14px;text-align:center;}
+  .score-card .val{font-size:26px;font-weight:700;color:var(--accent);}
+  .score-card .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+  .modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;}
+  .btn-modal{padding:9px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;}
+  .btn-modal:hover{background:#f8fafc;}
+  .btn-modal.primary{background:var(--accent-red);color:#fff;border-color:var(--accent-red);}
+  .btn-modal.primary:hover{background:var(--accent-red-hover);}
+  .ans-table-wrap{margin:12px 0;max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;}
+  .ans-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .ans-table th{position:sticky;top:0;background:var(--accent);color:#fff;padding:8px 10px;text-align:left;font-weight:600;font-size:11px;}
+  .ans-table td{padding:6px 10px;border-bottom:1px solid var(--border);}
+  .ans-table tr:nth-child(even) td{background:#f8fafc;}
+  .ans-table .ok{color:var(--success);font-weight:600;}
+  .ans-table .bad{color:var(--accent-red);font-weight:600;}
+  .ans-table .blank{color:var(--muted);font-style:italic;}
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px;}
+  .passage-content{display:none;}
+  .passage-content.active{display:block;}
+  mark.hl{background:#fef08a;padding:0 2px;border-radius:2px;}
+  mark.hl-note{background:#bbf7d0;padding:0 2px;border-radius:2px;border-bottom:2px solid #16a34a;}
+  #sel-toolbar{position:fixed;z-index:300;display:none;background:#1e3a5f;color:#fff;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);font-size:13px;font-weight:500;overflow:hidden;white-space:nowrap;}
+  #sel-toolbar button{background:transparent;border:none;color:#fff;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:500;font-family:inherit;}
+  #sel-toolbar button:hover{background:rgba(255,255,255,.15);}
+  #sel-toolbar .sep{display:inline-block;width:1px;height:14px;background:rgba(255,255,255,.35);vertical-align:middle;}
+  @media (max-width:800px){#main{flex-direction:column;}#passage-panel{width:100%!important;height:42vh;border-bottom:1px solid var(--border);}#resizer{display:none;}}
+  #passage-panel p.source-note{font-family:'Inter',system-ui,sans-serif;font-size:12px;font-style:normal;color:var(--muted);text-align:center;margin:-12px 0 20px;line-height:1.5;}
+  .figure{margin:4px 0 20px;}
+  .figure img{width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:6px;}
+  .figure figcaption{font-family:'Inter',system-ui,sans-serif;font-size:12.5px;color:var(--muted);line-height:1.55;margin-top:8px;}
+  .figure .fig-src{font-size:11.5px;opacity:.85;}
+  .dd-select.inline{display:inline-block;width:auto;min-width:130px;padding:6px 32px 6px 10px;vertical-align:middle;margin:0 2px;}
+  .info-box .box-title + .box-title{margin-top:8px;}
+  .q-section .figure{margin:0 0 14px;}
+  .para-label{font-weight:700;color:var(--accent);margin-right:6px;}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+<div id="start-screen">
+  <div class="start-card">
+    <h1>IELTS Academic Reading</h1>
+    <div class="sub">Computer-Delivered Simulation &middot; Test 316</div>
+    <div class="resume-banner" id="resume-banner">
+      <strong>&#9201; Saved session found</strong>
+      <div id="resume-info"></div>
+      <div class="resume-actions">
+        <button onclick="resumeTest()">Resume Test</button>
+        <button class="btn-ghost" onclick="discardSaved()">Start Fresh</button>
+      </div>
+    </div>
+    <label for="cand-name">Candidate Name</label>
+    <input type="text" id="cand-name" placeholder="Enter your full name" autocomplete="off">
+    <label for="cand-num">Candidate Number</label>
+    <input type="text" id="cand-num" placeholder="e.g. 123456" autocomplete="off">
+    <button onclick="startTest()">Start Test</button>
+  </div>
+</div>
+
+<div id="topbar">
+  <div class="top-left">
+    <span class="mock-label">IELTS Academic Reading &middot; Test 316</span>
+    <span id="autosave-indicator"><span class="dot"></span><span id="autosave-text">Saved</span></span>
+  </div>
+  <div id="timer-wrap">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <div id="timer">60:00</div>
+  </div>
+  <div class="top-actions">
+    <button class="icon-btn" id="notepad-btn" title="Notepad" onclick="toggleNotepad()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></button>
+    <button class="icon-btn" title="Full screen" onclick="toggleFullscreen()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
+    <button class="btn-submit" onclick="confirmSubmit()">Submit</button>
+  </div>
+</div>
+
+<div id="notepad-panel" class="hidden">
+  <div class="notepad-header">
+    <span class="notepad-title">Notepad</span>
+    <button class="icon-btn" title="Close" onclick="toggleNotepad()" style="width:28px;height:28px"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <textarea id="notepad-text" placeholder="Type your notes here&hellip;"></textarea>
+</div>
+
+<div id="sel-toolbar">
+  <button type="button" id="sel-note-btn">Note</button><span class="sep"></span><button type="button" id="sel-hl-btn">Highlight</button>
+</div>
+
+<div id="main">
+  <div id="passage-panel">
+
+<div class="passage-content active" id="pc-0">
+<div class="part-header">PART 1</div>
+<h2>READING PASSAGE 1</h2>
+<div class="time-note">You should spend about 20 minutes on Questions 1–13, which are based on Reading Passage 1 below.</div>
+<div class="passage-title">The ethics of driverless cars</div>
+<p><strong class="para-label">A</strong> The ethics of autonomous vehicles - those that effectively drive themselves without human intervention - has become a growing concern recently as such cars start to appear on public roads. This has provoked an urgent need to address the contentious issues surrounding this developing technology before it becomes widespread. However, the issues raised are not easy to resolve, highlighting the frequent inadequacy of our own moral judgements and perhaps asking us to take responsibility for the pre-programmed morals of a machine.</p>
+<p><strong class="para-label">B</strong> The branch of knowledge which deals with moral principles is known as ethics. Ethical concerns about autonomous cars are explored within an interdisciplinary field called “robot ethics” which brings together experts in engineering, computing, law, philosophy, sociology and psychology as robot ethicists seek to understand the implications of autonomous robots in human society. The reliability of machines and the level of decision-making authority they may have are key concerns and autonomous cars are a clear case of the predicaments posed by this new technology.</p>
+<p><strong class="para-label">C</strong> The potential autonomous cars have to significantly increase road safety is not disputed. According to Bryant Walker Smith from the University of South Carolina, 90% of all traffic accidents are caused by human error at least in part, and removing the error component would dramatically reduce the number of those accidents. Another investigation, by leading management consultancy McKinsey &amp; Co, found autonomous cars could save up to 30,000 lives a year in the USA alone.</p>
+<p><strong class="para-label">D</strong> However, in order to eliminate the effect of human error, all vehicles would need to be fully autonomous. Yet it seems unlikely the public would accept a situation in which we relinquish all manual control of vehicles. Not only do very few people trust machines more than themselves (despite all the evidence proving machines are safer), there is also the problem that putting the vehicle in complete and unsupervised control raises questions about the level of the driver's responsibility. This leads us to the ethical question: who is ultimately responsible for the moral decisions programmed into and made by the vehicle we are, to a degree, controlling?</p>
+<p><strong class="para-label">E</strong> In September 2016, Germany was the first country to propose introducing a set of ethical principles for autonomous vehicles into traffic laws. The transport minister Alexander Dobrindt suggested three key rules for autonomous vehicles: firstly, when faced with imminent danger, autonomous vehicles must always choose to damage property rather than injure people. Secondly, the vehicles must never distinguish between humans in any way, and must consider all to merit the same level of protection. Lastly, at all times there must be a human overseeing the vehicle's driving. This must be guaranteed by rendering the car manufacturer liable for any accidents which take place if nobody is holding the steering-wheel.</p>
+<p><strong class="para-label">F</strong> Robot ethicists were quick to point to some flaws in this draft proposal. While it is easy to argue that a car should crash into things not people, what should it do if it has to choose between crashing into one group of people over another? This thought experiment is usually called 'The Trolley Problem', and was first proposed by Philippa Foot in 1967. It is traditionally presented thus: A runaway trolley is hurtling down a railway track towards five people who are tied to it. You are standing next to a lever which will divert the trolley if pulled, but doing so would kill one person tied to the parallel track. Do you pull the lever? The utilitarian view, which seeks to achieve fewest deaths, says it is obligatory to pull the lever, killing one person instead of five. However, drivers are unlikely to welcome self-driving cars with fully utilitarian morals, potentially leading to situations in which the car chooses to swerve into a barrier and kill the driver to save the lives of five pedestrians.</p>
+<p><strong class="para-label">G</strong> Bryan Casey of Stanford University considers the Trolley Problem irrelevant for autonomous vehicles, and holds that the problem is not even ethical, but simply legal. He believes all points of contention will ultimately be tested and resolved by the courts, and argues that the rules programmed into cars will be designed not to adhere to an impossible and slippery sense of innate morality, but to keep the car within the law. Instead of attempting to minimise injury, cars will inevitably be programmed to minimise legal liability for manufacturers. However this is done, it must be agreed across the car industry and nations as far as possible to make the extensive rolling out of the vehicles viable.</p>
+<p><strong class="para-label">H</strong> If the law is written in such a way that the manufacturer is held responsible for all injury and any damage caused by the autonomous car regardless of other considerations, car-makers will program the vehicles to eliminate situations of risk. Manufacturers such as Volvo and Google have already stated they will accept responsibility for accidents involving their vehicles. Their reasons for this stem from an attempt to earn the public's trust in the technology, shifting some responsibility away from the customer in the case of an accident. However, they would only accept responsibility due to a flaw in the vehicle, not when the technology was used inappropriately, or if the collision was caused by a third party. If others follow their lead, some headway may be made in this legal minefield of responsibility, allowing for the undoubted spread of autonomous cars to continue its journey.</p>
+</div>
+<div class="passage-content" id="pc-1">
+<div class="part-header">PART 2</div>
+<h2>READING PASSAGE 2</h2>
+<div class="time-note">You should spend about 20 minutes on Questions 14–26, which are based on Reading Passage 2 below.</div>
+<div class="passage-title">Irish Potato Famine</div>
+<p><strong class="para-label">A</strong> In the ten years following the Irish potato famine of 1845, over 750,000 Irish people died, including many of those who attempted to immigrate to countries such as the United States and Canada. Prior to the potato blight, one of the main concerns in Ireland was overpopulation. In the early 1500s, the country's population was estimated at less than three million, but by 1840 this number had nearly tripled. The bountiful potato crop, which contains almost all of the nutrients that a person needs for survival, was largely to blame for the population growth. However, within five years of the failed crop of 1845, the population of Ireland was reduced by a quarter. A number of factors contributed to the plummet of the Irish population, namely the Irish dependency on the potato crop, the British tenure system, and the inadequate relief efforts of the English.</p>
+<p><strong class="para-label">B</strong> It is not known exactly how or when the potato was first introduced to Europe, however, the general assumption is that it arrived on a Spanish ship sometime in the 1600s. For more than one hundred years, Europeans believed that potatoes belonged to a botanical family of a poisonous breed. It was not until Marie Antoinette wore potato blossoms in her hair in the mid-eighteenth century that potatoes became a novelty. By the late 1700s, the dietary value of the potato had been discovered, and the monarchs of Europe ordered the vegetable to be widely planted.</p>
+<p><strong class="para-label">C</strong> By 1800, the vast majority of the Irish population had become dependent on the potato as its primary staple. It wasn't uncommon for an Irish potato farmer to consume more than six pounds of potatoes a day. Families stored potatoes for the winter and even fed potatoes to their livestock. Because of this dependency, the unexpected potato blight of 1845 devastated the Irish. Investigators at first suggested that the blight was caused by static energy, smoke from railroad trains, or vapors from underground volcanoes; however, the root cause was later discovered as an airborne fungus that traveled from Mexico. Not only did the disease destroy the potato crops, it also infected all of the potatoes in storage at the time. Their families were dying from famine, but weakened farmers had retained little of their agricultural skills to harvest other crops. Those who did manage to grow things such as oats, wheat, and barley relied on earnings from these exported crops to keep their rented homes.</p>
+<p><strong class="para-label">D</strong> While the potato blight generated mass starvation among the Irish, the people were held captive to their poverty by the British tenure system. Following the Napoleonic Wars of 1815, the English had turned their focus to their colonial land holdings. British landowners realized that the best way to profit from these holdings was to extract the resources and exports and charge expensive rents and taxes for people to live on the land. Under the tenure system, Protestant landlords owned 95 percent of the Irish land, which was divided up into five-acre plots for the people to live and farm on. As the population of Ireland grew, however, the plots were continuously subdivided into smaller parcels. Living conditions declined dramatically, and families were forced to move to less fertile land where almost nothing but the potato would grow.</p>
+<p><strong class="para-label">E</strong> During this same period of colonization, the Penal Laws were also instituted as a means of weakening the Irish spirit. Under the Penal Laws, Irish peasants were denied basic human rights, such as the right to speak their own native language, seek certain kinds of employment, practice their faith, receive education, and own land. Despite the famine that was devastating Ireland, the landlords had little compassion or sympathy for tenants unable to pay their rent. Approximately 500,000 Irish tenants were evicted by their landlords between 1845 and 1847. Many of these people also had their homes burned down and were put in jail for overdue rent.</p>
+<p><strong class="para-label">F</strong> The majority of the British officials in the 1840s adopted the laissez-faire philosophy, which supported a policy of nonintervention in the Irish plight. Prime Minister Sir Robert Peel was an exception. He showed compassion toward the Irish by making a move to repeal the Corn Laws, which had been put in place to protect British grain producers from the competition of foreign markets. For this hasty decision, Peel quickly lost the support of the British people and was forced to resign. The new Prime Minister, Lord John Russell, allowed assistant Charles Trevelyan to take complete control over all of the relief efforts in Ireland. Trevelyan believed that the Irish situation should be left to Providence. Claiming that it would be dangerous to let the Irish become dependent on other countries, he even took steps to close food depots that were selling corn and to redirect shipments of corn that were already on their way to Ireland. A few relief programs were eventually implemented, such as soup kitchens and workhouses; however, these were poorly run institutions that facilitated the spread of disease, tore apart families, and offered inadequate food supplies considering the extent of Ireland's shortages.</p>
+<p><strong class="para-label">G</strong> Many of the effects of the Irish potato famine are still evident today. Descendants of those who fled Ireland during the 1840s are dispersed all over the world. Some of the homes that were evacuated by absentee landlords still sit abandoned in the Irish hills. A number of Irish dependents still carry animosity toward the British for not putting people before politics. The potato blight itself still plagues the Irish people during certain growing seasons when weather conditions are favorable for the fungus to thrive.</p>
+</div>
+<div class="passage-content" id="pc-2">
+<div class="part-header">PART 3</div>
+<h2>READING PASSAGE 3</h2>
+<div class="time-note">You should spend about 20 minutes on Questions 27–40, which are based on Reading Passage 3 below.</div>
+<div class="passage-title">Mind Marketing</div>
+<p class="source-note">How marketing and advertising appeal to the associative nature of the brain</p>
+<p>While there had been a long tradition of giving rings as a commitment to marry, the custom of giving diamond engagement rings was in large part manufactured by one of the most effective marketing campaigns in history. In the early 1900s, diamond sales were declining, posing a serious problem for the company that essentially had control over the diamond market. In 1938, this company hired an advertising agency, which proposed reshaping social attitudes toward diamonds. As well as magazines showing film stars draped in diamonds, the agency arranged for movies to incorporate diamond engagement rings into their plots. The campaign culminated with the slogan: 'A diamond is forever.' At the time, the approach was unique. Rather than pushing a brand, the objective was to promote diamonds as the symbol of everlasting love. This was achieved by exploiting the associative nature of the brain: associating neurons activated by the concept of 'love' with neurons that encoded the concept of 'diamonds'. By 1941, diamond sales had increased by 55%.</p>
+<p>Advertising comes in many forms, from blatant neon signs to subtly embedded products in movies. In each case, the goal is to mould our habits, desires and opinions. Our visual system is targeted by an avalanche of information on the internet, street posters, and billboards and in movie theatres. Our auditory system submits to catchy radio jingles and telemarketers. More surreptitiously, our olfactory system is targeted by variations of vanilla and citrus perfumes aimed at enticing us to linger in a retail outlet. It is difficult to measure how effective these campaigns are, but as in the 'A diamond is forever' campaign, they can be so successful that they change the fabric of our culture. In the case of bottled water, we are swayed by advertising into paying for something that we can obtain for free. Most people cannot distinguish bottled from tap water, much less between brands of bottled water, which is why you rarely hear of a bottled water company proposing a blind taste test.</p>
+<p>So why is marketing such an effective mind-control technique? It is interesting to consider whether other animals exhibit anything analogous to humans' susceptibility to advertising. If we provide a lab rat with two types of cereal, it will consume approximately the same amount of each. However, if we put that rat with another rat that spent its day eating just one type, when faced with a choice, our rat will now show a preference for the same type as the other rat was eating. Psychologists call this 'socially transmitted food preference'.</p>
+<p>What many regard as the first documented examples of cultural learning in primates started with a clever monkey that lived in a colony of Japanese monkeys on the island of Koshima. She began taking her dirt-covered sweet potatoes to the river to wash them before eating them. Upon seeing this, a few other open-minded monkeys picked up on the idea. Potato washing then spread from monkey to monkey and, over the course of a few years, most monkeys were eating clean potatoes. Humans are clearly not the only animals to engage in imitation and social learning.</p>
+<p>Learning by observation can be an extraordinarily valuable brain feature; this is how we learn to communicate and perform motor skills as well as deal with many everyday problems. For example, a newcomer struggling to purchase tickets and navigate the subway system in a foreign city may step back to learn from the people nearby. Humans and other primates exhibit multiple forms of imitative learning and this is called cultural transmission.</p>
+<p>A component of advertising relies on the marketer's ability to tap into the brain's propensity for imitation. Anybody who has watched TV knows advertisements are disproportionately populated with attractive, successful looking individuals. If we are going to imitate someone, we are more inclined to imitate those who appear to be popular and appealing.</p>
+<p>Although not all researchers are convinced by the findings, a number of studies indicate that some animals also imitate dominant members of their group. Primatologist Frans de Waal provides anecdotal evidence of preferential imitation among chimpanzees. He noted that in one particular group the dominant male was hurt and was limping as a result. Soon unlikely if a non-dominant male had been injured.</p>
+<p>Imitation is undoubtedly an invaluable ability, but often our propensity to imitate generalises indiscriminately, leading to poor decisions. When athlete Dick Fosbury revolutionised the high jump by jumping over the bar backward in 1968, imitators obviously copied his jumping style, not his brand of sports shoes. However, today, sports people appear in advertisements asking us to buy the laptops or sports drinks that they promote. Rationally, we know these people's success did not depend on these products, so it seems our propensity to purchase products relates more to neural programs that evolved to encourage imitation of those further up the social ladder. Today, companies engage in stealth marketing campaigns in which people are paid to frequent bars or websites to covertly promote certain products. Companies also perform studies in which they track the eye movements of people viewing displays, and carefully craft names, packages and jingles associated with their products. While we may like to believe that manipulation on a grand scale would not be possible, that's not to say that advertising is innately harmful. To the contrary, the marketing of products or ideas is essential to human culture. The point is that we should ensure our choices reflect our actual goals and desires, and we must distinguish between the dissemination of information which is for our own good, and our manipulation for the benefit of companies.</p>
+</div>
+
+
+  </div>
+
+  <div id="resizer"><div class="handle">&#8942;&#8942;</div></div>
+
+  <div id="questions-panel">
+<div id="qs-0">
+<div class="q-section">
+<div class="q-section-header">Questions 1&ndash;7</div>
+<div class="q-section-intro">The text has eight paragraphs, <strong>A&ndash;H</strong>. Choose the correct heading for each paragraph. Choose the appropriate number, <strong>i&ndash;x</strong>. Paragraph A has been done for you.</div>
+<div class="info-box"><span class="box-title">List of Headings</span>
+<strong>i</strong> The likely solution<br>
+<strong>ii</strong> The culpability conundrum<br>
+<strong>iii</strong> Lessons from history<br>
+<strong>iv</strong> Gaining public confidence<br>
+<strong>v</strong> A new problem on our roads<br>
+<strong>vi</strong> The key benefit of driverless cars<br>
+<strong>vii</strong> The accident dilemma<br>
+<strong>viii</strong> An initial solution<br>
+<strong>ix</strong> An unethical problem<br>
+<strong>x</strong> A multi-faceted domain
+</div>
+<div class="pair-hint"><strong>Example</strong> &nbsp;Paragraph A &rarr; <strong>v</strong> (A new problem on our roads)</div>
+<div class="question" id="q1"><div class="q-num">1</div><div class="q-body"><div class="q-text">Paragraph B</div><select class="dd-select" id="dd-q1" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix,x" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q1')"></select></div></div>
+<div class="question" id="q2"><div class="q-num">2</div><div class="q-body"><div class="q-text">Paragraph C</div><select class="dd-select" id="dd-q2" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix,x" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q2')"></select></div></div>
+<div class="question" id="q3"><div class="q-num">3</div><div class="q-body"><div class="q-text">Paragraph D</div><select class="dd-select" id="dd-q3" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix,x" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q3')"></select></div></div>
+<div class="question" id="q4"><div class="q-num">4</div><div class="q-body"><div class="q-text">Paragraph E</div><select class="dd-select" id="dd-q4" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix,x" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q4')"></select></div></div>
+<div class="question" id="q5"><div class="q-num">5</div><div class="q-body"><div class="q-text">Paragraph F</div><select class="dd-select" id="dd-q5" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix,x" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q5')"></select></div></div>
+<div class="question" id="q6"><div class="q-num">6</div><div class="q-body"><div class="q-text">Paragraph G</div><select class="dd-select" id="dd-q6" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix,x" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q6')"></select></div></div>
+<div class="question" id="q7"><div class="q-num">7</div><div class="q-body"><div class="q-text">Paragraph H</div><select class="dd-select" id="dd-q7" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix,x" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q7')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 8&ndash;9</div>
+<div class="q-section-intro">Complete the summary. Write <strong>NO MORE THAN TWO WORDS</strong> from the text for each answer.</div>
+<div class="info-box notes"><span class="box-title">The Trolley Problem</span>
+&lsquo;The Trolley Problem&rsquo; is a <strong>8</strong> <input class="fill-input inline" id="q8" oninput="markFill('q8')" style="width:170px" placeholder="&hellip;"> in ethics, first introduced in 1967 by Philippa Foot. The general form of the problem is: There is a runaway trolley barrelling down a railway line. Ahead, on the rails, there are five people tied up and unable to move. To avoid hitting them, the trolley can be switched to a <strong>9</strong> <input class="fill-input inline" id="q9" oninput="markFill('q9')" style="width:170px" placeholder="&hellip;">, to which one person is bound.<br><br>You have two options: do nothing, causing five deaths, or divert the trolley, causing just one. What do you do?
+</div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 10&ndash;13</div>
+<div class="q-section-intro">Choose the correct letter, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>.</div>
+<div class="question" id="q10"><div class="q-num">10</div><div class="q-body"><div class="q-text">German transport minister Alexander Dobrindt was mainly concerned with</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q10','A')"><span class="radio-dot"></span>A getting driverless cars on the road in Germany as soon as possible.</label><label class="mcq-opt" onclick="selectMCQ(this,'q10','B')"><span class="radio-dot"></span>B making Germany's cars more autonomous than other countries.</label><label class="mcq-opt" onclick="selectMCQ(this,'q10','C')"><span class="radio-dot"></span>C protecting human life.</label><label class="mcq-opt" onclick="selectMCQ(this,'q10','D')"><span class="radio-dot"></span>D reducing the number of road accidents in Germany.</label></div></div></div>
+<div class="question" id="q11"><div class="q-num">11</div><div class="q-body"><div class="q-text">Before driverless cars become widespread,</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q11','A')"><span class="radio-dot"></span>A global consensus on legal issues must be reached.</label><label class="mcq-opt" onclick="selectMCQ(this,'q11','B')"><span class="radio-dot"></span>B they need to be proven safe.</label><label class="mcq-opt" onclick="selectMCQ(this,'q11','C')"><span class="radio-dot"></span>C car manufacturers must accept all liability for accidents.</label><label class="mcq-opt" onclick="selectMCQ(this,'q11','D')"><span class="radio-dot"></span>D the public will have to have more faith in the software.</label></div></div></div>
+<div class="question" id="q12"><div class="q-num">12</div><div class="q-body"><div class="q-text">Some automobile firms have already said they will accept liability for accidents involving their cars</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q12','A')"><span class="radio-dot"></span>A providing there is nobody controlling the vehicle at the time.</label><label class="mcq-opt" onclick="selectMCQ(this,'q12','B')"><span class="radio-dot"></span>B in the event the vehicle itself was at fault.</label><label class="mcq-opt" onclick="selectMCQ(this,'q12','C')"><span class="radio-dot"></span>C to encourage other manufacturers to invest in the technology.</label><label class="mcq-opt" onclick="selectMCQ(this,'q12','D')"><span class="radio-dot"></span>D to pre-empt lengthy legal disputes.</label></div></div></div>
+<div class="question" id="q13"><div class="q-num">13</div><div class="q-body"><div class="q-text">Which of the following best summarises the text as a whole?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q13','A')"><span class="radio-dot"></span>A Experts disagree on where the responsibility for driverless cars lies.</label><label class="mcq-opt" onclick="selectMCQ(this,'q13','B')"><span class="radio-dot"></span>B Driverless cars will create a safer world by eliminating driver error from our roads.</label><label class="mcq-opt" onclick="selectMCQ(this,'q13','C')"><span class="radio-dot"></span>C Important issues need to be laid to rest before driverless cars can become commonplace.</label><label class="mcq-opt" onclick="selectMCQ(this,'q13','D')"><span class="radio-dot"></span>D Robot ethicists will find the answers to the moral questions driverless cars raise.</label></div></div></div>
+</div>
+</div>
+<div id="qs-1" style="display:none">
+<div class="q-section">
+<div class="q-section-header">Questions 14&ndash;18</div>
+<div class="q-section-intro">The passage has seven paragraphs, <strong>A&ndash;G</strong>. Which paragraph contains the following information? Choose the correct letter, <strong>A&ndash;G</strong>.</div>
+<div class="question" id="q14"><div class="q-num">14</div><div class="q-body"><div class="q-text">the position of the British government towards the potato famine</div><select class="dd-select" id="dd-q14" data-opts="A,B,C,D,E,F,G" data-ph="Select a paragraph&hellip;" onchange="selectDropdown(this,'q14')"></select></div></div>
+<div class="question" id="q15"><div class="q-num">15</div><div class="q-body"><div class="q-text">a description of the system of land ownership in Ireland</div><select class="dd-select" id="dd-q15" data-opts="A,B,C,D,E,F,G" data-ph="Select a paragraph&hellip;" onchange="selectDropdown(this,'q15')"></select></div></div>
+<div class="question" id="q16"><div class="q-num">16</div><div class="q-body"><div class="q-text">early European attitudes toward the potato</div><select class="dd-select" id="dd-q16" data-opts="A,B,C,D,E,F,G" data-ph="Select a paragraph&hellip;" onchange="selectDropdown(this,'q16')"></select></div></div>
+<div class="question" id="q17"><div class="q-num">17</div><div class="q-body"><div class="q-text">an explanation of the lack of legal protection for Irish peasants</div><select class="dd-select" id="dd-q17" data-opts="A,B,C,D,E,F,G" data-ph="Select a paragraph&hellip;" onchange="selectDropdown(this,'q17')"></select></div></div>
+<div class="question" id="q18"><div class="q-num">18</div><div class="q-body"><div class="q-text">the importance of the potato in Irish society</div><select class="dd-select" id="dd-q18" data-opts="A,B,C,D,E,F,G" data-ph="Select a paragraph&hellip;" onchange="selectDropdown(this,'q18')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 19&ndash;26</div>
+<div class="q-section-intro">Complete each sentence with the correct ending, <strong>A&ndash;L</strong>, from the box below. There are more endings than sentences, so you won&rsquo;t use them all.</div>
+<div class="info-box"><span class="box-title">Sentence Endings</span>
+<strong>A</strong> because they couldn’t pay the rent on their farms.<br>
+<strong>B</strong> because railroad trains caused air pollution.<br>
+<strong>C</strong> because potatoes were their main source of food.<br>
+<strong>D</strong> because Charles Trevelyan took over relief efforts.<br>
+<strong>E</strong> because they needed the profits to pay the rent.<br>
+<strong>F</strong> because they weren’t well-managed.<br>
+<strong>G</strong> because there wasn’t enough land for the increasing population.<br>
+<strong>H</strong> because his efforts to help the Irish were unpopular among the British.<br>
+<strong>I</strong> because they believed that potatoes were poisonous.<br>
+<strong>J</strong> because the British instituted penal laws.<br>
+<strong>K</strong> because it was discovered that potatoes are full of nutrients.<br>
+<strong>L</strong> because Marie Antoinette used potato blossoms as decoration.
+</div>
+<div class="question" id="q19"><div class="q-num">19</div><div class="q-body"><div class="q-text">At first Europeans didn't eat potatoes</div><select class="dd-select" id="dd-q19" data-opts="A,B,C,D,E,F,G,H,I,J,K,L" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q19')"></select></div></div>
+<div class="question" id="q20"><div class="q-num">20</div><div class="q-body"><div class="q-text">European monarchs encouraged potato growing</div><select class="dd-select" id="dd-q20" data-opts="A,B,C,D,E,F,G,H,I,J,K,L" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q20')"></select></div></div>
+<div class="question" id="q21"><div class="q-num">21</div><div class="q-body"><div class="q-text">The potato blight was devastating to the Irish</div><select class="dd-select" id="dd-q21" data-opts="A,B,C,D,E,F,G,H,I,J,K,L" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q21')"></select></div></div>
+<div class="question" id="q22"><div class="q-num">22</div><div class="q-body"><div class="q-text">Farmers who grew oats, wheat, and barley didn't eat these crops</div><select class="dd-select" id="dd-q22" data-opts="A,B,C,D,E,F,G,H,I,J,K,L" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q22')"></select></div></div>
+<div class="question" id="q23"><div class="q-num">23</div><div class="q-body"><div class="q-text">Many Irish farmers lived on infertile plots</div><select class="dd-select" id="dd-q23" data-opts="A,B,C,D,E,F,G,H,I,J,K,L" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q23')"></select></div></div>
+<div class="question" id="q24"><div class="q-num">24</div><div class="q-body"><div class="q-text">Many Irish farmers were arrested</div><select class="dd-select" id="dd-q24" data-opts="A,B,C,D,E,F,G,H,I,J,K,L" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q24')"></select></div></div>
+<div class="question" id="q25"><div class="q-num">25</div><div class="q-body"><div class="q-text">Sir Robert Peel lost his position as prime minister</div><select class="dd-select" id="dd-q25" data-opts="A,B,C,D,E,F,G,H,I,J,K,L" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q25')"></select></div></div>
+<div class="question" id="q26"><div class="q-num">26</div><div class="q-body"><div class="q-text">Soup kitchens and workhouses didn't relieve the suffering</div><select class="dd-select" id="dd-q26" data-opts="A,B,C,D,E,F,G,H,I,J,K,L" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q26')"></select></div></div>
+</div>
+</div>
+<div id="qs-2" style="display:none">
+<div class="q-section">
+<div class="q-section-header">Questions 27&ndash;31</div>
+<div class="q-section-intro">Choose the correct letter, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>.</div>
+<div class="question" id="q27"><div class="q-num">27</div><div class="q-body"><div class="q-text">According to the writer, which marketing technique attempts to make consumers stay in a shop for longer?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q27','A')"><span class="radio-dot"></span>A playing appealing music</label><label class="mcq-opt" onclick="selectMCQ(this,'q27','B')"><span class="radio-dot"></span>B emitting pleasant scents</label><label class="mcq-opt" onclick="selectMCQ(this,'q27','C')"><span class="radio-dot"></span>C displaying attractive posters</label><label class="mcq-opt" onclick="selectMCQ(this,'q27','D')"><span class="radio-dot"></span>D making in-store announcements</label></div></div></div>
+<div class="question" id="q28"><div class="q-num">28</div><div class="q-body"><div class="q-text">The writer mentions bottled water in order to show that</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q28','A')"><span class="radio-dot"></span>A consumers buy it because of the fact that it is marketed.</label><label class="mcq-opt" onclick="selectMCQ(this,'q28','B')"><span class="radio-dot"></span>B people purchase it despite the fact that it has no taste.</label><label class="mcq-opt" onclick="selectMCQ(this,'q28','C')"><span class="radio-dot"></span>C marketers need not do taste tests when a campaign is effective.</label><label class="mcq-opt" onclick="selectMCQ(this,'q28','D')"><span class="radio-dot"></span>D tests prove that people cannot differentiate it from tap water.</label></div></div></div>
+<div class="question" id="q29"><div class="q-num">29</div><div class="q-body"><div class="q-text">According to the writer, socially transmitted food preference occurs when</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q29','A')"><span class="radio-dot"></span>A only dominant members of an animal group influence what others eat.</label><label class="mcq-opt" onclick="selectMCQ(this,'q29','B')"><span class="radio-dot"></span>B the same types of animals naturally prefer the same types of food.</label><label class="mcq-opt" onclick="selectMCQ(this,'q29','C')"><span class="radio-dot"></span>C animals are influenced by what any other animals of the same species eat.</label><label class="mcq-opt" onclick="selectMCQ(this,'q29','D')"><span class="radio-dot"></span>D a food type is more desirable because an animal views that food as scarce.</label></div></div></div>
+<div class="question" id="q30"><div class="q-num">30</div><div class="q-body"><div class="q-text">According to the writer, how is learning by observation and imitation a useful feature of the brain?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q30','A')"><span class="radio-dot"></span>A It helps people overcome challenges.</label><label class="mcq-opt" onclick="selectMCQ(this,'q30','B')"><span class="radio-dot"></span>B Positive models can influence social behaviour.</label><label class="mcq-opt" onclick="selectMCQ(this,'q30','C')"><span class="radio-dot"></span>C It can give an advantage when communicating with others.</label><label class="mcq-opt" onclick="selectMCQ(this,'q30','D')"><span class="radio-dot"></span>D Cultural norms and relationships can be understood more easily.</label></div></div></div>
+<div class="question" id="q31"><div class="q-num">31</div><div class="q-body"><div class="q-text">According to the writer, how does television advertising exploit the human tendency to imitate others?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q31','A')"><span class="radio-dot"></span>A It shows buying behaviour that marketers want to encourage in viewers.</label><label class="mcq-opt" onclick="selectMCQ(this,'q31','B')"><span class="radio-dot"></span>B It features people who have a desirable image.</label><label class="mcq-opt" onclick="selectMCQ(this,'q31','C')"><span class="radio-dot"></span>C It shows older people whom teenagers admire.</label><label class="mcq-opt" onclick="selectMCQ(this,'q31','D')"><span class="radio-dot"></span>D It features successful people endorsing products responsible for their success.</label></div></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 32&ndash;36</div>
+<div class="q-section-intro">Do the following statements agree with the claims of the writer in Reading Passage 3? Write <strong>YES</strong> if the statement agrees with the views of the writer, <strong>NO</strong> if the statement contradicts the views of the writer, or <strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this.</div>
+<div class="question" id="q32"><div class="q-num">32</div><div class="q-body"><div class="q-text">The diamond campaign worked by making a connection in people's minds between diamonds and luxury.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q32','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q32','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q32','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q33"><div class="q-num">33</div><div class="q-body"><div class="q-text">People are more aware of visual marketing than auditory marketing.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q33','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q33','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q33','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q34"><div class="q-num">34</div><div class="q-body"><div class="q-text">The campaign advertising diamonds had a positive influence on society.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q34','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q34','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q34','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q35"><div class="q-num">35</div><div class="q-body"><div class="q-text">There is still some uncertainty about whether animals copy the behaviour of the most powerful animals among them.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q35','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q35','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q35','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q36"><div class="q-num">36</div><div class="q-body"><div class="q-text">Consumers make a logical connection between celebrities' achievements and the products they promote.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q36','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q36','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q36','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 37&ndash;40</div>
+<div class="q-section-intro">Complete each sentence with the correct ending, <strong>A&ndash;G</strong>, below.</div>
+<div class="info-box"><span class="box-title">Sentence Endings</span>
+<strong>A</strong> people imitated behaviour that was linked with success.<br>
+<strong>B</strong> younger animals of a certain species are more likely to imitate each other.<br>
+<strong>C</strong> an animal would imitate another that had higher status.<br>
+<strong>D</strong> imitation of popular sportspeople has occurred for many decades.<br>
+<strong>E</strong> products are marketed to potential consumers who are unaware that marketing is occurring.<br>
+<strong>F</strong> animals can develop new habits by observation.<br>
+<strong>G</strong> incentives are provided for consumers who behave in a certain way.
+</div>
+<div class="question" id="q37"><div class="q-num">37</div><div class="q-body"><div class="q-text">The behaviour of the monkeys on the island of Koshima showed that</div><select class="dd-select" id="dd-q37" data-opts="A,B,C,D,E,F,G" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q37')"></select></div></div>
+<div class="question" id="q38"><div class="q-num">38</div><div class="q-body"><div class="q-text">Primatologist Frans de Waal found that</div><select class="dd-select" id="dd-q38" data-opts="A,B,C,D,E,F,G" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q38')"></select></div></div>
+<div class="question" id="q39"><div class="q-num">39</div><div class="q-body"><div class="q-text">Dick Fosbury is mentioned in order to show that</div><select class="dd-select" id="dd-q39" data-opts="A,B,C,D,E,F,G" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q39')"></select></div></div>
+<div class="question" id="q40"><div class="q-num">40</div><div class="q-body"><div class="q-text">A feature of some modern marketing campaigns is that</div><select class="dd-select" id="dd-q40" data-opts="A,B,C,D,E,F,G" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q40')"></select></div></div>
+</div>
+</div>
+
+  </div>
+</div>
+
+<div id="bottombar">
+  <div class="part-tabs">
+    <div class="part-tab active" id="ptab-0" onclick="switchPassage(0)">Part 1: <span class="count" id="pcount-0">0 of 13</span></div>
+    <div class="part-tab" id="ptab-1" onclick="switchPassage(1)">Part 2: <span class="count" id="pcount-1">0 of 13</span></div>
+    <div class="part-tab" id="ptab-2" onclick="switchPassage(2)">Part 3: <span class="count" id="pcount-2">0 of 14</span></div>
+  </div>
+  <div class="q-circles" id="q-circles"></div>
+  <div class="nav-arrows">
+    <button class="nav-arrow" onclick="prevQ()">&lsaquo;</button>
+    <button class="nav-arrow" onclick="nextQ()">&rsaquo;</button>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="submit-modal">
+  <div class="modal">
+    <h2>Submit Your Test?</h2>
+    <p>You are about to submit your test. This action cannot be undone.</p>
+    <div class="score-grid" id="score-grid" style="display:none">
+      <div class="score-card"><div class="val" id="sc-answered">0</div><div class="lbl">Answered</div></div>
+      <div class="score-card"><div class="val" id="sc-unanswered">40</div><div class="lbl">Unanswered</div></div>
+      <div class="score-card"><div class="val" id="sc-pct">0%</div><div class="lbl">Completion</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="closeModal()">Cancel</button>
+      <button class="btn-modal primary" onclick="submitTest()">Submit Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="results-modal">
+  <div class="modal">
+    <h2>Test Complete</h2>
+    <p id="results-cand"></p>
+    <div class="score-grid">
+      <div class="score-card"><div class="val" id="r-correct" style="color:var(--success)">&mdash;</div><div class="lbl">Correct</div></div>
+      <div class="score-card"><div class="val" id="r-wrong" style="color:var(--accent-red)">&mdash;</div><div class="lbl">Incorrect</div></div>
+      <div class="score-card"><div class="val" id="r-unanswered">&mdash;</div><div class="lbl">Unanswered</div></div>
+    </div>
+    <div style="margin:14px 0 12px;background:var(--accent);border-radius:12px;padding:18px 22px;text-align:center;color:#fff">
+      <div style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-bottom:4px">IELTS Band Score</div>
+      <div id="r-band" style="font-size:48px;font-weight:700;line-height:1">&mdash;</div>
+      <div id="r-band-label" style="font-size:13px;margin-top:6px;opacity:.85">&mdash;</div>
+    </div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:6px">Your Answers vs Correct Answers</div>
+    <div class="ans-table-wrap"><table class="ans-table"><thead><tr><th>Q</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr></thead><tbody id="ans-table-body"></tbody></table></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:10px">Green = correct &middot; Red = incorrect &middot; Band scores are approximate for Academic Reading.</p>
+    <p id="pdf-status" style="font-size:13px;color:var(--success);margin-top:8px;font-weight:500"></p>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="redownloadPDF()">Download PDF again</button>
+      <button class="btn-modal primary" onclick="document.getElementById('results-modal').classList.add('hidden')">Close &amp; Review</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   ANSWER KEY (Test 316)
+   ============================================================ */
+var ANSWERS = {
+  q1:'x', q2:'vi', q3:'ix', q4:'viii', q5:'vii', q6:'i', q7:'iv',
+  q8:'thought experiment', q9:'parallel track',
+  q10:'C', q11:'A', q12:'B', q13:'C',
+  q14:'F', q15:'D', q16:'B', q17:'E', q18:'C',
+  q19:'I', q20:'K', q21:'C', q22:'E', q23:'G', q24:'A', q25:'H', q26:'F',
+  q27:'B', q28:'A', q29:'C', q30:'A', q31:'B',
+  q32:'NO', q33:'NOT GIVEN', q34:'NOT GIVEN', q35:'YES', q36:'NO',
+  q37:'F', q38:'C', q39:'A', q40:'E'
+};
+
+var ALT = {
+  q8:['thought experiment'],
+  q9:['parallel track','parallel tracks']
+};
+
+var PART_RANGES = [[1,13],[14,26],[27,40]];
+var userAnswers = {}, currentPassage = 0, submitted = false;
+var candidateName='', candidateNumber='';
+var seconds = 60*60;
+var timerEl = document.getElementById('timer');
+var timerInterval = null;
+
+/* Fill dropdowns */
+(function initSelects(){
+  document.querySelectorAll('select[data-opts],select[data-words]').forEach(function(s){
+    var ph = document.createElement('option');
+    ph.value = ''; ph.disabled = true; ph.selected = true;
+    ph.innerHTML = s.getAttribute('data-ph') || 'Select\u2026';
+    s.appendChild(ph);
+    var words = s.getAttribute('data-words');
+    if(words){
+      words.split(',').forEach(function(p){
+        var kv = p.split(':');
+        var o = document.createElement('option');
+        o.value = kv[0]; o.textContent = kv[0] + ' \u2013 ' + kv[1];
+        s.appendChild(o);
+      });
+    } else {
+      s.getAttribute('data-opts').split(',').forEach(function(v){
+        var o = document.createElement('option');
+        o.value = v; o.textContent = v;
+        s.appendChild(o);
+      });
+    }
+  });
+})();
+
+/* ============================================================
+   AUTO-SAVE
+   ============================================================ */
+var STORAGE_KEY = 'ielts_reading_316_session';
+var autosaveInterval = null;
+var autosaveListenersAdded = false;
+var autosaveIndicator = document.getElementById('autosave-indicator');
+var autosaveText = document.getElementById('autosave-text');
+
+function showAutosaveSaving(){
+  autosaveIndicator.classList.add('show','saving');
+  autosaveText.textContent = 'Saving\u2026';
+}
+function showAutosaveSaved(){
+  autosaveIndicator.classList.add('show');
+  autosaveIndicator.classList.remove('saving');
+  var t = new Date();
+  autosaveText.textContent = 'Saved ' + t.toTimeString().slice(0,8);
+  setTimeout(function(){ autosaveIndicator.classList.remove('show'); }, 2500);
+}
+function getPassageWidth(){
+  var pw = document.getElementById('passage-panel');
+  return pw ? (pw.style.width || pw.offsetWidth + 'px') : '';
+}
+function saveSession(silent){
+  if(submitted) return;
+  if(!silent) showAutosaveSaving();
+  try{
+    var data = {
+      version: 3,
+      timestamp: Date.now(),
+      candidateName: candidateName,
+      candidateNumber: candidateNumber,
+      seconds: seconds,
+      currentPassage: currentPassage,
+      userAnswers: userAnswers,
+      notepad: document.getElementById('notepad-text').value,
+      passageWidth: getPassageWidth(),
+      started: true
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    if(!silent) showAutosaveSaved();
+  }catch(e){ console.warn('Autosave failed:', e); }
+}
+function loadSession(){
+  try{
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return null;
+    var d = JSON.parse(raw);
+    if(!d || !d.started) return null;
+    return d;
+  }catch(e){ return null; }
+}
+function clearSession(){ try{ localStorage.removeItem(STORAGE_KEY); }catch(e){} }
+function formatTime(sec){
+  var m = Math.floor(sec/60), s = sec%60;
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+
+(function checkSavedSession(){
+  var saved = loadSession();
+  if(!saved) return;
+  var banner = document.getElementById('resume-banner');
+  var info = document.getElementById('resume-info');
+  var answered = 0;
+  for(var i=1;i<=40;i++){ if(saved.userAnswers && saved.userAnswers['q'+i]) answered++; }
+  var when = new Date(saved.timestamp).toLocaleString();
+  info.innerHTML = '<strong>' + escapeHtml(saved.candidateName || 'Anonymous') + '</strong> &middot; ' + answered + '/40 answered &middot; ' + formatTime(saved.seconds) + ' remaining<br><span style="opacity:.75">Saved ' + when + '</span>';
+  banner.classList.add('show');
+  document.getElementById('cand-name').value = saved.candidateName || '';
+  document.getElementById('cand-num').value = saved.candidateNumber || '';
+})();
+
+function resumeTest(){
+  var saved = loadSession();
+  if(!saved){ startTest(); return; }
+  candidateName = saved.candidateName || 'Anonymous';
+  candidateNumber = saved.candidateNumber || 'N/A';
+  seconds = saved.seconds || 60*60;
+  userAnswers = saved.userAnswers || {};
+  currentPassage = saved.currentPassage || 0;
+  if(saved.notepad) document.getElementById('notepad-text').value = saved.notepad;
+  if(saved.passageWidth){ document.getElementById('passage-panel').style.width = saved.passageWidth; }
+
+  document.getElementById('start-screen').classList.add('hidden');
+  restoreAnswersUI();
+  buildCircles();
+  updatePartCounts();
+  if(currentPassage !== 0) switchPassage(currentPassage);
+  updateTimerDisplay();
+  startTimer();
+  startAutosave();
+  showAutosaveSaved();
+}
+function discardSaved(){
+  clearSession();
+  document.getElementById('resume-banner').classList.remove('show');
+  document.getElementById('cand-name').value = '';
+  document.getElementById('cand-num').value = '';
+}
+
+function restoreAnswersUI(){
+  for(var id in userAnswers){
+    var val = userAnswers[id];
+    if(!val) continue;
+    var dd = document.getElementById('dd-'+id);
+    if(dd){ dd.value = val; dd.classList.add('answered'); continue; }
+    var fi = document.getElementById(id);
+    if(fi && fi.tagName === 'INPUT'){ fi.value = val; fi.classList.add('answered'); continue; }
+    var tfnWrap = document.querySelector('#'+id+' .tfn-options');
+    if(tfnWrap){
+      tfnWrap.querySelectorAll('.tfn-btn').forEach(function(b){
+        if(b.textContent.trim() === val) b.classList.add('selected');
+      });
+      continue;
+    }
+    var mcqWrap = document.querySelector('#'+id+' .mcq-options');
+    if(mcqWrap){
+      mcqWrap.querySelectorAll('.mcq-opt').forEach(function(l){
+        if(l.textContent.trim().charAt(0) === val) l.classList.add('selected');
+      });
+    }
+  }
+}
+
+function startAutosave(){
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  autosaveInterval = setInterval(function(){ saveSession(false); }, 5000);
+  if(autosaveListenersAdded) return;
+  autosaveListenersAdded = true;
+  document.addEventListener('visibilitychange', function(){ if(document.hidden) saveSession(true); });
+  window.addEventListener('beforeunload', function(){ saveSession(true); });
+}
+
+function startTest(){
+  candidateName = document.getElementById('cand-name').value.trim() || 'Anonymous';
+  candidateNumber = document.getElementById('cand-num').value.trim() || 'N/A';
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('resume-banner').classList.remove('show');
+  clearSession();
+  buildCircles();
+  updatePartCounts();
+  startTimer();
+  startAutosave();
+  saveSession(true);
+}
+function startTimer(){
+  if(timerInterval) clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(function(){
+    if(submitted) return;
+    seconds--;
+    if(seconds <= 0){ clearInterval(timerInterval); submitTest(); return; }
+    updateTimerDisplay();
+  }, 1000);
+}
+function updateTimerDisplay(){
+  timerEl.textContent = formatTime(Math.max(0,seconds));
+  timerEl.classList.toggle('warn', seconds < 300);
+}
+
+function switchPassage(idx){
+  currentPassage = idx;
+  document.querySelectorAll('.part-tab').forEach(function(t,i){ t.classList.toggle('active', i===idx); });
+  document.querySelectorAll('.passage-content').forEach(function(p,i){ p.classList.toggle('active', i===idx); });
+  document.querySelectorAll('#qs-0,#qs-1,#qs-2').forEach(function(q,i){ q.style.display = i===idx ? '' : 'none'; });
+  buildCircles();
+  document.getElementById('questions-panel').scrollTop = 0;
+  document.getElementById('passage-panel').scrollTop = 0;
+  saveSession(true);
+}
+function buildCircles(){
+  var wrap = document.getElementById('q-circles');
+  wrap.innerHTML = '';
+  var range = PART_RANGES[currentPassage];
+  var start = range[0], end = range[1];
+  for(var i=start;i<=end;i++){
+    var d = document.createElement('div');
+    d.className = 'q-circle';
+    d.textContent = i;
+    var a = userAnswers['q'+i];
+    if(a && a.toString().trim()) d.classList.add('answered');
+    d.onclick = (function(n){ return function(){ scrollToQ(n); }; })(i);
+    wrap.appendChild(d);
+  }
+}
+function updatePartCounts(){
+  PART_RANGES.forEach(function(r, idx){
+    var s = r[0], e = r[1], a = 0;
+    for(var i=s;i<=e;i++){ if(userAnswers['q'+i] && userAnswers['q'+i].toString().trim()) a++; }
+    document.getElementById('pcount-'+idx).textContent = a + ' of ' + (e-s+1);
+  });
+}
+function scrollToQ(num){
+  var p = num<=13?0:num<=26?1:2;
+  if(p !== currentPassage) switchPassage(p);
+  setTimeout(function(){
+    var el = document.getElementById('q'+num);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+  },50);
+}
+function prevQ(){ document.getElementById('questions-panel').scrollBy({top:-240,behavior:'smooth'}); }
+function nextQ(){ document.getElementById('questions-panel').scrollBy({top:240,behavior:'smooth'}); }
+
+function selectTFN(btn, qId, val){
+  btn.closest('.tfn-options').querySelectorAll('.tfn-btn').forEach(function(b){ b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectMCQ(label, qId, val){
+  label.closest('.mcq-options').querySelectorAll('.mcq-opt').forEach(function(l){ l.classList.remove('selected'); });
+  label.classList.add('selected');
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectDropdown(sel, qId){
+  var val = sel.value;
+  sel.classList.toggle('answered', !!val);
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function markFill(id){
+  var el = document.getElementById(id);
+  var val = el.value.trim();
+  el.classList.toggle('answered', val.length > 0);
+  userAnswers[id] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+
+/* ============================================================
+   HIGHLIGHT / NOTE TOOLBAR
+   ============================================================ */
+var _savedRange = null;
+function hideSelToolbar(){ var tb=document.getElementById('sel-toolbar'); if(tb) tb.style.display='none'; _savedRange=null; }
+function showSelToolbar(x,y){
+  var tb=document.getElementById('sel-toolbar'); if(!tb) return;
+  tb.style.display='block';
+  var tw=tb.offsetWidth||140, th=tb.offsetHeight||36;
+  var left=x-tw/2, top=y-th-10;
+  if(left+tw>window.innerWidth-8) left=window.innerWidth-tw-8;
+  if(left<8) left=8;
+  if(top<60) top=y+12;
+  tb.style.left=left+'px'; tb.style.top=top+'px';
+}
+function getPassageSelection(){
+  var sel=window.getSelection();
+  if(!sel||sel.isCollapsed||sel.rangeCount===0) return null;
+  var range=sel.getRangeAt(0);
+  var p1=document.getElementById('passage-panel');
+  var p2=document.getElementById('questions-panel');
+  var node=range.commonAncestorContainer;
+  if(!((p1&&p1.contains(node))||(p2&&p2.contains(node)))) return null;
+  if(!sel.toString().trim()) return null;
+  var frag=range.cloneContents();
+  if(frag.querySelector && frag.querySelector('input,select,textarea,button,label')) return null;
+  return {sel:sel,range:range};
+}
+function onPassageMouseUp(e){
+  setTimeout(function(){
+    var data=getPassageSelection();
+    if(!data){ var tb=document.getElementById('sel-toolbar'); if(e&&e.target&&tb&&tb.contains(e.target)) return; hideSelToolbar(); return; }
+    _savedRange=data.range.cloneRange();
+    var rect=data.range.getBoundingClientRect();
+    showSelToolbar(rect.left+rect.width/2, rect.top);
+  },10);
+}
+function applyMark(cls){
+  if(!_savedRange) return;
+  try{ var m=document.createElement('mark'); m.className=cls; _savedRange.surroundContents(m); }
+  catch(e){ try{ var f=_savedRange.extractContents(); var m2=document.createElement('mark'); m2.className=cls; m2.appendChild(f); _savedRange.insertNode(m2); }catch(e2){} }
+  var s=window.getSelection(); if(s) s.removeAllRanges();
+  hideSelToolbar();
+}
+(function(){
+  var hl=document.getElementById('sel-hl-btn');
+  if(hl) hl.addEventListener('mousedown',function(e){e.preventDefault();applyMark('hl');});
+  var nb=document.getElementById('sel-note-btn');
+  if(nb) nb.addEventListener('mousedown',function(e){
+    e.preventDefault();
+    var text=_savedRange?_savedRange.toString().trim():'';
+    applyMark('hl-note');
+    if(text){ var ta=document.getElementById('notepad-text'); if(ta){ ta.value+=(ta.value&&!ta.value.endsWith('\n')?'\n':'')+'\u2022 '+text; saveSession(true); var p=document.getElementById('notepad-panel'); if(p&&p.classList.contains('hidden')) toggleNotepad(); } }
+  });
+  var pp=document.getElementById('passage-panel');
+  if(pp) pp.addEventListener('mouseup',onPassageMouseUp);
+  var qp=document.getElementById('questions-panel');
+  if(qp) qp.addEventListener('mouseup',onPassageMouseUp);
+  document.addEventListener('mousedown',function(e){ var tb=document.getElementById('sel-toolbar'); if(!tb||tb.style.display==='none') return; if(tb.contains(e.target)) return; setTimeout(function(){ var s=window.getSelection(); if(!s||s.isCollapsed) hideSelToolbar(); },150); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') hideSelToolbar(); });
+  if(pp) pp.addEventListener('scroll',hideSelToolbar);
+  if(qp) qp.addEventListener('scroll',hideSelToolbar);
+})();
+
+function toggleNotepad(){
+  var panel=document.getElementById('notepad-panel');
+  var btn=document.getElementById('notepad-btn');
+  panel.classList.toggle('hidden');
+  btn.classList.toggle('active', !panel.classList.contains('hidden'));
+  if(!panel.classList.contains('hidden')) document.getElementById('notepad-text').focus();
+  saveSession(true);
+}
+function toggleFullscreen(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function(){});
+  else document.exitFullscreen().catch(function(){});
+}
+document.getElementById('notepad-text').addEventListener('input', function(){ saveSession(true); });
+
+/* ============================================================
+   SCORING
+   ============================================================ */
+function getBandScore(c){
+  if(c>=39) return {band:'9.0',level:'Expert User'};
+  if(c>=37) return {band:'8.5',level:'Very Good User'};
+  if(c>=35) return {band:'8.0',level:'Very Good User'};
+  if(c>=33) return {band:'7.5',level:'Good User'};
+  if(c>=30) return {band:'7.0',level:'Good User'};
+  if(c>=27) return {band:'6.5',level:'Competent User'};
+  if(c>=23) return {band:'6.0',level:'Competent User'};
+  if(c>=19) return {band:'5.5',level:'Modest User'};
+  if(c>=15) return {band:'5.0',level:'Modest User'};
+  if(c>=13) return {band:'4.5',level:'Limited User'};
+  if(c>=10) return {band:'4.0',level:'Limited User'};
+  return {band:'3.5',level:'Extremely Limited'};
+}
+function normalize(s){
+  return (s||'').toString().trim().toLowerCase().replace(/[()]/g,'').replace(/\s+/g,' ').replace(/\.$/,'');
+}
+function checkCorrect(id){
+  var ans = ANSWERS[id];
+  var user = (userAnswers[id]||'').toString().trim();
+  if(!user) return null;
+  var nU = normalize(user);
+  if(ALT[id]){ for(var k=0;k<ALT[id].length;k++){ if(nU === normalize(ALT[id][k])) return true; } }
+  return nU === normalize(ans);
+}
+function correctAnswerLabel(id){
+  return ANSWERS[id];
+}
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function confirmSubmit(){
+  var count=0;
+  for(var i=1;i<=40;i++){ if(userAnswers['q'+i]&&userAnswers['q'+i].toString().trim()) count++; }
+  document.getElementById('sc-answered').textContent=count;
+  document.getElementById('sc-unanswered').textContent=40-count;
+  document.getElementById('sc-pct').textContent=Math.round(count/40*100)+'%';
+  document.getElementById('score-grid').style.display='grid';
+  document.getElementById('submit-modal').classList.remove('hidden');
+}
+function closeModal(){ document.getElementById('submit-modal').classList.add('hidden'); }
+
+function submitTest(){
+  submitted=true;
+  if(timerInterval) clearInterval(timerInterval);
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  document.getElementById('submit-modal').classList.add('hidden');
+  clearSession();
+
+  var correct=0, wrong=0, unanswered=0;
+  var tbody=document.getElementById('ans-table-body');
+  tbody.innerHTML='';
+  var pdfRows=[];
+
+  for(var num=1;num<=40;num++){
+    var id='q'+num;
+    var result=checkCorrect(id);
+    var userRaw=(userAnswers[id]||'').toString().trim();
+    var correctAns=correctAnswerLabel(id);
+
+    var yourCell, resultCell, resText;
+    if(result===null){
+      unanswered++;
+      yourCell='<span class="blank">&mdash;</span>';
+      resultCell='<span class="blank">Unanswered</span>';
+      resText='Unanswered';
+    } else if(result){
+      correct++;
+      yourCell='<span class="ok">'+escapeHtml(userRaw)+'</span>';
+      resultCell='<span class="ok">&#10003; Correct</span>';
+      resText='Correct';
+    } else {
+      wrong++;
+      yourCell='<span class="bad">'+escapeHtml(userRaw||'-')+'</span>';
+      resultCell='<span class="bad">&#10007; Incorrect</span>';
+      resText='Incorrect';
+    }
+
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td style="font-weight:700;color:var(--accent)">'+num+'</td><td>'+yourCell+'</td><td><strong>'+escapeHtml(correctAns)+'</strong></td><td>'+resultCell+'</td>';
+    tbody.appendChild(tr);
+    pdfRows.push([String(num), userRaw||'-', correctAns, resText]);
+  }
+
+  document.getElementById('r-correct').textContent=correct;
+  document.getElementById('r-wrong').textContent=wrong;
+  document.getElementById('r-unanswered').textContent=unanswered;
+  var bs=getBandScore(correct);
+  document.getElementById('r-band').textContent=bs.band;
+  document.getElementById('r-band-label').textContent=bs.level+' \u00B7 '+correct+' / 40 correct';
+  document.getElementById('results-cand').textContent='Candidate: '+candidateName+'  \u00B7  Number: '+candidateNumber;
+  document.getElementById('results-modal').classList.remove('hidden');
+  window._lastPdfData={correct:correct,wrong:wrong,unanswered:unanswered,bs:bs,pdfRows:pdfRows};
+  try{
+    generateResultsPDF(correct,wrong,unanswered,bs,pdfRows);
+    document.getElementById('pdf-status').textContent='Candidate response PDF downloaded.';
+  }catch(e){
+    document.getElementById('pdf-status').textContent='PDF download failed. Use the button below.';
+    document.getElementById('pdf-status').style.color='var(--accent-red)';
+  }
+}
+function redownloadPDF(){
+  if(!window._lastPdfData) return;
+  var d=window._lastPdfData;
+  try{ generateResultsPDF(d.correct,d.wrong,d.unanswered,d.bs,d.pdfRows); }catch(e){}
+}
+
+function generateResultsPDF(correct,wrong,unanswered,bandInfo,rows){
+  var jsPDF=window.jspdf.jsPDF;
+  var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  var pageWidth=doc.internal.pageSize.getWidth();
+  doc.setFillColor(30,58,95); doc.rect(0,0,pageWidth,28,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(16); doc.setFont('helvetica','bold');
+  doc.text('IELTS Academic Reading \u00B7 Test 316',14,12);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Candidate Response Report',14,20);
+  doc.text(new Date().toLocaleString(),pageWidth-14,20,{align:'right'});
+  doc.setTextColor(26,24,20); doc.setFontSize(11); doc.setFont('helvetica','bold');
+  doc.text('Candidate Name:',14,38); doc.setFont('helvetica','normal'); doc.text(candidateName||'Anonymous',52,38);
+  doc.setFont('helvetica','bold'); doc.text('Candidate Number:',14,45); doc.setFont('helvetica','normal'); doc.text(candidateNumber||'-',58,45);
+  doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.text('Score Summary',14,56);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Correct: '+correct+'    Incorrect: '+wrong+'    Unanswered: '+unanswered,14,64);
+  doc.setFont('helvetica','bold'); doc.setTextColor(30,58,95); doc.setFontSize(14);
+  doc.text('Band Score: '+bandInfo.band+'  ('+bandInfo.level+')',14,72);
+  doc.setTextColor(26,24,20); doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text(correct+' / 40 correct',14,79);
+  doc.autoTable({
+    startY:86, head:[['Q','Your Answer','Correct Answer','Result']], body:rows, theme:'grid',
+    styles:{fontSize:8,cellPadding:2.2,overflow:'linebreak',valign:'middle'},
+    headStyles:{fillColor:[30,58,95],textColor:255,fontStyle:'bold',fontSize:8},
+    columnStyles:{0:{cellWidth:18,halign:'center'},1:{cellWidth:50},2:{cellWidth:70},3:{cellWidth:35,halign:'center'}},
+    didParseCell:function(data){
+      if(data.section==='body'&&data.column.index===3){
+        var t=data.cell.raw||'';
+        if(t.indexOf('Correct')!==-1 && t.indexOf('Incorrect')===-1){data.cell.styles.textColor=[5,150,105];data.cell.styles.fontStyle='bold';}
+        else if(t.indexOf('Incorrect')!==-1){data.cell.styles.textColor=[225,29,72];data.cell.styles.fontStyle='bold';}
+        else {data.cell.styles.textColor=[107,114,128];data.cell.styles.fontStyle='italic';}
+      }
+    },
+    margin:{left:14,right:14}
+  });
+  var finalY=doc.lastAutoTable.finalY+12;
+  doc.setFontSize(8); doc.setTextColor(107,114,128);
+  doc.text('This report shows your answers against the official answer key.',14,finalY);
+  var safeName=(candidateName||'Candidate').replace(/[^a-zA-Z0-9]/g,'_').slice(0,20);
+  var safeNum=(candidateNumber||'NA').replace(/[^a-zA-Z0-9]/g,'_').slice(0,15);
+  doc.save('IELTS_Test316_'+safeName+'_'+safeNum+'_'+new Date().toISOString().slice(0,10)+'.pdf');
+}
+
+/* ============================================================
+   RESIZER
+   ============================================================ */
+var resizer=document.getElementById('resizer');
+var passPanel=document.getElementById('passage-panel');
+var isResizing=false,startX,startW;
+resizer.addEventListener('mousedown',function(e){ isResizing=true; startX=e.clientX; startW=passPanel.offsetWidth; resizer.classList.add('dragging'); document.body.style.userSelect='none'; document.body.style.cursor='col-resize'; });
+document.addEventListener('mousemove',function(e){ if(!isResizing) return; var dx=e.clientX-startX; passPanel.style.width=Math.min(Math.max(startW+dx,280),window.innerWidth-320)+'px'; });
+document.addEventListener('mouseup',function(){ if(isResizing){ isResizing=false; resizer.classList.remove('dragging'); document.body.style.userSelect=''; document.body.style.cursor=''; saveSession(true); } });
+
+(function(){
+  var saved = loadSession();
+  if(saved && saved.passageWidth){ document.getElementById('passage-panel').style.width = saved.passageWidth; }
+})();
+</script>
+</body>
+</html>

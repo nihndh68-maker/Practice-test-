@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Academic Reading · Practice Test 8</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fff;--border:#e5e7eb;--border-soft:#f3f4f6;--accent:#1e3a5f;--accent-red:#e11d48;--accent-red-hover:#be123c;--text:#1f2937;--muted:#6b7280;--success:#059669;--passage-width:52%;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+  #start-screen{position:fixed;inset:0;background:#f8fafc;display:flex;align-items:center;justify-content:center;z-index:500;}
+  #start-screen.hidden{display:none;}
+  .start-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:40px 44px;max-width:460px;width:92%;box-shadow:0 10px 40px rgba(0,0,0,.08);}
+  .start-card h1{font-size:20px;margin-bottom:4px;font-weight:600;}
+  .start-card .sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .start-card label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;}
+  .start-card input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;margin-bottom:16px;font-family:inherit;}
+  .start-card input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.12);}
+  .start-card button{width:100%;padding:12px;background:var(--accent-red);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;}
+  .start-card button:hover{background:var(--accent-red-hover);}
+  .resume-banner{display:none;background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12.5px;color:#92400e;line-height:1.5;}
+  .resume-banner.show{display:block;}
+  .resume-banner .resume-actions{margin-top:8px;display:flex;gap:8px;}
+  .resume-banner .resume-actions button{width:auto;margin:0;padding:6px 12px;font-size:12px;border-radius:6px;}
+  .resume-banner .resume-actions .btn-ghost{background:#fff;color:#92400e;border:1px solid #fbbf24;}
+  #topbar{background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;flex-shrink:0;z-index:100;}
+  .top-left{display:flex;align-items:center;gap:12px;}
+  .mock-label{font-size:15px;font-weight:500;}
+  #autosave-indicator{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--success);font-weight:500;opacity:0;transition:opacity .4s ease;}
+  #autosave-indicator.show{opacity:1;}
+  #autosave-indicator .dot{width:7px;height:7px;border-radius:50%;background:var(--success);}
+  #autosave-indicator.saving .dot{background:#f59e0b;animation:blink .8s infinite;}
+  #autosave-indicator.saving{color:#f59e0b;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+  #timer-wrap{display:flex;align-items:center;gap:6px;color:var(--accent-red);font-weight:600;}
+  #timer{font-size:18px;font-weight:600;letter-spacing:0.02em;min-width:52px;}
+  #timer.warn{animation:pulse 1s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .top-actions{display:flex;align-items:center;gap:8px;}
+  .icon-btn{width:36px;height:36px;border:none;background:transparent;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;}
+  .icon-btn:hover{background:var(--border-soft);color:var(--text);}
+  .btn-submit{background:#e5e7eb;color:var(--text);border:none;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;}
+  .btn-submit:hover{background:#d1d5db;}
+  .icon-btn.active{background:#fff1f2;color:var(--accent-red);}
+  #notepad-panel{position:fixed;top:56px;right:0;width:320px;height:calc(100vh - 56px - 56px);background:#fff;border-left:1px solid var(--border);box-shadow:-4px 0 24px rgba(0,0,0,.08);z-index:150;display:flex;flex-direction:column;transition:transform .2s ease;}
+  #notepad-panel.hidden{transform:translateX(100%);pointer-events:none;}
+  .notepad-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+  .notepad-title{font-size:15px;font-weight:600;color:var(--accent-red);}
+  #notepad-text{flex:1;border:none;resize:none;padding:14px 16px;font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.55;outline:none;}
+  #main{display:flex;flex:1;overflow:hidden;}
+  #passage-panel{width:var(--passage-width);background:#fff;overflow-y:auto;padding:24px 28px 40px;flex-shrink:0;}
+  .part-header{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:4px;}
+  #passage-panel h2{font-size:22px;font-weight:700;color:var(--accent);margin-bottom:18px;letter-spacing:-0.3px;}
+  .passage-title{text-align:center;font-family:'Source Serif 4',Georgia,serif;font-size:18px;font-weight:600;color:var(--accent);margin-bottom:22px;}
+  #passage-panel p{font-family:'Source Serif 4',Georgia,serif;font-size:15px;line-height:1.75;margin-bottom:16px;}
+  #passage-panel strong{font-weight:700;color:var(--accent);}
+  #passage-panel em{font-style:italic;}
+  #resizer{width:5px;background:transparent;cursor:col-resize;flex-shrink:0;position:relative;z-index:10;}
+  #resizer::before{content:'';position:absolute;top:0;bottom:0;left:2px;width:1px;background:var(--accent-red);}
+  #resizer:hover::before,#resizer.dragging::before{width:3px;left:1px;}
+  #resizer .handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:28px;background:#fff;border:1px solid var(--accent-red);border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--accent-red);font-size:10px;}
+  #questions-panel{flex:1;overflow-y:auto;padding:20px 24px 80px;background:#fff;}
+  .q-section{margin-bottom:28px;}
+  .q-section-header{font-size:15px;font-weight:600;margin-bottom:8px;}
+  .q-section-intro{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:16px;}
+  .question{padding:12px 0;border-bottom:1px solid var(--border-soft);display:flex;gap:12px;align-items:flex-start;}
+  .question:last-child{border-bottom:none;}
+  .q-num{min-width:26px;height:26px;color:var(--muted);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px;}
+  .q-body{flex:1;}
+  .q-text{font-size:14px;line-height:1.55;margin-bottom:10px;}
+  .tfn-options,.mcq-options{display:flex;flex-direction:column;gap:6px;}
+  .tfn-options.horizontal{flex-direction:row;flex-wrap:wrap;gap:8px;}
+  .tfn-btn,.mcq-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:13.5px;transition:all .12s;}
+  .tfn-btn:hover,.mcq-opt:hover{border-color:#94a3b8;background:#f8fafc;}
+  .tfn-btn.selected,.mcq-opt.selected{border-color:var(--accent-red);background:#fff1f2;}
+  .tfn-btn .radio-dot,.mcq-opt .radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid #cbd5e1;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .tfn-btn.selected .radio-dot,.mcq-opt.selected .radio-dot{border-color:var(--accent-red);}
+  .tfn-btn.selected .radio-dot::after,.mcq-opt.selected .radio-dot::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--accent-red);}
+  .fill-input{border:1.5px solid var(--border);border-radius:6px;padding:7px 12px;font-size:14px;font-family:inherit;width:100%;max-width:220px;transition:border-color .15s;}
+  .fill-input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .fill-input.answered{border-color:var(--success);background:#f0fdf4;}
+  .dd-select{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 36px 10px 12px;font-size:13.5px;font-family:inherit;background-color:#fff;cursor:pointer;transition:border-color .15s;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 12px center;}
+  .dd-select:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .dd-select.answered{border-color:var(--success);background-color:#f0fdf4;}
+  .pair-hint{font-size:12.5px;color:#b45309;background:#fffbeb;border:1px solid #fcd34d;border-radius:6px;padding:6px 10px;margin-bottom:10px;}
+  #bottombar{border-top:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0;gap:12px;min-height:56px;}
+  .part-tabs{display:flex;gap:8px;flex-shrink:0;}
+  .part-tab{padding:8px 16px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .part-tab:hover{border-color:#94a3b8;color:var(--text);}
+  .part-tab.active{border-color:var(--accent-red);color:var(--accent);box-shadow:0 0 0 1px var(--accent-red);}
+  .part-tab .count{font-weight:400;color:var(--muted);}
+  .q-circles{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;flex:1;padding:0 8px;}
+  .q-circle{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;}
+  .q-circle:hover{border-color:#94a3b8;color:var(--text);}
+  .q-circle.answered{background:var(--success);border-color:var(--success);color:#fff;}
+  .nav-arrows{display:flex;gap:6px;flex-shrink:0;}
+  .nav-arrow{width:36px;height:36px;border:1.5px solid var(--border);border-radius:50%;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:16px;}
+  .nav-arrow:hover{border-color:#94a3b8;color:var(--text);}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;}
+  .modal-overlay.hidden{display:none;}
+  .modal{background:#fff;border-radius:12px;padding:28px 32px;max-width:720px;width:94%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+  .modal h2{font-size:20px;margin-bottom:10px;}
+  .modal p{font-size:14px;line-height:1.6;color:var(--muted);margin-bottom:16px;}
+  .score-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0;}
+  .score-card{background:#f8fafc;border-radius:10px;padding:14px;text-align:center;}
+  .score-card .val{font-size:26px;font-weight:700;color:var(--accent);}
+  .score-card .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+  .modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;}
+  .btn-modal{padding:9px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;}
+  .btn-modal:hover{background:#f8fafc;}
+  .btn-modal.primary{background:var(--accent-red);color:#fff;border-color:var(--accent-red);}
+  .btn-modal.primary:hover{background:var(--accent-red-hover);}
+  .ans-table-wrap{margin:12px 0;max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;}
+  .ans-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .ans-table th{position:sticky;top:0;background:var(--accent);color:#fff;padding:8px 10px;text-align:left;font-weight:600;font-size:11px;}
+  .ans-table td{padding:6px 10px;border-bottom:1px solid var(--border);}
+  .ans-table tr:nth-child(even) td{background:#f8fafc;}
+  .ans-table .ok{color:var(--success);font-weight:600;}
+  .ans-table .bad{color:var(--accent-red);font-weight:600;}
+  .ans-table .blank{color:var(--muted);font-style:italic;}
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px;}
+  .passage-content{display:none;}
+  .passage-content.active{display:block;}
+  mark.hl{background:#fef08a;padding:0 2px;border-radius:2px;}
+  mark.hl-note{background:#bbf7d0;padding:0 2px;border-radius:2px;border-bottom:2px solid #16a34a;}
+  #sel-toolbar{position:fixed;z-index:300;display:none;background:#1e3a5f;color:#fff;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);font-size:13px;font-weight:500;overflow:hidden;white-space:nowrap;}
+  #sel-toolbar button{background:transparent;border:none;color:#fff;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:500;font-family:inherit;}
+  #sel-toolbar button:hover{background:rgba(255,255,255,.15);}
+  #sel-toolbar .sep{display:inline-block;width:1px;height:14px;background:rgba(255,255,255,.35);vertical-align:middle;}
+  @media (max-width:800px){#main{flex-direction:column;}#passage-panel{width:100%!important;height:42vh;border-bottom:1px solid var(--border);}#resizer{display:none;}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+<div id="start-screen">
+  <div class="start-card">
+    <h1>IELTS Academic Reading</h1>
+    <div class="sub">Computer-Delivered Simulation &middot; Practice Test 8</div>
+    <div class="resume-banner" id="resume-banner">
+      <strong>&#9201; Saved session found</strong>
+      <div id="resume-info"></div>
+      <div class="resume-actions">
+        <button onclick="resumeTest()">Resume Test</button>
+        <button class="btn-ghost" onclick="discardSaved()">Start Fresh</button>
+      </div>
+    </div>
+    <label for="cand-name">Candidate Name</label>
+    <input type="text" id="cand-name" placeholder="Enter your full name" autocomplete="off">
+    <label for="cand-num">Candidate Number</label>
+    <input type="text" id="cand-num" placeholder="e.g. 123456" autocomplete="off">
+    <button onclick="startTest()">Start Test</button>
+  </div>
+</div>
+
+<div id="topbar">
+  <div class="top-left">
+    <span class="mock-label">IELTS Academic Reading &middot; Practice Test 8</span>
+    <span id="autosave-indicator"><span class="dot"></span><span id="autosave-text">Saved</span></span>
+  </div>
+  <div id="timer-wrap">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <div id="timer">60:00</div>
+  </div>
+  <div class="top-actions">
+    <button class="icon-btn" id="notepad-btn" title="Notepad" onclick="toggleNotepad()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></button>
+    <button class="icon-btn" title="Full screen" onclick="toggleFullscreen()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
+    <button class="btn-submit" onclick="confirmSubmit()">Submit</button>
+  </div>
+</div>
+
+<div id="notepad-panel" class="hidden">
+  <div class="notepad-header">
+    <span class="notepad-title">Notepad</span>
+    <button class="icon-btn" title="Close" onclick="toggleNotepad()" style="width:28px;height:28px"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <textarea id="notepad-text" placeholder="Type your notes here&hellip;"></textarea>
+</div>
+
+<div id="sel-toolbar">
+  <button type="button" id="sel-note-btn">Note</button><span class="sep"></span><button type="button" id="sel-hl-btn">Highlight</button>
+</div>
+
+<div id="main">
+  <div id="passage-panel">
+<div class="passage-content active" id="pc-0">
+<div class="part-header">PART 1</div>
+<h2>READING PASSAGE 1</h2>
+<p><em>You should spend about 20 minutes on Questions 1&ndash;13, which are based on Reading Passage 1 below.</em></p>
+<div class="passage-title">Early Methods of Timekeeping</div>
+<p>Long before the invention of mechanical clocks, human societies developed a range of methods to measure the passage of time. These early systems were closely connected to observable natural cycles, including the apparent movement of the sun across the sky, the phases of the moon, and the steady flow of substances such as water or combustible materials. Although they lacked the precision of modern instruments, these techniques demonstrate a sophisticated understanding of the environment and an ability to adapt measurement tools to local conditions.</p>
+<p>One of the earliest and most widespread methods of timekeeping was based on the position of the sun. Sundials were used in ancient Egypt from at least the second millennium BCE and later refined in Greece and Rome. A typical sundial consists of a flat surface, often marked with hour lines, and a part raised above that surface, known as a gnomon. The gnomon is positioned at a specific angle so that it aligns with the Earth's rotational axis, allowing it to cast a shadow whose position changes predictably throughout the day. In more advanced designs, the hour lines were adjusted according to latitude to improve accuracy. Despite their relative simplicity and durability, sundials had significant drawbacks: they could not function at night or during heavy cloud cover, and they required careful installation to ensure correct orientation.</p>
+<p>To address these limitations, ancient civilisations also developed water clocks, or clepsydras, which measured time independently of sunlight. These devices operated through the controlled flow of water, either out of or into a container. In outflow models, water escaped through a small hole at a relatively constant rate, while in inflow models, water collected in a vessel marked with graduated levels. Archaeological evidence from Mesopotamia and Egypt suggests that early clepsydras were made from stone or ceramic and required periodic recalibration to maintain consistent flow. Water clocks were widely used in administrative, legal and religious contexts, for example to limit the length of speeches in courts. However, their accuracy could be affected by several variables, including water pressure, evaporation and especially temperature, which alters the flow rate.</p>
+<p>Another important category of timekeeping relied on the controlled burning of materials. In medieval Europe, candle clocks were constructed from long, uniformly shaped candles marked at regular intervals. As the candle burned, the passage of time could be estimated by observing the reduction in length. Some versions incorporated metal pins embedded at measured distances, which would fall onto a metal tray as the wax melted, producing an audible signal. However, candle clocks were sensitive to environmental conditions such as air currents, humidity and inconsistencies in material composition. In East Asia, particularly in China and Japan, incense clocks were developed using carefully prepared incense sticks or powdered trails in intricate patterns. These substances were designed to burn at a consistent rate, sometimes over many hours. More complex incense clocks included segmented paths and different aromatic compounds, allowing users to track multiple intervals or distinguish between periods using scent.</p>
+<p>Timekeeping was also closely linked to astronomical observation. Lunar calendars, based on the cyclical phases of the moon, were used by many early societies to determine the date of ceremonial events. A complete lunar cycle, from one new moon to the next, lasts approximately 29.5 days, which does not divide evenly into the solar year of about 365 days. As a result, purely lunar systems gradually drift out of alignment with the seasons. To correct this discrepancy, some cultures developed lunisolar calendars, in which additional months were inserted at calculated intervals. These systems required careful long-term observation and record-keeping to remain accurate.</p>
+<p>In addition to mechanical or observational devices, early timekeeping often depended on social and environmental cues. In agricultural societies, daily routines were structured around sunrise and sunset, as well as seasonal changes in daylight length. The division of the day into equal units developed gradually. In ancient Egypt, for instance, both daytime and nighttime were divided into twelve segments, but the duration of these "hours" varied according to the time of year, becoming longer in summer and shorter in winter. This unequal system was practical for organising labour and religious activities, even though it lacked the consistency of later timekeeping methods.</p>
+<p>Despite their limitations, these early approaches laid the foundation for more precise technologies. They enabled societies to coordinate their activities and administer legal systems with greater consistency. Over time, the demand for increased accuracy led to the development of weight-driven clocks in medieval Europe. Nevertheless, the fundamental principle underlying all timekeeping &ndash; the measurement of regular, repeatable processes &ndash; can be clearly seen in these early innovations, which represent an important stage in the evolution of scientific and technological thought.</p>
+</div>
+<div class="passage-content" id="pc-1">
+<div class="part-header">PART 2</div>
+<h2>READING PASSAGE 2</h2>
+<p><em>You should spend about 20 minutes on Questions 14&ndash;26, which are based on Reading Passage 2.</em></p>
+<div class="passage-title">Community Responses to Flooding</div>
+<p>Flooding is among the most frequent and damaging natural hazards affecting human populations worldwide, particularly in river basins and coastal regions. Traditionally, flood management has relied heavily on large-scale engineering solutions designed to control or contain water. However, there is growing recognition that such approaches must be complemented by community-based strategies that enhance local resilience and adaptability.</p>
+<p>One of the most common structural responses to flooding is the construction of levees. Their primary purpose is to prevent floodwater from spilling over into adjacent land. A typical levee has several key components. The main embankment is usually built from compacted clay or other low-permeability material, which helps reduce the movement of water through the structure. It is often supported by layers of more permeable material that provide stability and help distribute pressure. The height of the embankment above the expected water level is known as the freeboard, and this is a key safety measure because it allows for waves, sudden rises in water level and uncertainty in flood predictions. At the top of the levee is the crown, which must be high enough to remain above anticipated flood levels and wide enough to allow inspection, maintenance or access if required. The sides of the levee slope down from the crown to the base, ending at the toe, the point where the embankment meets the natural ground. The distance from one toe to the other determines the width of the base. On the river-facing side, the levee must withstand the direct hydraulic pressure of flowing water, while the landward side must cope with seepage and possible weakening caused by water passing through or beneath the structure.</p>
+<p>Despite these design features, levees are not fail-safe. They are typically engineered to withstand floods up to a certain magnitude, and events that exceed this threshold can result in water going over the top. When this occurs, the resulting erosion can rapidly destroy the structure. Furthermore, poor maintenance such as unchecked animal burrowing, cracking, or vegetation growth can significantly reduce a levee's effectiveness. For these reasons, many specialists caution against viewing levees as comprehensive solutions to flood risk.</p>
+<p>An additional concern associated with levee construction is its potential to alter human behaviour in ways that may increase long-term risk. In areas protected by levees, residents and developers may come to perceive the risk of flooding as significantly reduced, leading to increased construction in previously avoided floodplain zones. This phenomenon, sometimes referred to as the "levee effect", can result in greater numbers of people and buildings in vulnerable areas. Consequently, when levees fail or water goes over the top, the resulting damage may be far more severe than it would have been in the absence of such development. Some researchers argue that this behavioural response undermines the protective benefits of levees, while others suggest that improved planning regulations can mitigate these effects.</p>
+<p>In response to these limitations, there has been a shift towards incorporating community-based approaches into flood management. Critics of earlier strategies argue that centrally planned systems often neglected local conditions and excluded residents from decision-making processes. By contrast, community-based approaches emphasise participation, local knowledge, and shared responsibility.</p>
+<p>One important element of such approaches is the development of early warning systems. In many regions, local inhabitants monitor river levels and rainfall patterns, using both traditional knowledge and simple measuring tools. Because these systems are rooted in the community, they can enable faster dissemination of warnings than more centralised systems. In addition, local networks allow for more effective identification of vulnerable individuals, facilitating targeted evacuation efforts.</p>
+<p>Communities also play a role in adapting their built environments, sometimes based on local knowledge of risk. In areas prone to recurrent flooding, residents may choose to avoid constructing buildings in the most exposed locations. Where relocation is not possible, structures may be modified &ndash; for instance, by raising floors above expected flood levels or by using materials that are resistant to water damage. Such measures do not eliminate flooding, but they can reduce its impact and speed up recovery.</p>
+<p>Nevertheless, the effectiveness of community-based responses remains a subject of debate. Some researchers suggest that local initiatives may lack the technical expertise required to address complex challenges, particularly in densely populated urban areas. Others highlight the risk that certain groups might be excluded, leading to unequal levels of protection. These concerns indicate that community approaches, while valuable, are not without limitations.</p>
+<p>Overall, there is increasing agreement that the most effective flood management strategies combine engineered structures with community engagement. This approach recognises that while physical barriers such as levees play a crucial role, social factors including local knowledge, preparedness, and cooperation are equally important. Rather than replacing traditional methods, community-based responses are best understood as complementing them, creating a more flexible and resilient system for managing flood risk.</p>
+</div>
+<div class="passage-content" id="pc-2">
+<div class="part-header">PART 3</div>
+<h2>READING PASSAGE 3</h2>
+<p><em>You should spend about 20 minutes on Questions 27&ndash;40, which are based on Reading Passage 3 below.</em></p>
+<div class="passage-title">How Diets Change When Societies Urbanise</div>
+<p><strong>A</strong>&nbsp; Urbanisation &ndash; the transition from living in the country to living in cities &ndash; is often presented as a story of economic progress and opportunity. Yet one of its most profound and less visible consequences lies in what people eat. As populations move from rural to urban environments, dietary patterns undergo changes that may not be entirely beneficial. While increased food availability and diversity are frequently celebrated, the overall nutritional value of urban diets is far more ambiguous. In traditional rural settings, diets tend to be shaped by local agricultural production. Households often consume staple grains, legumes, and seasonal vegetables, with limited access to processed foods. Although such diets can lack variety or certain micronutrients, they are generally low in added sugars, salt and industrial fats. Urbanisation disrupts this pattern. As cities expand, food systems become more complex, relying on long supply chains, industrial processing and global trade networks. The result is not merely a change in ingredients but a shift in the entire structure of eating.</p>
+<p><strong>B</strong>&nbsp; One of the most consistent findings across studies is the increased consumption of energy-dense, nutrient-poor foods in urban environments. Processed products, rich in refined carbohydrates, saturated fats, and added sugars, become more accessible and often more affordable than fresh alternatives. This phenomenon is sometimes described as the nutrition transition, a term that captures the movement away from traditional diets towards more Westernised eating patterns. Importantly, this transition does not occur uniformly. It tends to affect lower-income urban populations more strongly, who may not be in a position to make the same food choices as people on higher incomes. Urban food environments play a decisive role in shaping these outcomes. Supermarkets, convenience stores and fast-food outlets are far more prevalent in cities than in rural areas. While this increased availability might suggest greater choice, the reality is more complex. Highly processed foods are often aggressively marketed, require minimal preparation and are designed for long shelf life. Fresh produce, by contrast, may be more expensive, less accessible in certain neighbourhoods and more time-consuming to prepare. In this sense, urbanisation does not simply expand options. It actively channels consumption in particular directions.</p>
+<p><strong>C</strong>&nbsp; Time pressure is another critical factor. Urban lifestyles are frequently characterised by long working hours and extended commutes. Under such conditions, convenience becomes a priority, and ready-to-eat or takeaway foods gain appeal. This shift is not merely a matter of personal preference but reflects broader structural changes in how time is organised in urban economies. It would be misleading, therefore, to attribute dietary change solely to individual choice, as is sometimes implied in public health discourse. In many cities, traditional food practices, such as shared family meals or home cooking, are gradually replaced by more individualised and informal patterns of consumption. Exposure to global cuisines can enrich dietary experience, but it may also weaken the role of local culinary traditions. Younger generations, in particular, often adopt new eating habits more rapidly, influenced by advertising, social media and peer behaviour. While such changes are not inherently negative, they can contribute to the loss of regional identity.</p>
+<p><strong>D</strong>&nbsp; Despite these concerns, it would be inaccurate to portray urban diets as entirely harmful. Cities can provide access to a wider variety of foods, including fruits, vegetables and imported products that are unavailable in rural areas. In some cases, urban residents may benefit from improved food safety standards and better nutritional information. However, these advantages are unevenly distributed and often correlate with income and education levels. Wealthier urban populations are typically better positioned to take advantage of healthier options, while poorer groups remain vulnerable to the negative aspects of the nutrition transition. The health implications of these dietary changes are substantial. Urbanisation has been closely associated with rising rates of obesity, type 2 diabetes and cardiovascular disease. While these conditions were once considered problems of affluent societies, they are now increasingly prevalent in low- and middle-income countries undergoing rapid urban growth. This suggests that the relationship between urbanisation and diet is not only a matter of individual health but also a broader public health challenge.</p>
+<p><strong>E</strong>&nbsp; It is tempting to view these developments as an inevitable consequence of modernisation. However, such a perspective risks obscuring the role of policy and planning. Urban food systems are shaped by particular decisions regarding transportation, city planning, agricultural subsidies and retail regulation. The current dominance of processed foods in many urban environments is not simply the result of consumer demand but reflects a set of economic and political priorities that could, in principle, be altered. While cities offer undeniable advantages in terms of food access and variety, they also create conditions that encourage unhealthy eating patterns, particularly among the most vulnerable populations. Urban diets are not merely changing. They are being shaped in ways that demand closer scrutiny and more deliberate intervention.</p>
+</div>
+</div>
+
+  <div id="resizer"><div class="handle">&#8942;&#8942;</div></div>
+
+  <div id="questions-panel">
+<div id="qs-0"><div class="q-section"><div class="q-section-header">Questions 1&ndash;7</div><div class="q-section-intro">Complete the table below. Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</div><div class="ans-table-wrap" style="max-height:none;overflow-x:auto;margin-bottom:16px"><table class="ans-table" style="font-size:12.5px"><thead><tr><th>Method of timekeeping</th><th>How it works</th><th>Advantages</th><th>Limitations</th></tr></thead><tbody>
+<tr><td><strong>Sundial</strong></td><td>Uses the shadow cast by a <strong>1</strong> <input class="fill-input" id="q1" oninput="markFill('q1')" style="width:100px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> aligned with Earth's axis</td><td>Durable and relatively simple</td><td>Cannot be used without sunlight or under <strong>2</strong> <input class="fill-input" id="q2" oninput="markFill('q2')" style="width:100px;display:inline-block;vertical-align:middle" placeholder="&hellip;"></td></tr>
+<tr><td><strong>Water clock (clepsydra)</strong></td><td>Measures time through the <strong>3</strong> <input class="fill-input" id="q3" oninput="markFill('q3')" style="width:90px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> of water</td><td>Can function without sunlight</td><td>Speed of water affected by <strong>4</strong> <input class="fill-input" id="q4" oninput="markFill('q4')" style="width:100px;display:inline-block;vertical-align:middle" placeholder="&hellip;"></td></tr>
+<tr><td><strong>Candle clock</strong></td><td>Estimates time by observing the reduction in length</td><td>Can be <strong>5</strong> <input class="fill-input" id="q5" oninput="markFill('q5')" style="width:100px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> as well as visual</td><td>Influenced by material, air currents and <strong>6</strong> <input class="fill-input" id="q6" oninput="markFill('q6')" style="width:100px;display:inline-block;vertical-align:middle" placeholder="&hellip;"></td></tr>
+<tr><td><strong>Incense clock</strong></td><td>Uses materials whose rate of burning is <strong>7</strong> <input class="fill-input" id="q7" oninput="markFill('q7')" style="width:100px;display:inline-block;vertical-align:middle" placeholder="&hellip;"></td><td>Can track multiple intervals</td><td>Sensitive to environmental conditions</td></tr></tbody></table></div></div>
+<div class="q-section"><div class="q-section-header">Questions 8&ndash;13</div><div class="q-section-intro">Complete the sentences below. Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</div><div style="padding:12px 16px;font-size:13.5px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:16px;line-height:2;line-height:2.3">The timing of <strong>8</strong> <input class="fill-input" id="q8" oninput="markFill('q8')" style="width:160px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> in many societies was based on observations of the moon.<br>Entirely lunar calendars gradually come to differ from the <strong>9</strong> <input class="fill-input" id="q9" oninput="markFill('q9')" style="width:160px;display:inline-block;vertical-align:middle" placeholder="&hellip;">.<br>Without good measurements, lunisolar calendars could not be kept <strong>10</strong> <input class="fill-input" id="q10" oninput="markFill('q10')" style="width:160px;display:inline-block;vertical-align:middle" placeholder="&hellip;">.<br>The changing amount of <strong>11</strong> <input class="fill-input" id="q11" oninput="markFill('q11')" style="width:160px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> throughout the year affected the habits of people who relied on farming.<br>The ancient Egyptian method of timekeeping was useful for <strong>12</strong> <input class="fill-input" id="q12" oninput="markFill('q12')" style="width:160px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> and work.<br>Early timekeeping methods were particularly useful in helping <strong>13</strong> <input class="fill-input" id="q13" oninput="markFill('q13')" style="width:160px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> run smoothly.</div></div>
+</div>
+<div id="qs-1" style="display:none"><div class="q-section"><div class="q-section-header">Questions 14&ndash;17</div><div class="q-section-intro">Label the diagram below. Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</div><div style="overflow-x:auto;margin-bottom:16px"><div style="font-weight:700;text-align:center;margin-bottom:6px">The Structure of a Levee</div><div style="position:relative;min-width:480px;max-width:560px;margin:0 auto;aspect-ratio:520/270;color:var(--text,#1f2937)"><svg viewBox="0 0 520 270" style="position:absolute;inset:0;width:100%;height:100%" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.5">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor" stroke="none"/></marker></defs>
+<path d="M20,205 H500"/>
+<path d="M130,205 L205,88 H320 L400,205"/>
+<path d="M20,150 q10,-8 20,0 t20,0 t20,0 t20,0 t20,0 L160,152" />
+<path d="M402,180 q10,-8 20,0 t20,0 t20,0 t20,0"/>
+<path d="M492,180 V205" marker-end="url(#ah)" marker-start="url(#ah)"/>
+<text x="425" y="165" font-size="12" fill="currentColor" stroke="none">Flood depth</text>
+<text x="30" y="232" font-size="13" fill="currentColor" stroke="none" font-weight="600">Waterside</text>
+<text x="430" y="232" font-size="13" fill="currentColor" stroke="none" font-weight="600">Landside</text>
+<path d="M255,218 V150" marker-end="url(#ah)"/>
+<path d="M128,72 Q165,70 200,92" marker-end="url(#ah)"/>
+<path d="M300,60 L275,86" marker-end="url(#ah)"/>
+<path d="M388,122 Q394,160 399,198" marker-end="url(#ah)"/>
+</svg><span style="position:absolute;left:33.65%;top:83.70%;white-space:nowrap;font-size:13px"><strong>14</strong> <input class="fill-input" id="q14" oninput="markFill('q14')" style="width:92px;display:inline-block;padding:4px 6px" placeholder="&hellip;"></span><span style="position:absolute;left:4.62%;top:17.78%;white-space:nowrap;font-size:13px"><strong>15</strong> <input class="fill-input" id="q15" oninput="markFill('q15')" style="width:92px;display:inline-block;padding:4px 6px" placeholder="&hellip;"></span><span style="position:absolute;left:57.69%;top:12.59%;white-space:nowrap;font-size:13px"><strong>16</strong> <input class="fill-input" id="q16" oninput="markFill('q16')" style="width:92px;display:inline-block;padding:4px 6px" placeholder="&hellip;"></span><span style="position:absolute;left:67.31%;top:31.85%;white-space:nowrap;font-size:13px"><strong>17</strong> <input class="fill-input" id="q17" oninput="markFill('q17')" style="width:92px;display:inline-block;padding:4px 6px" placeholder="&hellip;"></span></div></div></div>
+<div class="q-section"><div class="q-section-header">Questions 18&ndash;22</div><div class="q-section-intro">Do the following statements agree with the information given in Reading Passage 2? Write <strong>TRUE</strong>, <strong>FALSE</strong> or <strong>NOT GIVEN</strong>.</div><div class="question" id="q18"><div class="q-num">18</div><div class="q-body"><div class="q-text">Engineers often underestimate the risks floods pose to levees.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q18','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q18','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q18','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q19"><div class="q-num">19</div><div class="q-body"><div class="q-text">The illusion of safety provided by levees can put people at risk.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q19','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q19','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q19','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q20"><div class="q-num">20</div><div class="q-body"><div class="q-text">Some people think that tighter laws about building near levees would be beneficial.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q20','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q20','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q20','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q21"><div class="q-num">21</div><div class="q-body"><div class="q-text">Local people were usually consulted about flood management in the past.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q21','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q21','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q21','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q22"><div class="q-num">22</div><div class="q-body"><div class="q-text">Local people trust traditional knowledge about floods more than expert opinion.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q22','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q22','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q22','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+</div>
+<div class="q-section"><div class="q-section-header">Questions 23&ndash;26</div><div class="q-section-intro">Complete the notes below. Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</div><div style="padding:12px 16px;font-size:13.5px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:16px;line-height:2;line-height:2.2"><strong style="color:var(--accent)">Adapting built environments to flood risk</strong><br><em>Effects of local knowledge:</em><br>&bull; construction reduced in <strong>23</strong> <input class="fill-input" id="q23" oninput="markFill('q23')" style="width:150px;display:inline-block;vertical-align:middle" placeholder="&hellip;"><br>&bull; <strong>24</strong> <input class="fill-input" id="q24" oninput="markFill('q24')" style="width:150px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> avoided through choice of building components<br><em>Community-based response:</em><br>&bull; low level of <strong>25</strong> <input class="fill-input" id="q25" oninput="markFill('q25')" style="width:150px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> in crowded areas<br>&bull; degrees of safety potentially <strong>26</strong> <input class="fill-input" id="q26" oninput="markFill('q26')" style="width:150px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> across groups</div></div>
+</div>
+<div id="qs-2" style="display:none"><div class="q-section"><div class="q-section-header">Questions 27&ndash;31</div><div class="q-section-intro">Reading Passage 3 has five paragraphs, <strong>A&ndash;E</strong>. Which paragraph contains the following information? NB You may choose any letter more than once.</div><div class="question" id="q27"><div class="q-num">27</div><div class="q-body"><div class="q-text">groups that benefit from the urban food environment</div><select class="dd-select" id="dd-q27" onchange="selectDropdown(this,'q27')"><option value="" disabled selected>Select a paragraph&hellip;</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select></div></div>
+<div class="question" id="q28"><div class="q-num">28</div><div class="q-body"><div class="q-text">the way political choices influence the food environment in cities</div><select class="dd-select" id="dd-q28" onchange="selectDropdown(this,'q28')"><option value="" disabled selected>Select a paragraph&hellip;</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select></div></div>
+<div class="question" id="q29"><div class="q-num">29</div><div class="q-body"><div class="q-text">ways in which traditional patterns of eating can be eroded</div><select class="dd-select" id="dd-q29" onchange="selectDropdown(this,'q29')"><option value="" disabled selected>Select a paragraph&hellip;</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select></div></div>
+<div class="question" id="q30"><div class="q-num">30</div><div class="q-body"><div class="q-text">the usual eating habits of rural populations</div><select class="dd-select" id="dd-q30" onchange="selectDropdown(this,'q30')"><option value="" disabled selected>Select a paragraph&hellip;</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select></div></div>
+<div class="question" id="q31"><div class="q-num">31</div><div class="q-body"><div class="q-text">the impacts of urbanisation in developing countries</div><select class="dd-select" id="dd-q31" onchange="selectDropdown(this,'q31')"><option value="" disabled selected>Select a paragraph&hellip;</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select></div></div>
+</div>
+<div class="q-section"><div class="q-section-header">Questions 32&ndash;35</div><div class="q-section-intro">Choose the correct letter, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>.</div><div class="question" id="q32"><div class="q-num">32</div><div class="q-body"><div class="q-text">When people move from the countryside to the city, their diet usually becomes</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q32','A')"><span class="radio-dot"></span>A less appetising.</label><label class="mcq-opt" onclick="selectMCQ(this,'q32','B')"><span class="radio-dot"></span>B more nutritious.</label><label class="mcq-opt" onclick="selectMCQ(this,'q32','C')"><span class="radio-dot"></span>C lower in vegetables.</label><label class="mcq-opt" onclick="selectMCQ(this,'q32','D')"><span class="radio-dot"></span>D more varied.</label></div></div></div>
+<div class="question" id="q33"><div class="q-num">33</div><div class="q-body"><div class="q-text">One reason people in cities eat more processed food is that:</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q33','A')"><span class="radio-dot"></span>A they think it is tasty.</label><label class="mcq-opt" onclick="selectMCQ(this,'q33','B')"><span class="radio-dot"></span>B they find it cheap.</label><label class="mcq-opt" onclick="selectMCQ(this,'q33','C')"><span class="radio-dot"></span>C they need a lot of energy.</label><label class="mcq-opt" onclick="selectMCQ(this,'q33','D')"><span class="radio-dot"></span>D they don't care about their health.</label></div></div></div>
+<div class="question" id="q34"><div class="q-num">34</div><div class="q-body"><div class="q-text">In some areas of the urban environment,</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q34','A')"><span class="radio-dot"></span>A processed food doesn't sell well.</label><label class="mcq-opt" onclick="selectMCQ(this,'q34','B')"><span class="radio-dot"></span>B people object to fast food advertising.</label><label class="mcq-opt" onclick="selectMCQ(this,'q34','C')"><span class="radio-dot"></span>C it isn't easy to find healthy food.</label><label class="mcq-opt" onclick="selectMCQ(this,'q34','D')"><span class="radio-dot"></span>D there aren't enough supermarkets.</label></div></div></div>
+<div class="question" id="q35"><div class="q-num">35</div><div class="q-body"><div class="q-text">In cities, traditional ways of eating are being replaced by</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q35','A')"><span class="radio-dot"></span>A people eating alone and on the go.</label><label class="mcq-opt" onclick="selectMCQ(this,'q35','B')"><span class="radio-dot"></span>B more home-cooked, family meals.</label><label class="mcq-opt" onclick="selectMCQ(this,'q35','C')"><span class="radio-dot"></span>C a stricter attitude towards eating.</label><label class="mcq-opt" onclick="selectMCQ(this,'q35','D')"><span class="radio-dot"></span>D eating more to fuel lifestyles.</label></div></div></div>
+</div>
+<div class="q-section"><div class="q-section-header">Questions 36&ndash;40</div><div class="q-section-intro">Do the following statements agree with the claims of the writer in Reading Passage 3? Write <strong>YES</strong> if the statement agrees with the claims of the writer, <strong>NO</strong> if it contradicts the claims of the writer, or <strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this.</div><div class="question" id="q36"><div class="q-num">36</div><div class="q-body"><div class="q-text">People in cities may receive clearer guidance regarding the food they eat.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q36','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q36','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q36','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q37"><div class="q-num">37</div><div class="q-body"><div class="q-text">People should become more educated about the health risks of processed food.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q37','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q37','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q37','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q38"><div class="q-num">38</div><div class="q-body"><div class="q-text">Decisions taken by individuals have more of an effect than any controls of the food system.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q38','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q38','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q38','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q39"><div class="q-num">39</div><div class="q-body"><div class="q-text">The potential benefits of an urban diet are not worth the risks of that diet.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q39','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q39','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q39','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q40"><div class="q-num">40</div><div class="q-body"><div class="q-text">We should be investigating the forces affecting people's diets more closely.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q40','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q40','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q40','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="bottombar">
+  <div class="part-tabs">
+    <div class="part-tab active" id="ptab-0" onclick="switchPassage(0)">Part 1: <span class="count" id="pcount-0">0 of 13</span></div>
+    <div class="part-tab" id="ptab-1" onclick="switchPassage(1)">Part 2: <span class="count" id="pcount-1">0 of 13</span></div>
+    <div class="part-tab" id="ptab-2" onclick="switchPassage(2)">Part 3: <span class="count" id="pcount-2">0 of 14</span></div>
+  </div>
+  <div class="q-circles" id="q-circles"></div>
+  <div class="nav-arrows">
+    <button class="nav-arrow" onclick="prevQ()">&lsaquo;</button>
+    <button class="nav-arrow" onclick="nextQ()">&rsaquo;</button>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="submit-modal">
+  <div class="modal">
+    <h2>Submit Your Test?</h2>
+    <p>You are about to submit your test. This action cannot be undone.</p>
+    <div class="score-grid" id="score-grid" style="display:none">
+      <div class="score-card"><div class="val" id="sc-answered">0</div><div class="lbl">Answered</div></div>
+      <div class="score-card"><div class="val" id="sc-unanswered">40</div><div class="lbl">Unanswered</div></div>
+      <div class="score-card"><div class="val" id="sc-pct">0%</div><div class="lbl">Completion</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="closeModal()">Cancel</button>
+      <button class="btn-modal primary" onclick="submitTest()">Submit Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="results-modal">
+  <div class="modal">
+    <h2>Test Complete</h2>
+    <p id="results-cand"></p>
+    <div class="score-grid">
+      <div class="score-card"><div class="val" id="r-correct" style="color:var(--success)">&mdash;</div><div class="lbl">Correct</div></div>
+      <div class="score-card"><div class="val" id="r-wrong" style="color:var(--accent-red)">&mdash;</div><div class="lbl">Incorrect</div></div>
+      <div class="score-card"><div class="val" id="r-unanswered">&mdash;</div><div class="lbl">Unanswered</div></div>
+    </div>
+    <div style="margin:14px 0 12px;background:var(--accent);border-radius:12px;padding:18px 22px;text-align:center;color:#fff">
+      <div style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-bottom:4px">IELTS Band Score</div>
+      <div id="r-band" style="font-size:48px;font-weight:700;line-height:1">&mdash;</div>
+      <div id="r-band-label" style="font-size:13px;margin-top:6px;opacity:.85">&mdash;</div>
+    </div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:6px">Your Answers vs Correct Answers</div>
+    <div class="ans-table-wrap"><table class="ans-table"><thead><tr><th>Q</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr></thead><tbody id="ans-table-body"></tbody></table></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:10px">Green = correct &middot; Red = incorrect &middot; Band scores are approximate for Academic Reading.</p>
+    <p id="pdf-status" style="font-size:13px;color:var(--success);margin-top:8px;font-weight:500"></p>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="redownloadPDF()">Download PDF again</button>
+      <button class="btn-modal primary" onclick="document.getElementById('results-modal').classList.add('hidden')">Close &amp; Review</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   ANSWER KEY
+   ============================================================ */
+var ANSWERS = {
+  q1:'gnomon', q2:'cloud cover', q3:'flow', q4:'temperature', q5:'audible', q6:'humidity', q7:'consistent',
+  q8:'ceremonial events', q9:'seasons', q10:'accurate', q11:'daylight', q12:'religious activities', q13:'legal systems',
+  q14:'embankment', q15:'freeboard', q16:'crown', q17:'toe',
+  q18:'NOT GIVEN', q19:'TRUE', q20:'TRUE', q21:'FALSE', q22:'NOT GIVEN',
+  q23:'exposed locations', q24:'water damage', q25:'technical expertise', q26:'unequal',
+  q27:'D', q28:'E', q29:'C', q30:'A', q31:'D',
+  q32:'D', q33:'B', q34:'C', q35:'A',
+  q36:'YES', q37:'NOT GIVEN', q38:'NO', q39:'NOT GIVEN', q40:'YES'
+};
+
+var ALT = {
+  q8:['ceremonial events','ceremonial event'], q12:['religious activities','religious activity','religious'],
+  q13:['legal systems','legal system'], q23:['exposed locations','exposed location'],
+  q24:['water damage'], q25:['technical expertise','expertise'], q26:['unequal','unequal levels']
+};
+
+var KEY_LABELS = { q25:'(technical) expertise' };
+
+var PAIR_GROUPS = {};
+
+var PART_RANGES = [[1,13],[14,26],[27,40]];
+var userAnswers = {}, currentPassage = 0, submitted = false;
+var candidateName='', candidateNumber='';
+var seconds = 60*60;
+var timerEl = document.getElementById('timer');
+var timerInterval = null;
+
+/* ============================================================
+   AUTO-SAVE
+   ============================================================ */
+var STORAGE_KEY = 'ielts_reading_practice8_session';
+var autosaveInterval = null;
+var autosaveListenersAdded = false;
+var autosaveIndicator = document.getElementById('autosave-indicator');
+var autosaveText = document.getElementById('autosave-text');
+
+function showAutosaveSaving(){
+  autosaveIndicator.classList.add('show','saving');
+  autosaveText.textContent = 'Saving\u2026';
+}
+function showAutosaveSaved(){
+  autosaveIndicator.classList.add('show');
+  autosaveIndicator.classList.remove('saving');
+  var t = new Date();
+  autosaveText.textContent = 'Saved ' + t.toTimeString().slice(0,8);
+  setTimeout(function(){ autosaveIndicator.classList.remove('show'); }, 2500);
+}
+function getPassageWidth(){
+  var pw = document.getElementById('passage-panel');
+  return pw ? (pw.style.width || pw.offsetWidth + 'px') : '';
+}
+function saveSession(silent){
+  if(submitted) return;
+  if(!silent) showAutosaveSaving();
+  try{
+    var data = {
+      version: 3,
+      timestamp: Date.now(),
+      candidateName: candidateName,
+      candidateNumber: candidateNumber,
+      seconds: seconds,
+      currentPassage: currentPassage,
+      userAnswers: userAnswers,
+      notepad: document.getElementById('notepad-text').value,
+      passageWidth: getPassageWidth(),
+      started: true
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    if(!silent) showAutosaveSaved();
+  }catch(e){ console.warn('Autosave failed:', e); }
+}
+function loadSession(){
+  try{
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return null;
+    var d = JSON.parse(raw);
+    if(!d || !d.started) return null;
+    return d;
+  }catch(e){ return null; }
+}
+function clearSession(){ try{ localStorage.removeItem(STORAGE_KEY); }catch(e){} }
+function formatTime(sec){
+  var m = Math.floor(sec/60), s = sec%60;
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+
+(function checkSavedSession(){
+  var saved = loadSession();
+  if(!saved) return;
+  var banner = document.getElementById('resume-banner');
+  var info = document.getElementById('resume-info');
+  var answered = 0;
+  for(var i=1;i<=40;i++){ if(saved.userAnswers && saved.userAnswers['q'+i]) answered++; }
+  var when = new Date(saved.timestamp).toLocaleString();
+  info.innerHTML = '<strong>' + escapeHtml(saved.candidateName || 'Anonymous') + '</strong> &middot; ' + answered + '/40 answered &middot; ' + formatTime(saved.seconds) + ' remaining<br><span style="opacity:.75">Saved ' + when + '</span>';
+  banner.classList.add('show');
+  document.getElementById('cand-name').value = saved.candidateName || '';
+  document.getElementById('cand-num').value = saved.candidateNumber || '';
+})();
+
+function resumeTest(){
+  var saved = loadSession();
+  if(!saved){ startTest(); return; }
+  candidateName = saved.candidateName || 'Anonymous';
+  candidateNumber = saved.candidateNumber || 'N/A';
+  seconds = saved.seconds || 60*60;
+  userAnswers = saved.userAnswers || {};
+  currentPassage = saved.currentPassage || 0;
+  if(saved.notepad) document.getElementById('notepad-text').value = saved.notepad;
+  if(saved.passageWidth){ document.getElementById('passage-panel').style.width = saved.passageWidth; }
+
+  document.getElementById('start-screen').classList.add('hidden');
+  restoreAnswersUI();
+  buildCircles();
+  updatePartCounts();
+  if(currentPassage !== 0) switchPassage(currentPassage);
+  updateTimerDisplay();
+  startTimer();
+  startAutosave();
+  showAutosaveSaved();
+}
+function discardSaved(){
+  clearSession();
+  document.getElementById('resume-banner').classList.remove('show');
+  document.getElementById('cand-name').value = '';
+  document.getElementById('cand-num').value = '';
+}
+
+function restoreAnswersUI(){
+  for(var id in userAnswers){
+    var val = userAnswers[id];
+    if(!val) continue;
+    var dd = document.getElementById('dd-'+id);
+    if(dd){ dd.value = val; dd.classList.add('answered'); continue; }
+    var fi = document.getElementById(id);
+    if(fi && fi.tagName === 'INPUT'){ fi.value = val; fi.classList.add('answered'); continue; }
+    var tfnWrap = document.querySelector('#'+id+' .tfn-options');
+    if(tfnWrap){
+      tfnWrap.querySelectorAll('.tfn-btn').forEach(function(b){
+        if(b.textContent.trim() === val) b.classList.add('selected');
+      });
+      continue;
+    }
+    var mcqWrap = document.querySelector('#'+id+' .mcq-options');
+    if(mcqWrap){
+      mcqWrap.querySelectorAll('.mcq-opt').forEach(function(l){
+        if(l.textContent.trim().charAt(0) === val) l.classList.add('selected');
+      });
+    }
+  }
+}
+
+function startAutosave(){
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  autosaveInterval = setInterval(function(){ saveSession(false); }, 5000);
+  if(autosaveListenersAdded) return;
+  autosaveListenersAdded = true;
+  document.addEventListener('visibilitychange', function(){ if(document.hidden) saveSession(true); });
+  window.addEventListener('beforeunload', function(){ saveSession(true); });
+}
+
+function startTest(){
+  candidateName = document.getElementById('cand-name').value.trim() || 'Anonymous';
+  candidateNumber = document.getElementById('cand-num').value.trim() || 'N/A';
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('resume-banner').classList.remove('show');
+  clearSession();
+  buildCircles();
+  updatePartCounts();
+  startTimer();
+  startAutosave();
+  saveSession(true);
+}
+function startTimer(){
+  if(timerInterval) clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(function(){
+    if(submitted) return;
+    seconds--;
+    if(seconds <= 0){ clearInterval(timerInterval); submitTest(); return; }
+    updateTimerDisplay();
+  }, 1000);
+}
+function updateTimerDisplay(){
+  timerEl.textContent = formatTime(Math.max(0,seconds));
+  timerEl.classList.toggle('warn', seconds < 300);
+}
+
+function switchPassage(idx){
+  currentPassage = idx;
+  document.querySelectorAll('.part-tab').forEach(function(t,i){ t.classList.toggle('active', i===idx); });
+  document.querySelectorAll('.passage-content').forEach(function(p,i){ p.classList.toggle('active', i===idx); });
+  document.querySelectorAll('#qs-0,#qs-1,#qs-2').forEach(function(q,i){ q.style.display = i===idx ? '' : 'none'; });
+  buildCircles();
+  document.getElementById('questions-panel').scrollTop = 0;
+  saveSession(true);
+}
+function buildCircles(){
+  var wrap = document.getElementById('q-circles');
+  wrap.innerHTML = '';
+  var range = PART_RANGES[currentPassage];
+  var start = range[0], end = range[1];
+  for(var i=start;i<=end;i++){
+    var d = document.createElement('div');
+    d.className = 'q-circle';
+    d.textContent = i;
+    var a = userAnswers['q'+i];
+    if(a && a.toString().trim()) d.classList.add('answered');
+    d.onclick = (function(n){ return function(){ scrollToQ(n); }; })(i);
+    wrap.appendChild(d);
+  }
+}
+function updatePartCounts(){
+  PART_RANGES.forEach(function(r, idx){
+    var s = r[0], e = r[1], a = 0;
+    for(var i=s;i<=e;i++){ if(userAnswers['q'+i] && userAnswers['q'+i].toString().trim()) a++; }
+    document.getElementById('pcount-'+idx).textContent = a + ' of ' + (e-s+1);
+  });
+}
+function scrollToQ(num){
+  var p = num<=13?0:num<=26?1:2;
+  if(p !== currentPassage) switchPassage(p);
+  setTimeout(function(){
+    var el = document.getElementById('q'+num);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+  },50);
+}
+function prevQ(){ document.getElementById('questions-panel').scrollBy({top:-240,behavior:'smooth'}); }
+function nextQ(){ document.getElementById('questions-panel').scrollBy({top:240,behavior:'smooth'}); }
+
+function selectTFN(btn, qId, val){
+  btn.closest('.tfn-options').querySelectorAll('.tfn-btn').forEach(function(b){ b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectMCQ(label, qId, val){
+  label.closest('.mcq-options').querySelectorAll('.mcq-opt').forEach(function(l){ l.classList.remove('selected'); });
+  label.classList.add('selected');
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectDropdown(sel, qId){
+  var val = sel.value;
+  sel.classList.toggle('answered', !!val);
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function markFill(id){
+  var el = document.getElementById(id);
+  var val = el.value.trim();
+  el.classList.toggle('answered', val.length > 0);
+  userAnswers[id] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectPair(sel, qId, partnerId){
+  var val = sel.value;
+  var partner = document.getElementById('dd-'+partnerId);
+  var partnerVal = partner ? partner.value : '';
+  if(val && partnerVal && val === partnerVal){
+    partner.value = '';
+    partner.classList.remove('answered');
+    userAnswers[partnerId] = '';
+  }
+  sel.classList.toggle('answered', !!val);
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+
+/* ============================================================
+   HIGHLIGHT / NOTE TOOLBAR
+   ============================================================ */
+var _savedRange = null;
+function hideSelToolbar(){ var tb=document.getElementById('sel-toolbar'); if(tb) tb.style.display='none'; _savedRange=null; }
+function showSelToolbar(x,y){
+  var tb=document.getElementById('sel-toolbar'); if(!tb) return;
+  tb.style.display='block';
+  var tw=tb.offsetWidth||140, th=tb.offsetHeight||36;
+  var left=x-tw/2, top=y-th-10;
+  if(left+tw>window.innerWidth-8) left=window.innerWidth-tw-8;
+  if(left<8) left=8;
+  if(top<60) top=y+12;
+  tb.style.left=left+'px'; tb.style.top=top+'px';
+}
+function getPassageSelection(){
+  var sel=window.getSelection();
+  if(!sel||sel.isCollapsed||sel.rangeCount===0) return null;
+  var range=sel.getRangeAt(0);
+  var p1=document.getElementById('passage-panel');
+  var p2=document.getElementById('questions-panel');
+  var node=range.commonAncestorContainer;
+  if(!((p1&&p1.contains(node))||(p2&&p2.contains(node)))) return null;
+  if(!sel.toString().trim()) return null;
+  /* never wrap form controls in a <mark> - it breaks the answer inputs */
+  var frag=range.cloneContents();
+  if(frag.querySelector && frag.querySelector('input,select,textarea,button,label')) return null;
+  return {sel:sel,range:range};
+}
+function onPassageMouseUp(e){
+  setTimeout(function(){
+    var data=getPassageSelection();
+    if(!data){ var tb=document.getElementById('sel-toolbar'); if(e&&e.target&&tb&&tb.contains(e.target)) return; hideSelToolbar(); return; }
+    _savedRange=data.range.cloneRange();
+    var rect=data.range.getBoundingClientRect();
+    showSelToolbar(rect.left+rect.width/2, rect.top);
+  },10);
+}
+function applyMark(cls){
+  if(!_savedRange) return;
+  try{ var m=document.createElement('mark'); m.className=cls; _savedRange.surroundContents(m); }
+  catch(e){ try{ var f=_savedRange.extractContents(); var m2=document.createElement('mark'); m2.className=cls; m2.appendChild(f); _savedRange.insertNode(m2); }catch(e2){} }
+  var s=window.getSelection(); if(s) s.removeAllRanges();
+  hideSelToolbar();
+}
+(function(){
+  var hl=document.getElementById('sel-hl-btn');
+  if(hl) hl.addEventListener('mousedown',function(e){e.preventDefault();applyMark('hl');});
+  var nb=document.getElementById('sel-note-btn');
+  if(nb) nb.addEventListener('mousedown',function(e){
+    e.preventDefault();
+    var text=_savedRange?_savedRange.toString().trim():'';
+    applyMark('hl-note');
+    if(text){ var ta=document.getElementById('notepad-text'); if(ta){ ta.value+=(ta.value&&!ta.value.endsWith('\n')?'\n':'')+'\u2022 '+text; saveSession(true); var p=document.getElementById('notepad-panel'); if(p&&p.classList.contains('hidden')) toggleNotepad(); } }
+  });
+  var pp=document.getElementById('passage-panel');
+  if(pp) pp.addEventListener('mouseup',onPassageMouseUp);
+  var qp=document.getElementById('questions-panel');
+  if(qp) qp.addEventListener('mouseup',onPassageMouseUp);
+  document.addEventListener('mousedown',function(e){ var tb=document.getElementById('sel-toolbar'); if(!tb||tb.style.display==='none') return; if(tb.contains(e.target)) return; setTimeout(function(){ var s=window.getSelection(); if(!s||s.isCollapsed) hideSelToolbar(); },150); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') hideSelToolbar(); });
+  /* hide the toolbar when either panel scrolls, since it is fixed-position */
+  if(pp) pp.addEventListener('scroll',hideSelToolbar);
+  if(qp) qp.addEventListener('scroll',hideSelToolbar);
+})();
+
+function toggleNotepad(){
+  var panel=document.getElementById('notepad-panel');
+  var btn=document.getElementById('notepad-btn');
+  panel.classList.toggle('hidden');
+  btn.classList.toggle('active', !panel.classList.contains('hidden'));
+  if(!panel.classList.contains('hidden')) document.getElementById('notepad-text').focus();
+  saveSession(true);
+}
+function toggleFullscreen(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function(){});
+  else document.exitFullscreen().catch(function(){});
+}
+document.getElementById('notepad-text').addEventListener('input', function(){ saveSession(true); });
+
+/* ============================================================
+   SCORING
+   ============================================================ */
+function getBandScore(c){
+  if(c>=39) return {band:'9.0',level:'Expert User'};
+  if(c>=37) return {band:'8.5',level:'Very Good User'};
+  if(c>=35) return {band:'8.0',level:'Very Good User'};
+  if(c>=33) return {band:'7.5',level:'Good User'};
+  if(c>=30) return {band:'7.0',level:'Good User'};
+  if(c>=27) return {band:'6.5',level:'Competent User'};
+  if(c>=23) return {band:'6.0',level:'Competent User'};
+  if(c>=19) return {band:'5.5',level:'Modest User'};
+  if(c>=15) return {band:'5.0',level:'Modest User'};
+  if(c>=13) return {band:'4.5',level:'Limited User'};
+  if(c>=10) return {band:'4.0',level:'Limited User'};
+  return {band:'3.5',level:'Extremely Limited'};
+}
+function normalize(s){
+  return (s||'').toString().trim().toLowerCase().replace(/[()]/g,'').replace(/\s+/g,' ').replace(/\.$/,'');
+}
+/* Each letter in a "choose TWO" pair is marked on its own, in either order. */
+function pairResult(qId){
+  var g = PAIR_GROUPS[qId];
+  if(!g) return null;
+  var mine = (userAnswers[qId]||'').toString().trim().toUpperCase();
+  if(!mine) return null;
+  var theirs = (userAnswers[g.partner]||'').toString().trim().toUpperCase();
+  if(mine === theirs) return false;          // duplicate letters can't both score
+  return g.correct.indexOf(mine) !== -1;     // each letter judged on its own
+}
+function checkCorrect(id){
+  if(PAIR_GROUPS[id]) return pairResult(id);
+  var ans = ANSWERS[id];
+  var user = (userAnswers[id]||'').toString().trim();
+  if(!user) return null;
+  var nU = normalize(user);
+  if(ALT[id]){ for(var k=0;k<ALT[id].length;k++){ if(nU === normalize(ALT[id][k])) return true; } }
+  return nU === normalize(ans);
+}
+function correctAnswerLabel(id){
+  if(PAIR_GROUPS[id]){
+    var other = (id === 'q23' || id === 'q24') ? 'Q23/Q24' : 'Q25/Q26';
+    var letters = PAIR_GROUPS[id].correct.join(' or ');
+    return letters + ' (any order, ' + other + ')';
+  }
+  return KEY_LABELS[id] || ANSWERS[id];
+}
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function confirmSubmit(){
+  var count=0;
+  for(var i=1;i<=40;i++){ if(userAnswers['q'+i]&&userAnswers['q'+i].toString().trim()) count++; }
+  document.getElementById('sc-answered').textContent=count;
+  document.getElementById('sc-unanswered').textContent=40-count;
+  document.getElementById('sc-pct').textContent=Math.round(count/40*100)+'%';
+  document.getElementById('score-grid').style.display='grid';
+  document.getElementById('submit-modal').classList.remove('hidden');
+}
+function closeModal(){ document.getElementById('submit-modal').classList.add('hidden'); }
+
+function submitTest(){
+  submitted=true;
+  if(timerInterval) clearInterval(timerInterval);
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  document.getElementById('submit-modal').classList.add('hidden');
+  clearSession();
+
+  var correct=0, wrong=0, unanswered=0;
+  var tbody=document.getElementById('ans-table-body');
+  tbody.innerHTML='';
+  var pdfRows=[];
+
+  for(var num=1;num<=40;num++){
+    var id='q'+num;
+    var result=checkCorrect(id);
+    var userRaw=(userAnswers[id]||'').toString().trim();
+    var correctAns=correctAnswerLabel(id);
+
+    var yourCell, resultCell, resText;
+    if(result===null){
+      unanswered++;
+      yourCell='<span class="blank">&mdash;</span>';
+      resultCell='<span class="blank">Unanswered</span>';
+      resText='Unanswered';
+    } else if(result){
+      correct++;
+      yourCell='<span class="ok">'+escapeHtml(userRaw)+'</span>';
+      resultCell='<span class="ok">&#10003; Correct</span>';
+      resText='Correct';
+    } else {
+      wrong++;
+      yourCell='<span class="bad">'+escapeHtml(userRaw||'-')+'</span>';
+      resultCell='<span class="bad">&#10007; Incorrect</span>';
+      resText='Incorrect';
+    }
+
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td style="font-weight:700;color:var(--accent)">'+num+'</td><td>'+yourCell+'</td><td><strong>'+escapeHtml(correctAns)+'</strong></td><td>'+resultCell+'</td>';
+    tbody.appendChild(tr);
+    pdfRows.push([String(num), userRaw||'-', correctAns, resText]);
+  }
+
+  document.getElementById('r-correct').textContent=correct;
+  document.getElementById('r-wrong').textContent=wrong;
+  document.getElementById('r-unanswered').textContent=unanswered;
+  var bs=getBandScore(correct);
+  document.getElementById('r-band').textContent=bs.band;
+  document.getElementById('r-band-label').textContent=bs.level+' \u00B7 '+correct+' / 40 correct';
+  document.getElementById('results-cand').textContent='Candidate: '+candidateName+'  \u00B7  Number: '+candidateNumber;
+  document.getElementById('results-modal').classList.remove('hidden');
+  window._lastPdfData={correct:correct,wrong:wrong,unanswered:unanswered,bs:bs,pdfRows:pdfRows};
+  try{
+    generateResultsPDF(correct,wrong,unanswered,bs,pdfRows);
+    document.getElementById('pdf-status').textContent='Candidate response PDF downloaded.';
+  }catch(e){
+    document.getElementById('pdf-status').textContent='PDF download failed. Use the button below.';
+    document.getElementById('pdf-status').style.color='var(--accent-red)';
+  }
+}
+function redownloadPDF(){
+  if(!window._lastPdfData) return;
+  var d=window._lastPdfData;
+  try{ generateResultsPDF(d.correct,d.wrong,d.unanswered,d.bs,d.pdfRows); }catch(e){}
+}
+
+function generateResultsPDF(correct,wrong,unanswered,bandInfo,rows){
+  var jsPDF=window.jspdf.jsPDF;
+  var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  var pageWidth=doc.internal.pageSize.getWidth();
+  doc.setFillColor(30,58,95); doc.rect(0,0,pageWidth,28,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(16); doc.setFont('helvetica','bold');
+  doc.text('IELTS Academic Reading \u00B7 Practice Test 8',14,12);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Candidate Response Report',14,20);
+  doc.text(new Date().toLocaleString(),pageWidth-14,20,{align:'right'});
+  doc.setTextColor(26,24,20); doc.setFontSize(11); doc.setFont('helvetica','bold');
+  doc.text('Candidate Name:',14,38); doc.setFont('helvetica','normal'); doc.text(candidateName||'Anonymous',52,38);
+  doc.setFont('helvetica','bold'); doc.text('Candidate Number:',14,45); doc.setFont('helvetica','normal'); doc.text(candidateNumber||'-',58,45);
+  doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.text('Score Summary',14,56);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Correct: '+correct+'    Incorrect: '+wrong+'    Unanswered: '+unanswered,14,64);
+  doc.setFont('helvetica','bold'); doc.setTextColor(30,58,95); doc.setFontSize(14);
+  doc.text('Band Score: '+bandInfo.band+'  ('+bandInfo.level+')',14,72);
+  doc.setTextColor(26,24,20); doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text(correct+' / 40 correct',14,79);
+  doc.autoTable({
+    startY:86, head:[['Q','Your Answer','Correct Answer','Result']], body:rows, theme:'grid',
+    styles:{fontSize:8,cellPadding:2.2,overflow:'linebreak',valign:'middle'},
+    headStyles:{fillColor:[30,58,95],textColor:255,fontStyle:'bold',fontSize:8},
+    columnStyles:{0:{cellWidth:18,halign:'center'},1:{cellWidth:50},2:{cellWidth:70},3:{cellWidth:35,halign:'center'}},
+    didParseCell:function(data){
+      if(data.section==='body'&&data.column.index===3){
+        var t=data.cell.raw||'';
+        if(t.indexOf('Correct')!==-1 && t.indexOf('Incorrect')===-1){data.cell.styles.textColor=[5,150,105];data.cell.styles.fontStyle='bold';}
+        else if(t.indexOf('Incorrect')!==-1){data.cell.styles.textColor=[225,29,72];data.cell.styles.fontStyle='bold';}
+        else {data.cell.styles.textColor=[107,114,128];data.cell.styles.fontStyle='italic';}
+      }
+    },
+    margin:{left:14,right:14}
+  });
+  var finalY=doc.lastAutoTable.finalY+12;
+  doc.setFontSize(8); doc.setTextColor(107,114,128);
+  doc.text('This report shows your answers against the official answer key.',14,finalY);
+  var safeName=(candidateName||'Candidate').replace(/[^a-zA-Z0-9]/g,'_').slice(0,20);
+  var safeNum=(candidateNumber||'NA').replace(/[^a-zA-Z0-9]/g,'_').slice(0,15);
+  doc.save('IELTS_Reading8_'+safeName+'_'+safeNum+'_'+new Date().toISOString().slice(0,10)+'.pdf');
+}
+
+/* ============================================================
+   RESIZER
+   ============================================================ */
+var resizer=document.getElementById('resizer');
+var passPanel=document.getElementById('passage-panel');
+var isResizing=false,startX,startW;
+resizer.addEventListener('mousedown',function(e){ isResizing=true; startX=e.clientX; startW=passPanel.offsetWidth; resizer.classList.add('dragging'); document.body.style.userSelect='none'; document.body.style.cursor='col-resize'; });
+document.addEventListener('mousemove',function(e){ if(!isResizing) return; var dx=e.clientX-startX; passPanel.style.width=Math.min(Math.max(startW+dx,280),window.innerWidth-320)+'px'; });
+document.addEventListener('mouseup',function(){ if(isResizing){ isResizing=false; resizer.classList.remove('dragging'); document.body.style.userSelect=''; document.body.style.cursor=''; saveSession(true); } });
+
+(function(){
+  var saved = loadSession();
+  if(saved && saved.passageWidth){ document.getElementById('passage-panel').style.width = saved.passageWidth; }
+})();
+</script>
+</body>
+</html>

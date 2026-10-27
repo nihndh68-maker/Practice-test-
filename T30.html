@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Academic Reading · Test 317</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fff;--border:#e5e7eb;--border-soft:#f3f4f6;--accent:#1e3a5f;--accent-red:#e11d48;--accent-red-hover:#be123c;--text:#1f2937;--muted:#6b7280;--success:#059669;--passage-width:52%;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+  #start-screen{position:fixed;inset:0;background:#f8fafc;display:flex;align-items:center;justify-content:center;z-index:500;}
+  #start-screen.hidden{display:none;}
+  .start-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:40px 44px;max-width:460px;width:92%;box-shadow:0 10px 40px rgba(0,0,0,.08);}
+  .start-card h1{font-size:20px;margin-bottom:4px;font-weight:600;}
+  .start-card .sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .start-card label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;}
+  .start-card input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;margin-bottom:16px;font-family:inherit;}
+  .start-card input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.12);}
+  .start-card button{width:100%;padding:12px;background:var(--accent-red);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;}
+  .start-card button:hover{background:var(--accent-red-hover);}
+  .resume-banner{display:none;background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12.5px;color:#92400e;line-height:1.5;}
+  .resume-banner.show{display:block;}
+  .resume-banner .resume-actions{margin-top:8px;display:flex;gap:8px;}
+  .resume-banner .resume-actions button{width:auto;margin:0;padding:6px 12px;font-size:12px;border-radius:6px;}
+  .resume-banner .resume-actions .btn-ghost{background:#fff;color:#92400e;border:1px solid #fbbf24;}
+  #topbar{background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;flex-shrink:0;z-index:100;}
+  .top-left{display:flex;align-items:center;gap:12px;}
+  .mock-label{font-size:15px;font-weight:500;}
+  #autosave-indicator{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--success);font-weight:500;opacity:0;transition:opacity .4s ease;}
+  #autosave-indicator.show{opacity:1;}
+  #autosave-indicator .dot{width:7px;height:7px;border-radius:50%;background:var(--success);}
+  #autosave-indicator.saving .dot{background:#f59e0b;animation:blink .8s infinite;}
+  #autosave-indicator.saving{color:#f59e0b;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+  #timer-wrap{display:flex;align-items:center;gap:6px;color:var(--accent-red);font-weight:600;}
+  #timer{font-size:18px;font-weight:600;letter-spacing:0.02em;min-width:52px;}
+  #timer.warn{animation:pulse 1s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .top-actions{display:flex;align-items:center;gap:8px;}
+  .icon-btn{width:36px;height:36px;border:none;background:transparent;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;}
+  .icon-btn:hover{background:var(--border-soft);color:var(--text);}
+  .btn-submit{background:#e5e7eb;color:var(--text);border:none;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;}
+  .btn-submit:hover{background:#d1d5db;}
+  .icon-btn.active{background:#fff1f2;color:var(--accent-red);}
+  #notepad-panel{position:fixed;top:56px;right:0;width:320px;height:calc(100vh - 56px - 56px);background:#fff;border-left:1px solid var(--border);box-shadow:-4px 0 24px rgba(0,0,0,.08);z-index:150;display:flex;flex-direction:column;transition:transform .2s ease;}
+  #notepad-panel.hidden{transform:translateX(100%);pointer-events:none;}
+  .notepad-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+  .notepad-title{font-size:15px;font-weight:600;color:var(--accent-red);}
+  #notepad-text{flex:1;border:none;resize:none;padding:14px 16px;font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.55;outline:none;}
+  #main{display:flex;flex:1;overflow:hidden;}
+  #passage-panel{width:var(--passage-width);background:#fff;overflow-y:auto;padding:24px 28px 40px;flex-shrink:0;}
+  .part-header{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:4px;}
+  #passage-panel h2{font-size:22px;font-weight:700;color:var(--accent);margin-bottom:6px;letter-spacing:-0.3px;}
+  .time-note{font-size:12.5px;color:var(--muted);margin-bottom:16px;line-height:1.5;}
+  .passage-title{text-align:center;font-family:'Source Serif 4',Georgia,serif;font-size:18px;font-weight:600;color:var(--accent);margin-bottom:22px;}
+  #passage-panel p{font-family:'Source Serif 4',Georgia,serif;font-size:15px;line-height:1.75;margin-bottom:16px;}
+  #passage-panel p.glossary{font-size:13px;line-height:1.6;color:var(--muted);border-top:1px solid var(--border);padding-top:12px;margin-top:8px;}
+  #passage-panel strong{font-weight:700;color:var(--accent);}
+  #passage-panel em{font-style:italic;}
+  #resizer{width:5px;background:transparent;cursor:col-resize;flex-shrink:0;position:relative;z-index:10;}
+  #resizer::before{content:'';position:absolute;top:0;bottom:0;left:2px;width:1px;background:var(--accent-red);}
+  #resizer:hover::before,#resizer.dragging::before{width:3px;left:1px;}
+  #resizer .handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:28px;background:#fff;border:1px solid var(--accent-red);border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--accent-red);font-size:10px;}
+  #questions-panel{flex:1;overflow-y:auto;padding:20px 24px 80px;background:#fff;}
+  .q-section{margin-bottom:28px;}
+  .q-section-header{font-size:15px;font-weight:600;margin-bottom:8px;}
+  .q-section-intro{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:16px;}
+  .info-box{padding:12px 16px;font-size:13px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:14px;line-height:1.9;}
+  .info-box.notes{font-size:13.5px;line-height:2.1;}
+  .info-box .box-title{display:block;font-weight:600;color:var(--accent);margin-bottom:2px;}
+  .question{padding:12px 0;border-bottom:1px solid var(--border-soft);display:flex;gap:12px;align-items:flex-start;}
+  .question:last-child{border-bottom:none;}
+  .q-num{min-width:26px;height:26px;color:var(--muted);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px;}
+  .q-body{flex:1;}
+  .q-text{font-size:14px;line-height:1.55;margin-bottom:10px;}
+  .tfn-options,.mcq-options{display:flex;flex-direction:column;gap:6px;}
+  .tfn-options.horizontal{flex-direction:row;flex-wrap:wrap;gap:8px;}
+  .tfn-btn,.mcq-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:13.5px;transition:all .12s;}
+  .tfn-btn:hover,.mcq-opt:hover{border-color:#94a3b8;background:#f8fafc;}
+  .tfn-btn.selected,.mcq-opt.selected{border-color:var(--accent-red);background:#fff1f2;}
+  .tfn-btn .radio-dot,.mcq-opt .radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid #cbd5e1;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .tfn-btn.selected .radio-dot,.mcq-opt.selected .radio-dot{border-color:var(--accent-red);}
+  .tfn-btn.selected .radio-dot::after,.mcq-opt.selected .radio-dot::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--accent-red);}
+  .fill-input{border:1.5px solid var(--border);border-radius:6px;padding:7px 12px;font-size:14px;font-family:inherit;width:100%;max-width:220px;transition:border-color .15s;}
+  .fill-input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .fill-input.answered{border-color:var(--success);background:#f0fdf4;}
+  .fill-input.inline{display:inline-block;vertical-align:middle;margin:0 2px;}
+  .dd-select{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 36px 10px 12px;font-size:13.5px;font-family:inherit;background-color:#fff;cursor:pointer;transition:border-color .15s;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 12px center;}
+  .dd-select:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .dd-select.answered{border-color:var(--success);background-color:#f0fdf4;}
+  .pair-hint{font-size:12.5px;color:#b45314;background:#fffbeb;border:1px solid #fcd34d;border-radius:6px;padding:6px 10px;margin-bottom:10px;}
+  #bottombar{border-top:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0;gap:12px;min-height:56px;}
+  .part-tabs{display:flex;gap:8px;flex-shrink:0;}
+  .part-tab{padding:8px 16px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .part-tab:hover{border-color:#94a3b8;color:var(--text);}
+  .part-tab.active{border-color:var(--accent-red);color:var(--accent);box-shadow:0 0 0 1px var(--accent-red);}
+  .part-tab .count{font-weight:400;color:var(--muted);}
+  .q-circles{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;flex:1;padding:0 8px;}
+  .q-circle{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;}
+  .q-circle:hover{border-color:#94a3b8;color:var(--text);}
+  .q-circle.answered{background:var(--success);border-color:var(--success);color:#fff;}
+  .nav-arrows{display:flex;gap:6px;flex-shrink:0;}
+  .nav-arrow{width:36px;height:36px;border:1.5px solid var(--border);border-radius:50%;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:16px;}
+  .nav-arrow:hover{border-color:#94a3b8;color:var(--text);}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;}
+  .modal-overlay.hidden{display:none;}
+  .modal{background:#fff;border-radius:12px;padding:28px 32px;max-width:720px;width:94%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+  .modal h2{font-size:20px;margin-bottom:10px;}
+  .modal p{font-size:14px;line-height:1.6;color:var(--muted);margin-bottom:16px;}
+  .score-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0;}
+  .score-card{background:#f8fafc;border-radius:10px;padding:14px;text-align:center;}
+  .score-card .val{font-size:26px;font-weight:700;color:var(--accent);}
+  .score-card .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+  .modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;}
+  .btn-modal{padding:9px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;}
+  .btn-modal:hover{background:#f8fafc;}
+  .btn-modal.primary{background:var(--accent-red);color:#fff;border-color:var(--accent-red);}
+  .btn-modal.primary:hover{background:var(--accent-red-hover);}
+  .ans-table-wrap{margin:12px 0;max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;}
+  .ans-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .ans-table th{position:sticky;top:0;background:var(--accent);color:#fff;padding:8px 10px;text-align:left;font-weight:600;font-size:11px;}
+  .ans-table td{padding:6px 10px;border-bottom:1px solid var(--border);}
+  .ans-table tr:nth-child(even) td{background:#f8fafc;}
+  .ans-table .ok{color:var(--success);font-weight:600;}
+  .ans-table .bad{color:var(--accent-red);font-weight:600;}
+  .ans-table .blank{color:var(--muted);font-style:italic;}
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px;}
+  .passage-content{display:none;}
+  .passage-content.active{display:block;}
+  mark.hl{background:#fef08a;padding:0 2px;border-radius:2px;}
+  mark.hl-note{background:#bbf7d0;padding:0 2px;border-radius:2px;border-bottom:2px solid #16a34a;}
+  #sel-toolbar{position:fixed;z-index:300;display:none;background:#1e3a5f;color:#fff;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);font-size:13px;font-weight:500;overflow:hidden;white-space:nowrap;}
+  #sel-toolbar button{background:transparent;border:none;color:#fff;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:500;font-family:inherit;}
+  #sel-toolbar button:hover{background:rgba(255,255,255,.15);}
+  #sel-toolbar .sep{display:inline-block;width:1px;height:14px;background:rgba(255,255,255,.35);vertical-align:middle;}
+  @media (max-width:800px){#main{flex-direction:column;}#passage-panel{width:100%!important;height:42vh;border-bottom:1px solid var(--border);}#resizer{display:none;}}
+  #passage-panel p.source-note{font-family:'Inter',system-ui,sans-serif;font-size:12px;font-style:normal;color:var(--muted);text-align:center;margin:-12px 0 20px;line-height:1.5;}
+  .figure{margin:4px 0 20px;}
+  .figure img{width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:6px;}
+  .figure figcaption{font-family:'Inter',system-ui,sans-serif;font-size:12.5px;color:var(--muted);line-height:1.55;margin-top:8px;}
+  .figure .fig-src{font-size:11.5px;opacity:.85;}
+  .dd-select.inline{display:inline-block;width:auto;min-width:130px;padding:6px 32px 6px 10px;vertical-align:middle;margin:0 2px;}
+  .info-box .box-title + .box-title{margin-top:8px;}
+  .q-section .figure{margin:0 0 14px;}
+  .para-label{font-weight:700;color:var(--accent);margin-right:6px;}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+<div id="start-screen">
+  <div class="start-card">
+    <h1>IELTS Academic Reading</h1>
+    <div class="sub">Computer-Delivered Simulation &middot; Test 317</div>
+    <div class="resume-banner" id="resume-banner">
+      <strong>&#9201; Saved session found</strong>
+      <div id="resume-info"></div>
+      <div class="resume-actions">
+        <button onclick="resumeTest()">Resume Test</button>
+        <button class="btn-ghost" onclick="discardSaved()">Start Fresh</button>
+      </div>
+    </div>
+    <label for="cand-name">Candidate Name</label>
+    <input type="text" id="cand-name" placeholder="Enter your full name" autocomplete="off">
+    <label for="cand-num">Candidate Number</label>
+    <input type="text" id="cand-num" placeholder="e.g. 123456" autocomplete="off">
+    <button onclick="startTest()">Start Test</button>
+  </div>
+</div>
+
+<div id="topbar">
+  <div class="top-left">
+    <span class="mock-label">IELTS Academic Reading &middot; Test 317</span>
+    <span id="autosave-indicator"><span class="dot"></span><span id="autosave-text">Saved</span></span>
+  </div>
+  <div id="timer-wrap">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <div id="timer">60:00</div>
+  </div>
+  <div class="top-actions">
+    <button class="icon-btn" id="notepad-btn" title="Notepad" onclick="toggleNotepad()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></button>
+    <button class="icon-btn" title="Full screen" onclick="toggleFullscreen()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
+    <button class="btn-submit" onclick="confirmSubmit()">Submit</button>
+  </div>
+</div>
+
+<div id="notepad-panel" class="hidden">
+  <div class="notepad-header">
+    <span class="notepad-title">Notepad</span>
+    <button class="icon-btn" title="Close" onclick="toggleNotepad()" style="width:28px;height:28px"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <textarea id="notepad-text" placeholder="Type your notes here&hellip;"></textarea>
+</div>
+
+<div id="sel-toolbar">
+  <button type="button" id="sel-note-btn">Note</button><span class="sep"></span><button type="button" id="sel-hl-btn">Highlight</button>
+</div>
+
+<div id="main">
+  <div id="passage-panel">
+
+<div class="passage-content active" id="pc-0">
+<div class="part-header">PART 1</div>
+<h2>READING PASSAGE 1</h2>
+<div class="time-note">You should spend about 20 minutes on Questions 1–13, which are based on Reading Passage 1 below.</div>
+<div class="passage-title">Is aid hurting Africa?</div>
+<p>Despite its population of more than one billion and its rich land and natural resources, the continent of Africa remains poor. The combined economies of its 54 states equal that of one European country: the Netherlands.</p>
+<p>It is difficult to speak of Africa as a unit as its states differ from each other in culture, climate, size, and political system. Since mid-20th-century independence, many African states have pursued different economic policies. Yet, none of them has overcome poverty. Why might this be?</p>
+<p>One theory says Africa is unlucky. Sparsely populated with diverse language and culture, it contains numerous landlocked countries, and it is far from international markets. Dambisa Moyo, a Zambian-born economist, has another theory. In her 2009 book, Dead Aid, she proposes that international aid is largely to blame for African poverty because it has encouraged dependence and corruption, and has diverted talented people from the business. One of her statistics is that from 1970-98, when aid to Africa was highest, poverty rose from eleven to 66%. If aid were cut, she believes Africans would utilise their resources more creatively.</p>
+<p>When a state lacks the capacity to care for its people, international non-governmental organisations (NGOs), like Oxfam or the Red Cross, assume this role. While NGOs distribute food or medical supplies, Moyo argues they reduce the ability of the state to provide. Furthermore, during this process, those in government and the military siphon off aid goods and money themselves. Transparency International, an organisation that surveys corruption, rates the majority of African states poorly.</p>
+<p>Moyo provides another example. Maybe a Hollywood star donates American-made mosquito nets. Certainly, this benefits malaria-prone areas, but it also draws business away from local African traders who supply nets. More consultation is needed between do-gooder foreigners and local communities.</p>
+<p>Moyo also suggests African nations increase their wealth by investment in bonds, or by increased co-operation with China.</p>
+<p>The presidents of Rwanda and Senegal are strong supporters of Moyo, but critics say her theories are simplistic. The international aid community is not responsible for geography, nor has it anything to do with the military takeover, corruption, or legislation that hampers trade. Africans have had half a century of self-government and economic control, yet, as the population of the continent doubled, its GDP has risen only 60%. In the same period, Malaysia and Vietnam threw off colonialism and surged ahead economically by investing in education, health, and infrastructure; by lowering taxes on international trade; and, by being fortunate to be surrounded by other successful nations.</p>
+<p>The economist Paul Collier has speculated that if aid were cut, African governments would not find alternative sources of income, nor would they reduce corruption. Another economist, Jeffrey Sachs, has calculated that twice the amount of aid currently given is needed to prevent suffering on a grand scale.</p>
+<p>In Dead Aid, Moyo presents her case through a fictitious country called 'Dongo', but nowhere does she provide examples of real aid organisations causing actual problems. Her approach may be entertaining, but it is hardly academic.</p>
+<p>Other scholars point out that Africa is dominated by tribal societies with military-government elites. Joining the army, rather than doing business, was the easiest route to personal wealth and power. Unsurprisingly, military takeovers have occurred in almost every African country. In the 1960s and 70s, European colonials were replaced by African 'colonials': African generals and their families. Meantime, the very small, educated bourgeoisie has moved abroad. All over Africa, strongmen leaders have ruled for a long time, or one unstable military regime has succeeded another. As a result, business, separate from the military government is rare, and international investment limited.</p>
+<p>Post-secondary education rates are low in Africa. Communications and transportation remain basic although mobile phones are having an impact. The distances farmers must travel to market are vast due to poor roads. High cross-border taxes and long bureaucratic delays are par for the course. African rural populations exceed those elsewhere in the world. Without a decent infrastructure or an educated urbanised workforce, a business cannot prosper. Recent World Bank statistics show that in southern Africa, the number of companies using the internet for business is 20% as opposed to 40% in South America or 80% in the US. There are 37 days each year without water whereas there is less than one day in Europe. The average cost of sending one container to the US is $7600, but only $3900 from East Asia or the Pacific. All these problems are the result of poor state planning.</p>
+<p>Great ethnic and linguistic diversity within African countries has led to tribal favouritism. Governments are often controlled by one tribe or allied tribes; civil war is usually tribal. It is estimated each civil war costs a country roughly $64 billion. Southern Africa had 34 such conflicts from 1940-2000 while South Asia, the next-affected region, had only 24 in the same period. To this day, a number of bloody conflicts continue.</p>
+<p>Other opponents of Moyo add that her focus on market investment and more business with China is shortsighted. The 2008 financial crisis meant that countries with market investments lost money. Secondly, China's real intentions in Africa are unknown, but everyone can see China is buying up African farmland and securing cheap oil supplies.</p>
+<p>All over Africa, there are untapped resources, but distance, diversity, and low population density contribute to poverty. Where there is no TV, infrequent electricity, and bad roads, there still seems to be money for automatic weapons just the right size for 12-year-old boys to use. Blaming the West for assisting with aid fails to address the issues of continuous conflict, ineffective government, and little infrastructure. Nor does it prevent terrible suffering.</p>
+<p>Has aid caused problems for Africa, or is Africa's strife of its own making or due to geography? Whatever you think, Dambisa Moyo's book has generated lively discussion, which is fruitful for Africa.</p>
+</div>
+<div class="passage-content" id="pc-1">
+<div class="part-header">PART 2</div>
+<h2>READING PASSAGE 2</h2>
+<div class="time-note">You should spend about 20 minutes on Questions 14–26, which are based on Reading Passage 2 below.</div>
+<div class="passage-title">Children’s Literature</div>
+<p>Stories and poems aimed at children have an exceedingly long history: lullabies, for example, were sung in Roman times, and a few nursery games and rhymes are almost as ancient. Yet so far as written-down literature is concerned, while there were stories in print before 1700 that children often seized on when they had the chance, such as translations of Aesop's fables, fairy-stories and popular ballads and romances, these were not aimed at young people in particular. Since the only genuinely child-oriented literature at this time would have been a few instructional works to help with reading and general knowledge, plus the odd Puritanical tract as an aid to morality, the only course for keen child readers was to read adult literature. This still occurs today, especially with adult thrillers or romances that include more exciting, graphic detail than is normally found in the literature for younger readers.</p>
+<p>By the middle of the 18th century there were enough eager child readers, and enough parents glad to cater to this interest, for publishers to specialize in children's books whose first aim was pleasure rather than education or morality. In Britain, a London merchant named Thomas Boreham produced Cajanus, The Swedish Giant in 1742, while the more famous John Newbery published A Little Pretty Pocket Book in 1744. Its contents - rhymes, stories, children's games plus a free gift ('A ball and a pincushion') in many ways anticipated the similar lucky-dip contents of children's annuals this century. It is a tribute to Newbery's flair that he hit upon a winning formula quite so quickly, to be pirated almost immediately in America.</p>
+<p>Such pleasing levity was not to last. Influenced by Rousseau, whose Emile (1762) decreed that all books for children save Robinson Crusoe were a dangerous diversion, contemporary critics saw to it that children's literature should be instructive and uplifting. Prominent among such voices was Mrs. Sarah Trimmer, whose magazine The Guardian of Education (1802) carried the first regular reviews of children's books. It was she who condemned fairy-tales for their violence and general absurdity; her own stories, Fabulous Histories (1786) described talking animals who were always models of sense and decorum.</p>
+<p>So the moral story for children was always threatened from within, given the way children have of drawing out entertainment from the sternest moralist. But the greatest blow to the improving children's book was to come from an unlikely source indeed: early 19th century interest in folklore. Both nursery rhymes, selected by James Orchard Halliwell for a folklore society in 1842, and collection of fairy-stories by the scholarly Grimm brothers, swiftly translated into English in 1823, soon rocketed to popularity with the young, quickly leading to new editions, each one more child-centered than the last. From now on younger children could expect stories written for their particular interest and with the needs of their own limited experience of life kept well to the fore.</p>
+<p>What eventually determined the reading of older children was often not the availability of special children's literature as such but access to books that contained characters, such as young people or animals, with whom they could more easily empathize, or action, such as exploring or fighting, that made few demands on adult maturity or understanding.</p>
+<p>The final apotheosis of literary childhood as something to be protected from unpleasant reality came with the arrival in the late 1930s of child-centered best-sellers intent on entertainment at its most escapist. In Britain novelists such as Enid Blyton and Richmal Crompton described children who were always free to have the most unlikely adventures, secure in the knowledge that nothing bad could ever happen to them in the end. The fact that war broke out again during her books' greatest popularity fails to register at all in the self-enclosed world inhabited by Enid Blyton's young characters. Reaction against such dream-worlds was inevitable after World War II, coinciding with the growth of paperback sales, children's libraries and a new spirit of moral and social concern. Urged on by committed publishers and progressive librarians, writers slowly began to explore new areas of interest while also shifting the settings of their plots from the middle-class world to which their chiefly adult patrons had always previously belonged.</p>
+<p>Critical emphasis, during this development, has been divided. For some the most important task was to rid children's books of the social prejudice and exclusiveness no longer found acceptable. Others concentrated more on the positive achievements of contemporary children's literature. That writers of these works are now often recommended to the attentions of adult as well as child readers echoes the 19th-century belief that children's literature can be shared by the generations, rather than being a defensive barrier between childhood and the necessary growth towards adult understanding.</p>
+</div>
+<div class="passage-content" id="pc-2">
+<div class="part-header">PART 3</div>
+<h2>READING PASSAGE 3</h2>
+<div class="time-note">You should spend about 20 minutes on Questions 27–40, which are based on Reading Passage 3 below.</div>
+<div class="passage-title">Business Accidents</div>
+<p>In 1894 Dr John Kellogg and his brother, Will, were supervising a hospital and health spa in Michigan. The patients were on a restricted diet. One day, the brothers left cooked wheat untended for more than 24 hours. When they returned, they saw what they had done. It was no good to eat, but they decided to run the stale wheat through rollers, just to see how it would turn out. Normally, the process produced long sheets, but they were surprised to discover that this time the rollers created flat flakes. They baked them, and then tried the same thing with corn. From this accidental discovery came the cornflakes that generations have now been eating for breakfast.</p>
+<p>Accidents happen; there is nothing predictable and orderly about innovation. Nobel laureate Sir Alan Hodgkin, who discovered how nerve cells transmit electrical impulses between the skin and the brain, commented: 'I believe that the record of my published papers conveys an impression of directedness and planning which does not at all coincide with the actual sequence of events.'</p>
+<p>The same rule applies in business. The mistake that gave us cornflakes keeps repeating itself in the history of disruptive innovation, the kind that transforms markets. Louis Daguerre, for instance, discovered the technique that gave us photography in the 1830s, when drops of mercury from a shattered thermometer produced a photographic image. The microwave was discovered when Percy Spencer, a scientist with Raytheon, was testing a new vacuum tube and discovered that the sweet in his pocket had melted. The artificial sweetener, saccharin, was the unintentional result of a medical scientist's work on a chemical treatment for gastric ulcers. While working for the firm 3M, researcher Art Fry had no idea he was taking the first steps towards Post-it Notes when he used bits of adhesive office paper that could be easily lifted off the page to replace the scrap paper bookmarks that kept falling out of his hymn book.</p>
+<p>Breakthrough and disruptive innovation are rarely driven by orderly process. Usually they come out of a chaotic, haphazard mess, which is why big companies, full of managers schooled in business programmes designed to eliminate random variation and mistakes, struggle with them. In these sorts of environments, accidents are called failures and are discouraged.</p>
+<p>It is no surprise then that research from the late British economist Paul Geroski and London Business School's Constantinos Markides found that companies that were skilled at innovation were usually not that skilled when it came to commercialisation, and vice versa. Their book, Fast Second, divides businesses into 'colonists' and 'consolidators'. Small and nimble, colonists are adept at creating market niches but are terrible institution builders. Consolidators, with their strong cultures of discipline and cost control, know how to take clever ideas from other firms and turn them into mass-market items. Microsoft is a prime instance of this.</p>
+<p>With companies spending hundreds of billions of dollars on research and development, US academics Robert Austin and Lee Devin examined how managers can encourage productive slip-ups. In their article Accident, Intention and Expectation in the Innovation Process, they argue that business processes actually prevent helpful mis-steps from occurring. According to their catalogue of accidents, not all false steps and mishaps are equal. Accidents, they say, come from unlikely mental associations such as memories and vague connections, looking for something and finding it in an unexpected way, looking for one thing and finding something else, and not looking for anything but finding something valuable.</p>
+<p>Accident-prone innovation, they say, requires companies to get outside the 'cone of expectation'. It means throwing together groups from diverse backgrounds, and combining ideas in unpredictable ways. Other strategies also include having systems that watch out for accidents and examine them for value, generating them when they do not happen often enough, seizing on the useful ones, capturing their valuable features, and building on them to add value and give potential for useful accidents.</p>
+<p>All this, however, requires thinking that is often counter-intuitive to the way businesses operate. In other words, it is the kind of thinking that goes against the beliefs of most business managers. It runs counter to the notion frequently pushed by consultants that you can 'harness' creativity and direct it to line up with intention. 'The cost of accidents business, people tend to call such efforts failure.'</p>
+<p>There are tentative signs that more companies are starting to realise that failure can lead to commercial gain, and that this is part of the risk-taking that underpins innovation. Australia's largest brewing company, for example, made a bad error when it launched a new beer called Empire Lager, pitched at younger consumers. Having spent a fortune creating a beer with a sweeter taste, designing a great-looking bottle and a television campaign, Foster's was left with a drink that no-one wanted to buy. The target market was more interested in brands built up by word of mouth.</p>
+<p>Instead of wiping the unsuccessful product launch, Fosters used this lesson learned to go on and develop other brands instead. One of them, Pure Blonde, is now ranked as Australia's fifth-largest beer brand. Unlike Empire Lager, there has been almost no promotion and its sales are generated more by word of mouth.</p>
+<p>Other companies are taking similar steps to study their own slip-ups. Intuit, the company behind financial tools such as Quicken, holds regular 'When Learning Hurts' sessions. But this sort of transformation is never easy. In a market that focuses on the short-term, convincing employees and shareholders to tolerate failure and not play it safe is a big thing to ask.</p>
+</div>
+
+
+  </div>
+
+  <div id="resizer"><div class="handle">&#8942;&#8942;</div></div>
+
+  <div id="questions-panel">
+<div id="qs-0">
+<div class="q-section">
+<div class="q-section-header">Questions 1&ndash;11</div>
+<div class="q-section-intro">Complete the notes below. Write <strong>NO MORE THAN ONE WORD AND/OR A NUMBER</strong> from the passage for each answer.</div>
+<div class="info-box notes"><span class="box-title">Is aid to blame for Africa&rsquo;s poverty?</span>
+<span class="box-title" style="margin-top:6px">Background</span>
+&bull; Africa has rich <strong>1</strong> <input class="fill-input inline" id="q1" oninput="markFill('q1')" style="width:130px" placeholder="&hellip;"> and natural resources, yet the continent remains <strong>2</strong> <input class="fill-input inline" id="q2" oninput="markFill('q2')" style="width:130px" placeholder="&hellip;">.<br>
+<span class="box-title" style="margin-top:6px">Dambisa Moyo&rsquo;s view</span>
+&bull; International <strong>3</strong> <input class="fill-input inline" id="q3" oninput="markFill('q3')" style="width:130px" placeholder="&hellip;"> has encouraged dependence and corruption, and has diverted talented people from <strong>4</strong> <input class="fill-input inline" id="q4" oninput="markFill('q4')" style="width:140px" placeholder="&hellip;">.<br>
+&bull; Foreign donors and NGOs should consult local <strong>5</strong> <input class="fill-input inline" id="q5" oninput="markFill('q5')" style="width:150px" placeholder="&hellip;"> more.<br>
+&bull; African nations should co-operate more with <strong>6</strong> <input class="fill-input inline" id="q6" oninput="markFill('q6')" style="width:130px" placeholder="&hellip;"> and invest in bonds.<br>
+<span class="box-title" style="margin-top:6px">Critics&rsquo; response</span>
+&bull; The aid community is not responsible for <strong>7</strong> <input class="fill-input inline" id="q7" oninput="markFill('q7')" style="width:150px" placeholder="&hellip;">, military takeovers, corruption or laws that hamper trade.<br>
+&bull; Countries with market <strong>8</strong> <input class="fill-input inline" id="q8" oninput="markFill('q8')" style="width:150px" placeholder="&hellip;"> lost money in the 2008 financial crisis.<br>
+&bull; Malaysia and Vietnam succeeded by investing in <strong>9</strong> <input class="fill-input inline" id="q9" oninput="markFill('q9')" style="width:150px" placeholder="&hellip;">, health and infrastructure.<br>
+&bull; Southern Africa had <strong>10</strong> <input class="fill-input inline" id="q10" oninput="markFill('q10')" style="width:90px" placeholder="&hellip;"> civil conflicts between 1940 and 2000.<br>
+&bull; China is securing cheap oil supplies and buying up African <strong>11</strong> <input class="fill-input inline" id="q11" oninput="markFill('q11')" style="width:130px" placeholder="&hellip;">.
+</div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 12&ndash;13</div>
+<div class="q-section-intro">Choose <strong>TWO</strong> letters, <strong>A&ndash;E</strong>. Which two of the statements does the writer of the passage support? You may give the two letters in either order.</div>
+<div class="info-box"><span class="box-title">Statements</span>
+<strong>A</strong> Moyo is right that international aid is causing Africa's problems.<br>
+<strong>B</strong> Moyo has ignored the role of geography in Africa.<br>
+<strong>C</strong> Convincing evidence is lacking in Moyo's theory.<br>
+<strong>D</strong> Most political leaders in Africa agree with Moyo's analysis.<br>
+<strong>E</strong> Useful discussion about Africa has resulted from Moyo's book.
+</div>
+<div class="question" id="q12"><div class="q-num">12</div><div class="q-body"><div class="q-text">First statement the writer supports</div><select class="dd-select" id="dd-q12" data-opts="A,B,C,D,E" data-ph="Select a letter&hellip;" onchange="selectDropdown(this,'q12')"></select></div></div>
+<div class="question" id="q13"><div class="q-num">13</div><div class="q-body"><div class="q-text">Second statement the writer supports</div><select class="dd-select" id="dd-q13" data-opts="A,B,C,D,E" data-ph="Select a letter&hellip;" onchange="selectDropdown(this,'q13')"></select></div></div>
+</div>
+</div>
+<div id="qs-1" style="display:none">
+<div class="q-section">
+<div class="q-section-header">Questions 14&ndash;18</div>
+<div class="q-section-intro">Complete the table below. Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</div>
+<div class="info-box" style="padding:10px"><table style="width:100%;border-collapse:collapse;font-size:13px">
+<tr><th style="border:1px solid var(--border);padding:8px 10px;background:#eef2f7;color:var(--accent);text-align:left;font-size:12px;letter-spacing:.04em">DATE</th><th style="border:1px solid var(--border);padding:8px 10px;background:#eef2f7;color:var(--accent);text-align:left;font-size:12px;letter-spacing:.04em">FEATURES</th><th style="border:1px solid var(--border);padding:8px 10px;background:#eef2f7;color:var(--accent);text-align:left;font-size:12px;letter-spacing:.04em">AIM</th><th style="border:1px solid var(--border);padding:8px 10px;background:#eef2f7;color:var(--accent);text-align:left;font-size:12px;letter-spacing:.04em">EXAMPLE</th></tr>
+<tr><td style="border:1px solid var(--border);padding:8px 10px;vertical-align:top;line-height:1.7">Before 1700</td><td style="border:1px solid var(--border);padding:8px 10px;vertical-align:top;line-height:1.7">Not aimed at young children</td><td style="border:1px solid var(--border);padding:8px 10px;vertical-align:top;line-height:1.7">Education and morality</td><td style="border:1px solid var(--border);padding:8px 10px;vertical-align:top;line-height:1.7">Puritanical tract</td></tr>
+<tr><td style="border:1px solid var(--border);padding:8px 10px;vertical-align:top;line-height:1.7">By the middle of the 18th century</td><td style="border:1px solid var(--border);padding:8px 10px;vertical-align:top;line-height:1.7">Collection of <strong>14</strong> <input class="fill-input inline" id="q14" oninput="markFill('q14')" style="width:120px" placeholder="&hellip;"> and games</td><td style="border:1px solid var(--border);padding:8px 10px;vertical-align:top;line-height:1.7">Read for pleasure</td><td style="border:1px solid var(--border);padding:8px 10px;vertical-align:top;line-height:1.7"><em>A Little Pretty Pocket Book</em> (exported to <strong>15</strong> <input class="fill-input inline" id="q15" oninput="markFill('q15')" style="width:110px" placeholder="&hellip;">)</td></tr>
+<tr><td style="border:1px solid var(--border);padding:8px 10px;vertical-align:top;line-height:1.7">Early 19th century</td><td style="border:1px solid var(--border);padding:8px 10px;vertical-align:top;line-height:1.7">Growing interest in <strong>16</strong> <input class="fill-input inline" id="q16" oninput="markFill('q16')" style="width:110px" placeholder="&hellip;"></td><td style="border:1px solid var(--border);padding:8px 10px;vertical-align:top;line-height:1.7">To be more children-centred</td><td style="border:1px solid var(--border);padding:8px 10px;vertical-align:top;line-height:1.7">Nursery rhymes and <strong>17</strong> <input class="fill-input inline" id="q17" oninput="markFill('q17')" style="width:120px" placeholder="&hellip;"></td></tr>
+<tr><td style="border:1px solid var(--border);padding:8px 10px;vertical-align:top;line-height:1.7">Late 1930s</td><td style="border:1px solid var(--border);padding:8px 10px;vertical-align:top;line-height:1.7">Stories of harm-free <strong>18</strong> <input class="fill-input inline" id="q18" oninput="markFill('q18')" style="width:110px" placeholder="&hellip;"></td><td style="border:1px solid var(--border);padding:8px 10px;vertical-align:top;line-height:1.7">Entertainment</td><td style="border:1px solid var(--border);padding:8px 10px;vertical-align:top;line-height:1.7">Enid Blyton and Richmal Crompton&rsquo;s novels</td></tr>
+</table></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 19&ndash;21</div>
+<div class="q-section-intro">Look at the following people and the list of statements below. Match each person with the correct statement, <strong>A&ndash;E</strong>.</div>
+<div class="info-box"><span class="box-title">List of Statements</span>
+<strong>A</strong> Wrote criticisms of children&rsquo;s literature<br>
+<strong>B</strong> Used animals to demonstrate the absurdity of fairy tales<br>
+<strong>C</strong> Was not a writer originally<br>
+<strong>D</strong> Translated a book into English<br>
+<strong>E</strong> Didn&rsquo;t write in the English language
+</div>
+<div class="question" id="q19"><div class="q-num">19</div><div class="q-body"><div class="q-text">Thomas Boreham</div><select class="dd-select" id="dd-q19" data-opts="A,B,C,D,E" data-ph="Select a statement&hellip;" onchange="selectDropdown(this,'q19')"></select></div></div>
+<div class="question" id="q20"><div class="q-num">20</div><div class="q-body"><div class="q-text">Mrs. Sarah Trimmer</div><select class="dd-select" id="dd-q20" data-opts="A,B,C,D,E" data-ph="Select a statement&hellip;" onchange="selectDropdown(this,'q20')"></select></div></div>
+<div class="question" id="q21"><div class="q-num">21</div><div class="q-body"><div class="q-text">The Grimm brothers</div><select class="dd-select" id="dd-q21" data-opts="A,B,C,D,E" data-ph="Select a statement&hellip;" onchange="selectDropdown(this,'q21')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 22&ndash;26</div>
+<div class="q-section-intro">Do the following statements agree with the information given in Reading Passage 2? Write <strong>TRUE</strong> if the statement agrees with the information, <strong>FALSE</strong> if the statement contradicts the information, or <strong>NOT GIVEN</strong> if there is no information on this.</div>
+<div class="question" id="q22"><div class="q-num">22</div><div class="q-body"><div class="q-text">Children didn't start to read books until 1700.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q22','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q22','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q22','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q23"><div class="q-num">23</div><div class="q-body"><div class="q-text">Sarah Trimmer believed that children's books should set good examples.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q23','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q23','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q23','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q24"><div class="q-num">24</div><div class="q-body"><div class="q-text">Parents were concerned about the violence in children's books.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q24','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q24','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q24','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q25"><div class="q-num">25</div><div class="q-body"><div class="q-text">An interest in folklore changed the direction of the development of children's books.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q25','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q25','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q25','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q26"><div class="q-num">26</div><div class="q-body"><div class="q-text">Today children's book writers believe their works should appeal to both children and adults.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q26','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q26','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q26','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+</div>
+</div>
+<div id="qs-2" style="display:none">
+<div class="q-section">
+<div class="q-section-header">Questions 27&ndash;31</div>
+<div class="q-section-intro">Do the following statements agree with the claims of the writer in Reading Passage 3? Write <strong>YES</strong> if the statement agrees with the views of the writer, <strong>NO</strong> if the statement contradicts the views of the writer, or <strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this.</div>
+<div class="question" id="q27"><div class="q-num">27</div><div class="q-body"><div class="q-text">The delay in the process used by the Kellogg brothers affected the final product.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q27','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q27','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q27','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q28"><div class="q-num">28</div><div class="q-body"><div class="q-text">Sir Alan Hodgkin is an example of someone whose work proceeded in a logical and systematic way.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q28','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q28','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q28','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q29"><div class="q-num">29</div><div class="q-body"><div class="q-text">Daguerre is an exception to the general rule of innovation.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q29','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q29','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q29','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q30"><div class="q-num">30</div><div class="q-body"><div class="q-text">The discovery of saccharin occurred by accident during drug research.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q30','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q30','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q30','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q31"><div class="q-num">31</div><div class="q-body"><div class="q-text">The company 3M should have supported Art Fry by funding his idea of Post-it Notes.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q31','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q31','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q31','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 32&ndash;35</div>
+<div class="q-section-intro">Complete each sentence with the correct ending, <strong>A&ndash;H</strong>, below.</div>
+<div class="info-box"><span class="box-title">Sentence Endings</span>
+<strong>A</strong> can be found in unusual thoughts and chance events.<br>
+<strong>B</strong> can be taught in business schools.<br>
+<strong>C</strong> has made a success from someone else's invention.<br>
+<strong>D</strong> is designed to nurture differences.<br>
+<strong>E</strong> is unlikely to lead to creative innovation.<br>
+<strong>F</strong> says that all mistakes are the same.<br>
+<strong>G</strong> shows that businesses are good at either inventing or selling.<br>
+<strong>H</strong> suggests ways of increasing the number of mistakes.
+</div>
+<div class="question" id="q32"><div class="q-num">32</div><div class="q-body"><div class="q-text">The usual business environment</div><select class="dd-select" id="dd-q32" data-opts="A,B,C,D,E,F,G,H" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q32')"></select></div></div>
+<div class="question" id="q33"><div class="q-num">33</div><div class="q-body"><div class="q-text">Geroski and Markides's book</div><select class="dd-select" id="dd-q33" data-opts="A,B,C,D,E,F,G,H" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q33')"></select></div></div>
+<div class="question" id="q34"><div class="q-num">34</div><div class="q-body"><div class="q-text">Microsoft is an example of a company which</div><select class="dd-select" id="dd-q34" data-opts="A,B,C,D,E,F,G,H" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q34')"></select></div></div>
+<div class="question" id="q35"><div class="q-num">35</div><div class="q-body"><div class="q-text">The origin of useful accidents</div><select class="dd-select" id="dd-q35" data-opts="A,B,C,D,E,F,G,H" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q35')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 36&ndash;40</div>
+<div class="q-section-intro">Choose the correct letter, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>.</div>
+<div class="question" id="q36"><div class="q-num">36</div><div class="q-body"><div class="q-text">How do Austin and Devin advise companies to get out of the 'cone of expectation'?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q36','A')"><span class="radio-dot"></span>A by decreasing the number of company systems</label><label class="mcq-opt" onclick="selectMCQ(this,'q36','B')"><span class="radio-dot"></span>B by forming teams of different types of people</label><label class="mcq-opt" onclick="selectMCQ(this,'q36','C')"><span class="radio-dot"></span>C by hiring new and creative people</label><label class="mcq-opt" onclick="selectMCQ(this,'q36','D')"><span class="radio-dot"></span>D by holding regular brainstorming meetings</label></div></div></div>
+<div class="question" id="q37"><div class="q-num">37</div><div class="q-body"><div class="q-text">In recommending 'counter-intuitive' thinking, what do Austin and Devin imply?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q37','A')"><span class="radio-dot"></span>A that failing at business is bad for staff morale</label><label class="mcq-opt" onclick="selectMCQ(this,'q37','B')"><span class="radio-dot"></span>B that innovation cannot be planned for</label><label class="mcq-opt" onclick="selectMCQ(this,'q37','C')"><span class="radio-dot"></span>C that most businesses should be devoted to avoiding mistakes</label><label class="mcq-opt" onclick="selectMCQ(this,'q37','D')"><span class="radio-dot"></span>D that the cost of mistakes is an important consideration</label></div></div></div>
+<div class="question" id="q38"><div class="q-num">38</div><div class="q-body"><div class="q-text">The writer describes the Empire Lager disaster in order to show that</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q38','A')"><span class="radio-dot"></span>A success can come out of a business failure</label><label class="mcq-opt" onclick="selectMCQ(this,'q38','B')"><span class="radio-dot"></span>B the majority of companies now value risk-taking.</label><label class="mcq-opt" onclick="selectMCQ(this,'q38','C')"><span class="radio-dot"></span>C TV advertising works better on older people</label><label class="mcq-opt" onclick="selectMCQ(this,'q38','D')"><span class="radio-dot"></span>D young beer drinkers do not like a sweet taste</label></div></div></div>
+<div class="question" id="q39"><div class="q-num">39</div><div class="q-body"><div class="q-text">Pure Blonde has been more successful than Empire Lager because</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q39','A')"><span class="radio-dot"></span>A digital media other than TV were used.</label><label class="mcq-opt" onclick="selectMCQ(this,'q39','B')"><span class="radio-dot"></span>B it was advertised under a different brand name.</label><label class="mcq-opt" onclick="selectMCQ(this,'q39','C')"><span class="radio-dot"></span>C it was launched with very little advertising.</label><label class="mcq-opt" onclick="selectMCQ(this,'q39','D')"><span class="radio-dot"></span>D the advertising budget was larger</label></div></div></div>
+<div class="question" id="q40"><div class="q-num">40</div><div class="q-body"><div class="q-text">The writer concludes that creating a culture that learns from mistakes</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q40','A')"><span class="radio-dot"></span>A brings short-term financial gains.</label><label class="mcq-opt" onclick="selectMCQ(this,'q40','B')"><span class="radio-dot"></span>B can be very difficult for some companies.</label><label class="mcq-opt" onclick="selectMCQ(this,'q40','C')"><span class="radio-dot"></span>C holds no risk for workers.</label><label class="mcq-opt" onclick="selectMCQ(this,'q40','D')"><span class="radio-dot"></span>D is a popular move with shareholders.</label></div></div></div>
+</div>
+</div>
+
+  </div>
+</div>
+
+<div id="bottombar">
+  <div class="part-tabs">
+    <div class="part-tab active" id="ptab-0" onclick="switchPassage(0)">Part 1: <span class="count" id="pcount-0">0 of 13</span></div>
+    <div class="part-tab" id="ptab-1" onclick="switchPassage(1)">Part 2: <span class="count" id="pcount-1">0 of 13</span></div>
+    <div class="part-tab" id="ptab-2" onclick="switchPassage(2)">Part 3: <span class="count" id="pcount-2">0 of 14</span></div>
+  </div>
+  <div class="q-circles" id="q-circles"></div>
+  <div class="nav-arrows">
+    <button class="nav-arrow" onclick="prevQ()">&lsaquo;</button>
+    <button class="nav-arrow" onclick="nextQ()">&rsaquo;</button>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="submit-modal">
+  <div class="modal">
+    <h2>Submit Your Test?</h2>
+    <p>You are about to submit your test. This action cannot be undone.</p>
+    <div class="score-grid" id="score-grid" style="display:none">
+      <div class="score-card"><div class="val" id="sc-answered">0</div><div class="lbl">Answered</div></div>
+      <div class="score-card"><div class="val" id="sc-unanswered">40</div><div class="lbl">Unanswered</div></div>
+      <div class="score-card"><div class="val" id="sc-pct">0%</div><div class="lbl">Completion</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="closeModal()">Cancel</button>
+      <button class="btn-modal primary" onclick="submitTest()">Submit Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="results-modal">
+  <div class="modal">
+    <h2>Test Complete</h2>
+    <p id="results-cand"></p>
+    <div class="score-grid">
+      <div class="score-card"><div class="val" id="r-correct" style="color:var(--success)">&mdash;</div><div class="lbl">Correct</div></div>
+      <div class="score-card"><div class="val" id="r-wrong" style="color:var(--accent-red)">&mdash;</div><div class="lbl">Incorrect</div></div>
+      <div class="score-card"><div class="val" id="r-unanswered">&mdash;</div><div class="lbl">Unanswered</div></div>
+    </div>
+    <div style="margin:14px 0 12px;background:var(--accent);border-radius:12px;padding:18px 22px;text-align:center;color:#fff">
+      <div style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-bottom:4px">IELTS Band Score</div>
+      <div id="r-band" style="font-size:48px;font-weight:700;line-height:1">&mdash;</div>
+      <div id="r-band-label" style="font-size:13px;margin-top:6px;opacity:.85">&mdash;</div>
+    </div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:6px">Your Answers vs Correct Answers</div>
+    <div class="ans-table-wrap"><table class="ans-table"><thead><tr><th>Q</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr></thead><tbody id="ans-table-body"></tbody></table></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:10px">Green = correct &middot; Red = incorrect &middot; Band scores are approximate for Academic Reading.</p>
+    <p id="pdf-status" style="font-size:13px;color:var(--success);margin-top:8px;font-weight:500"></p>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="redownloadPDF()">Download PDF again</button>
+      <button class="btn-modal primary" onclick="document.getElementById('results-modal').classList.add('hidden')">Close &amp; Review</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   ANSWER KEY (Test 317)
+   ============================================================ */
+var ANSWERS = {
+  q1:'land', q2:'poor', q3:'aid', q4:'business', q5:'communities', q6:'China',
+  q7:'geography', q8:'investment', q9:'education', q10:'34', q11:'land',
+  q12:'C', q13:'E',
+  q14:'rhymes, stories', q15:'America', q16:'folklore', q17:'fairy-tales', q18:'adventures',
+  q19:'C', q20:'A', q21:'E',
+  q22:'FALSE', q23:'TRUE', q24:'NOT GIVEN', q25:'TRUE', q26:'TRUE',
+  q27:'YES', q28:'NO', q29:'NO', q30:'YES', q31:'NOT GIVEN',
+  q32:'E', q33:'G', q34:'C', q35:'A',
+  q36:'B', q37:'D', q38:'A', q39:'C', q40:'B'
+};
+
+var ALT = {
+  q11:['land','farmland','farm land'],
+  q12:['C','E'], q13:['C','E'],
+  q14:['rhymes, stories','stories, rhymes','rhymes stories','stories rhymes','rhymes and stories','stories and rhymes'],
+  q17:['fairy-tales','fairy tales','fairy-stories','fairy stories'],
+  q32:['E','F']
+};
+var LABELS = { q12:'C or E', q13:'C or E', q14:'rhymes, stories', q17:'fairy-tales / fairy-stories', q32:'E (key sheet: F)' };
+
+var PART_RANGES = [[1,13],[14,26],[27,40]];
+var userAnswers = {}, currentPassage = 0, submitted = false;
+var candidateName='', candidateNumber='';
+var seconds = 60*60;
+var timerEl = document.getElementById('timer');
+var timerInterval = null;
+
+/* Fill dropdowns */
+(function initSelects(){
+  document.querySelectorAll('select[data-opts],select[data-words]').forEach(function(s){
+    var ph = document.createElement('option');
+    ph.value = ''; ph.disabled = true; ph.selected = true;
+    ph.innerHTML = s.getAttribute('data-ph') || 'Select\u2026';
+    s.appendChild(ph);
+    var words = s.getAttribute('data-words');
+    if(words){
+      words.split(',').forEach(function(p){
+        var kv = p.split(':');
+        var o = document.createElement('option');
+        o.value = kv[0]; o.textContent = kv[0] + ' \u2013 ' + kv[1];
+        s.appendChild(o);
+      });
+    } else {
+      s.getAttribute('data-opts').split(',').forEach(function(v){
+        var o = document.createElement('option');
+        o.value = v; o.textContent = v;
+        s.appendChild(o);
+      });
+    }
+  });
+})();
+
+/* ============================================================
+   AUTO-SAVE
+   ============================================================ */
+var STORAGE_KEY = 'ielts_reading_317_session';
+var autosaveInterval = null;
+var autosaveListenersAdded = false;
+var autosaveIndicator = document.getElementById('autosave-indicator');
+var autosaveText = document.getElementById('autosave-text');
+
+function showAutosaveSaving(){
+  autosaveIndicator.classList.add('show','saving');
+  autosaveText.textContent = 'Saving\u2026';
+}
+function showAutosaveSaved(){
+  autosaveIndicator.classList.add('show');
+  autosaveIndicator.classList.remove('saving');
+  var t = new Date();
+  autosaveText.textContent = 'Saved ' + t.toTimeString().slice(0,8);
+  setTimeout(function(){ autosaveIndicator.classList.remove('show'); }, 2500);
+}
+function getPassageWidth(){
+  var pw = document.getElementById('passage-panel');
+  return pw ? (pw.style.width || pw.offsetWidth + 'px') : '';
+}
+function saveSession(silent){
+  if(submitted) return;
+  if(!silent) showAutosaveSaving();
+  try{
+    var data = {
+      version: 3,
+      timestamp: Date.now(),
+      candidateName: candidateName,
+      candidateNumber: candidateNumber,
+      seconds: seconds,
+      currentPassage: currentPassage,
+      userAnswers: userAnswers,
+      notepad: document.getElementById('notepad-text').value,
+      passageWidth: getPassageWidth(),
+      started: true
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    if(!silent) showAutosaveSaved();
+  }catch(e){ console.warn('Autosave failed:', e); }
+}
+function loadSession(){
+  try{
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return null;
+    var d = JSON.parse(raw);
+    if(!d || !d.started) return null;
+    return d;
+  }catch(e){ return null; }
+}
+function clearSession(){ try{ localStorage.removeItem(STORAGE_KEY); }catch(e){} }
+function formatTime(sec){
+  var m = Math.floor(sec/60), s = sec%60;
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+
+(function checkSavedSession(){
+  var saved = loadSession();
+  if(!saved) return;
+  var banner = document.getElementById('resume-banner');
+  var info = document.getElementById('resume-info');
+  var answered = 0;
+  for(var i=1;i<=40;i++){ if(saved.userAnswers && saved.userAnswers['q'+i]) answered++; }
+  var when = new Date(saved.timestamp).toLocaleString();
+  info.innerHTML = '<strong>' + escapeHtml(saved.candidateName || 'Anonymous') + '</strong> &middot; ' + answered + '/40 answered &middot; ' + formatTime(saved.seconds) + ' remaining<br><span style="opacity:.75">Saved ' + when + '</span>';
+  banner.classList.add('show');
+  document.getElementById('cand-name').value = saved.candidateName || '';
+  document.getElementById('cand-num').value = saved.candidateNumber || '';
+})();
+
+function resumeTest(){
+  var saved = loadSession();
+  if(!saved){ startTest(); return; }
+  candidateName = saved.candidateName || 'Anonymous';
+  candidateNumber = saved.candidateNumber || 'N/A';
+  seconds = saved.seconds || 60*60;
+  userAnswers = saved.userAnswers || {};
+  currentPassage = saved.currentPassage || 0;
+  if(saved.notepad) document.getElementById('notepad-text').value = saved.notepad;
+  if(saved.passageWidth){ document.getElementById('passage-panel').style.width = saved.passageWidth; }
+
+  document.getElementById('start-screen').classList.add('hidden');
+  restoreAnswersUI();
+  buildCircles();
+  updatePartCounts();
+  if(currentPassage !== 0) switchPassage(currentPassage);
+  updateTimerDisplay();
+  startTimer();
+  startAutosave();
+  showAutosaveSaved();
+}
+function discardSaved(){
+  clearSession();
+  document.getElementById('resume-banner').classList.remove('show');
+  document.getElementById('cand-name').value = '';
+  document.getElementById('cand-num').value = '';
+}
+
+function restoreAnswersUI(){
+  for(var id in userAnswers){
+    var val = userAnswers[id];
+    if(!val) continue;
+    var dd = document.getElementById('dd-'+id);
+    if(dd){ dd.value = val; dd.classList.add('answered'); continue; }
+    var fi = document.getElementById(id);
+    if(fi && fi.tagName === 'INPUT'){ fi.value = val; fi.classList.add('answered'); continue; }
+    var tfnWrap = document.querySelector('#'+id+' .tfn-options');
+    if(tfnWrap){
+      tfnWrap.querySelectorAll('.tfn-btn').forEach(function(b){
+        if(b.textContent.trim() === val) b.classList.add('selected');
+      });
+      continue;
+    }
+    var mcqWrap = document.querySelector('#'+id+' .mcq-options');
+    if(mcqWrap){
+      mcqWrap.querySelectorAll('.mcq-opt').forEach(function(l){
+        if(l.textContent.trim().charAt(0) === val) l.classList.add('selected');
+      });
+    }
+  }
+}
+
+function startAutosave(){
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  autosaveInterval = setInterval(function(){ saveSession(false); }, 5000);
+  if(autosaveListenersAdded) return;
+  autosaveListenersAdded = true;
+  document.addEventListener('visibilitychange', function(){ if(document.hidden) saveSession(true); });
+  window.addEventListener('beforeunload', function(){ saveSession(true); });
+}
+
+function startTest(){
+  candidateName = document.getElementById('cand-name').value.trim() || 'Anonymous';
+  candidateNumber = document.getElementById('cand-num').value.trim() || 'N/A';
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('resume-banner').classList.remove('show');
+  clearSession();
+  buildCircles();
+  updatePartCounts();
+  startTimer();
+  startAutosave();
+  saveSession(true);
+}
+function startTimer(){
+  if(timerInterval) clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(function(){
+    if(submitted) return;
+    seconds--;
+    if(seconds <= 0){ clearInterval(timerInterval); submitTest(); return; }
+    updateTimerDisplay();
+  }, 1000);
+}
+function updateTimerDisplay(){
+  timerEl.textContent = formatTime(Math.max(0,seconds));
+  timerEl.classList.toggle('warn', seconds < 300);
+}
+
+function switchPassage(idx){
+  currentPassage = idx;
+  document.querySelectorAll('.part-tab').forEach(function(t,i){ t.classList.toggle('active', i===idx); });
+  document.querySelectorAll('.passage-content').forEach(function(p,i){ p.classList.toggle('active', i===idx); });
+  document.querySelectorAll('#qs-0,#qs-1,#qs-2').forEach(function(q,i){ q.style.display = i===idx ? '' : 'none'; });
+  buildCircles();
+  document.getElementById('questions-panel').scrollTop = 0;
+  document.getElementById('passage-panel').scrollTop = 0;
+  saveSession(true);
+}
+function buildCircles(){
+  var wrap = document.getElementById('q-circles');
+  wrap.innerHTML = '';
+  var range = PART_RANGES[currentPassage];
+  var start = range[0], end = range[1];
+  for(var i=start;i<=end;i++){
+    var d = document.createElement('div');
+    d.className = 'q-circle';
+    d.textContent = i;
+    var a = userAnswers['q'+i];
+    if(a && a.toString().trim()) d.classList.add('answered');
+    d.onclick = (function(n){ return function(){ scrollToQ(n); }; })(i);
+    wrap.appendChild(d);
+  }
+}
+function updatePartCounts(){
+  PART_RANGES.forEach(function(r, idx){
+    var s = r[0], e = r[1], a = 0;
+    for(var i=s;i<=e;i++){ if(userAnswers['q'+i] && userAnswers['q'+i].toString().trim()) a++; }
+    document.getElementById('pcount-'+idx).textContent = a + ' of ' + (e-s+1);
+  });
+}
+function scrollToQ(num){
+  var p = num<=13?0:num<=26?1:2;
+  if(p !== currentPassage) switchPassage(p);
+  setTimeout(function(){
+    var el = document.getElementById('q'+num);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+  },50);
+}
+function prevQ(){ document.getElementById('questions-panel').scrollBy({top:-240,behavior:'smooth'}); }
+function nextQ(){ document.getElementById('questions-panel').scrollBy({top:240,behavior:'smooth'}); }
+
+function selectTFN(btn, qId, val){
+  btn.closest('.tfn-options').querySelectorAll('.tfn-btn').forEach(function(b){ b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectMCQ(label, qId, val){
+  label.closest('.mcq-options').querySelectorAll('.mcq-opt').forEach(function(l){ l.classList.remove('selected'); });
+  label.classList.add('selected');
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectDropdown(sel, qId){
+  var val = sel.value;
+  sel.classList.toggle('answered', !!val);
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function markFill(id){
+  var el = document.getElementById(id);
+  var val = el.value.trim();
+  el.classList.toggle('answered', val.length > 0);
+  userAnswers[id] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+
+/* ============================================================
+   HIGHLIGHT / NOTE TOOLBAR
+   ============================================================ */
+var _savedRange = null;
+function hideSelToolbar(){ var tb=document.getElementById('sel-toolbar'); if(tb) tb.style.display='none'; _savedRange=null; }
+function showSelToolbar(x,y){
+  var tb=document.getElementById('sel-toolbar'); if(!tb) return;
+  tb.style.display='block';
+  var tw=tb.offsetWidth||140, th=tb.offsetHeight||36;
+  var left=x-tw/2, top=y-th-10;
+  if(left+tw>window.innerWidth-8) left=window.innerWidth-tw-8;
+  if(left<8) left=8;
+  if(top<60) top=y+12;
+  tb.style.left=left+'px'; tb.style.top=top+'px';
+}
+function getPassageSelection(){
+  var sel=window.getSelection();
+  if(!sel||sel.isCollapsed||sel.rangeCount===0) return null;
+  var range=sel.getRangeAt(0);
+  var p1=document.getElementById('passage-panel');
+  var p2=document.getElementById('questions-panel');
+  var node=range.commonAncestorContainer;
+  if(!((p1&&p1.contains(node))||(p2&&p2.contains(node)))) return null;
+  if(!sel.toString().trim()) return null;
+  var frag=range.cloneContents();
+  if(frag.querySelector && frag.querySelector('input,select,textarea,button,label')) return null;
+  return {sel:sel,range:range};
+}
+function onPassageMouseUp(e){
+  setTimeout(function(){
+    var data=getPassageSelection();
+    if(!data){ var tb=document.getElementById('sel-toolbar'); if(e&&e.target&&tb&&tb.contains(e.target)) return; hideSelToolbar(); return; }
+    _savedRange=data.range.cloneRange();
+    var rect=data.range.getBoundingClientRect();
+    showSelToolbar(rect.left+rect.width/2, rect.top);
+  },10);
+}
+function applyMark(cls){
+  if(!_savedRange) return;
+  try{ var m=document.createElement('mark'); m.className=cls; _savedRange.surroundContents(m); }
+  catch(e){ try{ var f=_savedRange.extractContents(); var m2=document.createElement('mark'); m2.className=cls; m2.appendChild(f); _savedRange.insertNode(m2); }catch(e2){} }
+  var s=window.getSelection(); if(s) s.removeAllRanges();
+  hideSelToolbar();
+}
+(function(){
+  var hl=document.getElementById('sel-hl-btn');
+  if(hl) hl.addEventListener('mousedown',function(e){e.preventDefault();applyMark('hl');});
+  var nb=document.getElementById('sel-note-btn');
+  if(nb) nb.addEventListener('mousedown',function(e){
+    e.preventDefault();
+    var text=_savedRange?_savedRange.toString().trim():'';
+    applyMark('hl-note');
+    if(text){ var ta=document.getElementById('notepad-text'); if(ta){ ta.value+=(ta.value&&!ta.value.endsWith('\n')?'\n':'')+'\u2022 '+text; saveSession(true); var p=document.getElementById('notepad-panel'); if(p&&p.classList.contains('hidden')) toggleNotepad(); } }
+  });
+  var pp=document.getElementById('passage-panel');
+  if(pp) pp.addEventListener('mouseup',onPassageMouseUp);
+  var qp=document.getElementById('questions-panel');
+  if(qp) qp.addEventListener('mouseup',onPassageMouseUp);
+  document.addEventListener('mousedown',function(e){ var tb=document.getElementById('sel-toolbar'); if(!tb||tb.style.display==='none') return; if(tb.contains(e.target)) return; setTimeout(function(){ var s=window.getSelection(); if(!s||s.isCollapsed) hideSelToolbar(); },150); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') hideSelToolbar(); });
+  if(pp) pp.addEventListener('scroll',hideSelToolbar);
+  if(qp) qp.addEventListener('scroll',hideSelToolbar);
+})();
+
+function toggleNotepad(){
+  var panel=document.getElementById('notepad-panel');
+  var btn=document.getElementById('notepad-btn');
+  panel.classList.toggle('hidden');
+  btn.classList.toggle('active', !panel.classList.contains('hidden'));
+  if(!panel.classList.contains('hidden')) document.getElementById('notepad-text').focus();
+  saveSession(true);
+}
+function toggleFullscreen(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function(){});
+  else document.exitFullscreen().catch(function(){});
+}
+document.getElementById('notepad-text').addEventListener('input', function(){ saveSession(true); });
+
+/* ============================================================
+   SCORING
+   ============================================================ */
+function getBandScore(c){
+  if(c>=39) return {band:'9.0',level:'Expert User'};
+  if(c>=37) return {band:'8.5',level:'Very Good User'};
+  if(c>=35) return {band:'8.0',level:'Very Good User'};
+  if(c>=33) return {band:'7.5',level:'Good User'};
+  if(c>=30) return {band:'7.0',level:'Good User'};
+  if(c>=27) return {band:'6.5',level:'Competent User'};
+  if(c>=23) return {band:'6.0',level:'Competent User'};
+  if(c>=19) return {band:'5.5',level:'Modest User'};
+  if(c>=15) return {band:'5.0',level:'Modest User'};
+  if(c>=13) return {band:'4.5',level:'Limited User'};
+  if(c>=10) return {band:'4.0',level:'Limited User'};
+  return {band:'3.5',level:'Extremely Limited'};
+}
+function normalize(s){
+  return (s||'').toString().trim().toLowerCase().replace(/[()]/g,'').replace(/\s+/g,' ').replace(/\.$/,'');
+}
+function checkCorrect(id){
+  var ans = ANSWERS[id];
+  var user = (userAnswers[id]||'').toString().trim();
+  if(!user) return null;
+  var nU = normalize(user);
+  if(id==='q13' && normalize(userAnswers['q12']||'')===nU) return false;
+  if(ALT[id]){ for(var k=0;k<ALT[id].length;k++){ if(nU === normalize(ALT[id][k])) return true; } }
+  return nU === normalize(ans);
+}
+function correctAnswerLabel(id){
+  if(typeof LABELS!=='undefined' && LABELS[id]) return LABELS[id];
+  return ANSWERS[id];
+}
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function confirmSubmit(){
+  var count=0;
+  for(var i=1;i<=40;i++){ if(userAnswers['q'+i]&&userAnswers['q'+i].toString().trim()) count++; }
+  document.getElementById('sc-answered').textContent=count;
+  document.getElementById('sc-unanswered').textContent=40-count;
+  document.getElementById('sc-pct').textContent=Math.round(count/40*100)+'%';
+  document.getElementById('score-grid').style.display='grid';
+  document.getElementById('submit-modal').classList.remove('hidden');
+}
+function closeModal(){ document.getElementById('submit-modal').classList.add('hidden'); }
+
+function submitTest(){
+  submitted=true;
+  if(timerInterval) clearInterval(timerInterval);
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  document.getElementById('submit-modal').classList.add('hidden');
+  clearSession();
+
+  var correct=0, wrong=0, unanswered=0;
+  var tbody=document.getElementById('ans-table-body');
+  tbody.innerHTML='';
+  var pdfRows=[];
+
+  for(var num=1;num<=40;num++){
+    var id='q'+num;
+    var result=checkCorrect(id);
+    var userRaw=(userAnswers[id]||'').toString().trim();
+    var correctAns=correctAnswerLabel(id);
+
+    var yourCell, resultCell, resText;
+    if(result===null){
+      unanswered++;
+      yourCell='<span class="blank">&mdash;</span>';
+      resultCell='<span class="blank">Unanswered</span>';
+      resText='Unanswered';
+    } else if(result){
+      correct++;
+      yourCell='<span class="ok">'+escapeHtml(userRaw)+'</span>';
+      resultCell='<span class="ok">&#10003; Correct</span>';
+      resText='Correct';
+    } else {
+      wrong++;
+      yourCell='<span class="bad">'+escapeHtml(userRaw||'-')+'</span>';
+      resultCell='<span class="bad">&#10007; Incorrect</span>';
+      resText='Incorrect';
+    }
+
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td style="font-weight:700;color:var(--accent)">'+num+'</td><td>'+yourCell+'</td><td><strong>'+escapeHtml(correctAns)+'</strong></td><td>'+resultCell+'</td>';
+    tbody.appendChild(tr);
+    pdfRows.push([String(num), userRaw||'-', correctAns, resText]);
+  }
+
+  document.getElementById('r-correct').textContent=correct;
+  document.getElementById('r-wrong').textContent=wrong;
+  document.getElementById('r-unanswered').textContent=unanswered;
+  var bs=getBandScore(correct);
+  document.getElementById('r-band').textContent=bs.band;
+  document.getElementById('r-band-label').textContent=bs.level+' \u00B7 '+correct+' / 40 correct';
+  document.getElementById('results-cand').textContent='Candidate: '+candidateName+'  \u00B7  Number: '+candidateNumber;
+  document.getElementById('results-modal').classList.remove('hidden');
+  window._lastPdfData={correct:correct,wrong:wrong,unanswered:unanswered,bs:bs,pdfRows:pdfRows};
+  try{
+    generateResultsPDF(correct,wrong,unanswered,bs,pdfRows);
+    document.getElementById('pdf-status').textContent='Candidate response PDF downloaded.';
+  }catch(e){
+    document.getElementById('pdf-status').textContent='PDF download failed. Use the button below.';
+    document.getElementById('pdf-status').style.color='var(--accent-red)';
+  }
+}
+function redownloadPDF(){
+  if(!window._lastPdfData) return;
+  var d=window._lastPdfData;
+  try{ generateResultsPDF(d.correct,d.wrong,d.unanswered,d.bs,d.pdfRows); }catch(e){}
+}
+
+function generateResultsPDF(correct,wrong,unanswered,bandInfo,rows){
+  var jsPDF=window.jspdf.jsPDF;
+  var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  var pageWidth=doc.internal.pageSize.getWidth();
+  doc.setFillColor(30,58,95); doc.rect(0,0,pageWidth,28,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(16); doc.setFont('helvetica','bold');
+  doc.text('IELTS Academic Reading \u00B7 Test 317',14,12);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Candidate Response Report',14,20);
+  doc.text(new Date().toLocaleString(),pageWidth-14,20,{align:'right'});
+  doc.setTextColor(26,24,20); doc.setFontSize(11); doc.setFont('helvetica','bold');
+  doc.text('Candidate Name:',14,38); doc.setFont('helvetica','normal'); doc.text(candidateName||'Anonymous',52,38);
+  doc.setFont('helvetica','bold'); doc.text('Candidate Number:',14,45); doc.setFont('helvetica','normal'); doc.text(candidateNumber||'-',58,45);
+  doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.text('Score Summary',14,56);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Correct: '+correct+'    Incorrect: '+wrong+'    Unanswered: '+unanswered,14,64);
+  doc.setFont('helvetica','bold'); doc.setTextColor(30,58,95); doc.setFontSize(14);
+  doc.text('Band Score: '+bandInfo.band+'  ('+bandInfo.level+')',14,72);
+  doc.setTextColor(26,24,20); doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text(correct+' / 40 correct',14,79);
+  doc.autoTable({
+    startY:86, head:[['Q','Your Answer','Correct Answer','Result']], body:rows, theme:'grid',
+    styles:{fontSize:8,cellPadding:2.2,overflow:'linebreak',valign:'middle'},
+    headStyles:{fillColor:[30,58,95],textColor:255,fontStyle:'bold',fontSize:8},
+    columnStyles:{0:{cellWidth:18,halign:'center'},1:{cellWidth:50},2:{cellWidth:70},3:{cellWidth:35,halign:'center'}},
+    didParseCell:function(data){
+      if(data.section==='body'&&data.column.index===3){
+        var t=data.cell.raw||'';
+        if(t.indexOf('Correct')!==-1 && t.indexOf('Incorrect')===-1){data.cell.styles.textColor=[5,150,105];data.cell.styles.fontStyle='bold';}
+        else if(t.indexOf('Incorrect')!==-1){data.cell.styles.textColor=[225,29,72];data.cell.styles.fontStyle='bold';}
+        else {data.cell.styles.textColor=[107,114,128];data.cell.styles.fontStyle='italic';}
+      }
+    },
+    margin:{left:14,right:14}
+  });
+  var finalY=doc.lastAutoTable.finalY+12;
+  doc.setFontSize(8); doc.setTextColor(107,114,128);
+  doc.text('This report shows your answers against the official answer key.',14,finalY);
+  var safeName=(candidateName||'Candidate').replace(/[^a-zA-Z0-9]/g,'_').slice(0,20);
+  var safeNum=(candidateNumber||'NA').replace(/[^a-zA-Z0-9]/g,'_').slice(0,15);
+  doc.save('IELTS_Test317_'+safeName+'_'+safeNum+'_'+new Date().toISOString().slice(0,10)+'.pdf');
+}
+
+/* ============================================================
+   RESIZER
+   ============================================================ */
+var resizer=document.getElementById('resizer');
+var passPanel=document.getElementById('passage-panel');
+var isResizing=false,startX,startW;
+resizer.addEventListener('mousedown',function(e){ isResizing=true; startX=e.clientX; startW=passPanel.offsetWidth; resizer.classList.add('dragging'); document.body.style.userSelect='none'; document.body.style.cursor='col-resize'; });
+document.addEventListener('mousemove',function(e){ if(!isResizing) return; var dx=e.clientX-startX; passPanel.style.width=Math.min(Math.max(startW+dx,280),window.innerWidth-320)+'px'; });
+document.addEventListener('mouseup',function(){ if(isResizing){ isResizing=false; resizer.classList.remove('dragging'); document.body.style.userSelect=''; document.body.style.cursor=''; saveSession(true); } });
+
+(function(){
+  var saved = loadSession();
+  if(saved && saved.passageWidth){ document.getElementById('passage-panel').style.width = saved.passageWidth; }
+})();
+</script>
+</body>
+</html>

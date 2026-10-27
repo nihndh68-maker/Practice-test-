@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Academic Reading · Test 307</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fff;--border:#e5e7eb;--border-soft:#f3f4f6;--accent:#1e3a5f;--accent-red:#e11d48;--accent-red-hover:#be123c;--text:#1f2937;--muted:#6b7280;--success:#059669;--passage-width:52%;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+  #start-screen{position:fixed;inset:0;background:#f8fafc;display:flex;align-items:center;justify-content:center;z-index:500;}
+  #start-screen.hidden{display:none;}
+  .start-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:40px 44px;max-width:460px;width:92%;box-shadow:0 10px 40px rgba(0,0,0,.08);}
+  .start-card h1{font-size:20px;margin-bottom:4px;font-weight:600;}
+  .start-card .sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .start-card label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;}
+  .start-card input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;margin-bottom:16px;font-family:inherit;}
+  .start-card input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.12);}
+  .start-card button{width:100%;padding:12px;background:var(--accent-red);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;}
+  .start-card button:hover{background:var(--accent-red-hover);}
+  .resume-banner{display:none;background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12.5px;color:#92400e;line-height:1.5;}
+  .resume-banner.show{display:block;}
+  .resume-banner .resume-actions{margin-top:8px;display:flex;gap:8px;}
+  .resume-banner .resume-actions button{width:auto;margin:0;padding:6px 12px;font-size:12px;border-radius:6px;}
+  .resume-banner .resume-actions .btn-ghost{background:#fff;color:#92400e;border:1px solid #fbbf24;}
+  #topbar{background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;flex-shrink:0;z-index:100;}
+  .top-left{display:flex;align-items:center;gap:12px;}
+  .mock-label{font-size:15px;font-weight:500;}
+  #autosave-indicator{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--success);font-weight:500;opacity:0;transition:opacity .4s ease;}
+  #autosave-indicator.show{opacity:1;}
+  #autosave-indicator .dot{width:7px;height:7px;border-radius:50%;background:var(--success);}
+  #autosave-indicator.saving .dot{background:#f59e0b;animation:blink .8s infinite;}
+  #autosave-indicator.saving{color:#f59e0b;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+  #timer-wrap{display:flex;align-items:center;gap:6px;color:var(--accent-red);font-weight:600;}
+  #timer{font-size:18px;font-weight:600;letter-spacing:0.02em;min-width:52px;}
+  #timer.warn{animation:pulse 1s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .top-actions{display:flex;align-items:center;gap:8px;}
+  .icon-btn{width:36px;height:36px;border:none;background:transparent;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;}
+  .icon-btn:hover{background:var(--border-soft);color:var(--text);}
+  .btn-submit{background:#e5e7eb;color:var(--text);border:none;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;}
+  .btn-submit:hover{background:#d1d5db;}
+  .icon-btn.active{background:#fff1f2;color:var(--accent-red);}
+  #notepad-panel{position:fixed;top:56px;right:0;width:320px;height:calc(100vh - 56px - 56px);background:#fff;border-left:1px solid var(--border);box-shadow:-4px 0 24px rgba(0,0,0,.08);z-index:150;display:flex;flex-direction:column;transition:transform .2s ease;}
+  #notepad-panel.hidden{transform:translateX(100%);pointer-events:none;}
+  .notepad-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+  .notepad-title{font-size:15px;font-weight:600;color:var(--accent-red);}
+  #notepad-text{flex:1;border:none;resize:none;padding:14px 16px;font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.55;outline:none;}
+  #main{display:flex;flex:1;overflow:hidden;}
+  #passage-panel{width:var(--passage-width);background:#fff;overflow-y:auto;padding:24px 28px 40px;flex-shrink:0;}
+  .part-header{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:4px;}
+  #passage-panel h2{font-size:22px;font-weight:700;color:var(--accent);margin-bottom:6px;letter-spacing:-0.3px;}
+  .time-note{font-size:12.5px;color:var(--muted);margin-bottom:16px;line-height:1.5;}
+  .passage-title{text-align:center;font-family:'Source Serif 4',Georgia,serif;font-size:18px;font-weight:600;color:var(--accent);margin-bottom:22px;}
+  #passage-panel p{font-family:'Source Serif 4',Georgia,serif;font-size:15px;line-height:1.75;margin-bottom:16px;}
+  #passage-panel p.glossary{font-size:13px;line-height:1.6;color:var(--muted);border-top:1px solid var(--border);padding-top:12px;margin-top:8px;}
+  #passage-panel strong{font-weight:700;color:var(--accent);}
+  #passage-panel em{font-style:italic;}
+  #resizer{width:5px;background:transparent;cursor:col-resize;flex-shrink:0;position:relative;z-index:10;}
+  #resizer::before{content:'';position:absolute;top:0;bottom:0;left:2px;width:1px;background:var(--accent-red);}
+  #resizer:hover::before,#resizer.dragging::before{width:3px;left:1px;}
+  #resizer .handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:28px;background:#fff;border:1px solid var(--accent-red);border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--accent-red);font-size:10px;}
+  #questions-panel{flex:1;overflow-y:auto;padding:20px 24px 80px;background:#fff;}
+  .q-section{margin-bottom:28px;}
+  .q-section-header{font-size:15px;font-weight:600;margin-bottom:8px;}
+  .q-section-intro{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:16px;}
+  .info-box{padding:12px 16px;font-size:13px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:14px;line-height:1.9;}
+  .info-box.notes{font-size:13.5px;line-height:2.1;}
+  .info-box .box-title{display:block;font-weight:600;color:var(--accent);margin-bottom:2px;}
+  .question{padding:12px 0;border-bottom:1px solid var(--border-soft);display:flex;gap:12px;align-items:flex-start;}
+  .question:last-child{border-bottom:none;}
+  .q-num{min-width:26px;height:26px;color:var(--muted);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px;}
+  .q-body{flex:1;}
+  .q-text{font-size:14px;line-height:1.55;margin-bottom:10px;}
+  .tfn-options,.mcq-options{display:flex;flex-direction:column;gap:6px;}
+  .tfn-options.horizontal{flex-direction:row;flex-wrap:wrap;gap:8px;}
+  .tfn-btn,.mcq-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:13.5px;transition:all .12s;}
+  .tfn-btn:hover,.mcq-opt:hover{border-color:#94a3b8;background:#f8fafc;}
+  .tfn-btn.selected,.mcq-opt.selected{border-color:var(--accent-red);background:#fff1f2;}
+  .tfn-btn .radio-dot,.mcq-opt .radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid #cbd5e1;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .tfn-btn.selected .radio-dot,.mcq-opt.selected .radio-dot{border-color:var(--accent-red);}
+  .tfn-btn.selected .radio-dot::after,.mcq-opt.selected .radio-dot::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--accent-red);}
+  .fill-input{border:1.5px solid var(--border);border-radius:6px;padding:7px 12px;font-size:14px;font-family:inherit;width:100%;max-width:220px;transition:border-color .15s;}
+  .fill-input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .fill-input.answered{border-color:var(--success);background:#f0fdf4;}
+  .fill-input.inline{display:inline-block;vertical-align:middle;margin:0 2px;}
+  .dd-select{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 36px 10px 12px;font-size:13.5px;font-family:inherit;background-color:#fff;cursor:pointer;transition:border-color .15s;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 12px center;}
+  .dd-select:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .dd-select.answered{border-color:var(--success);background-color:#f0fdf4;}
+  .pair-hint{font-size:12.5px;color:#b45309;background:#fffbeb;border:1px solid #fcd34d;border-radius:6px;padding:6px 10px;margin-bottom:10px;}
+  #bottombar{border-top:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0;gap:12px;min-height:56px;}
+  .part-tabs{display:flex;gap:8px;flex-shrink:0;}
+  .part-tab{padding:8px 16px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .part-tab:hover{border-color:#94a3b8;color:var(--text);}
+  .part-tab.active{border-color:var(--accent-red);color:var(--accent);box-shadow:0 0 0 1px var(--accent-red);}
+  .part-tab .count{font-weight:400;color:var(--muted);}
+  .q-circles{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;flex:1;padding:0 8px;}
+  .q-circle{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;}
+  .q-circle:hover{border-color:#94a3b8;color:var(--text);}
+  .q-circle.answered{background:var(--success);border-color:var(--success);color:#fff;}
+  .nav-arrows{display:flex;gap:6px;flex-shrink:0;}
+  .nav-arrow{width:36px;height:36px;border:1.5px solid var(--border);border-radius:50%;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:16px;}
+  .nav-arrow:hover{border-color:#94a3b8;color:var(--text);}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;}
+  .modal-overlay.hidden{display:none;}
+  .modal{background:#fff;border-radius:12px;padding:28px 32px;max-width:720px;width:94%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+  .modal h2{font-size:20px;margin-bottom:10px;}
+  .modal p{font-size:14px;line-height:1.6;color:var(--muted);margin-bottom:16px;}
+  .score-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0;}
+  .score-card{background:#f8fafc;border-radius:10px;padding:14px;text-align:center;}
+  .score-card .val{font-size:26px;font-weight:700;color:var(--accent);}
+  .score-card .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+  .modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;}
+  .btn-modal{padding:9px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;}
+  .btn-modal:hover{background:#f8fafc;}
+  .btn-modal.primary{background:var(--accent-red);color:#fff;border-color:var(--accent-red);}
+  .btn-modal.primary:hover{background:var(--accent-red-hover);}
+  .ans-table-wrap{margin:12px 0;max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;}
+  .ans-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .ans-table th{position:sticky;top:0;background:var(--accent);color:#fff;padding:8px 10px;text-align:left;font-weight:600;font-size:11px;}
+  .ans-table td{padding:6px 10px;border-bottom:1px solid var(--border);}
+  .ans-table tr:nth-child(even) td{background:#f8fafc;}
+  .ans-table .ok{color:var(--success);font-weight:600;}
+  .ans-table .bad{color:var(--accent-red);font-weight:600;}
+  .ans-table .blank{color:var(--muted);font-style:italic;}
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px;}
+  .passage-content{display:none;}
+  .passage-content.active{display:block;}
+  mark.hl{background:#fef08a;padding:0 2px;border-radius:2px;}
+  mark.hl-note{background:#bbf7d0;padding:0 2px;border-radius:2px;border-bottom:2px solid #16a34a;}
+  #sel-toolbar{position:fixed;z-index:300;display:none;background:#1e3a5f;color:#fff;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);font-size:13px;font-weight:500;overflow:hidden;white-space:nowrap;}
+  #sel-toolbar button{background:transparent;border:none;color:#fff;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:500;font-family:inherit;}
+  #sel-toolbar button:hover{background:rgba(255,255,255,.15);}
+  #sel-toolbar .sep{display:inline-block;width:1px;height:14px;background:rgba(255,255,255,.35);vertical-align:middle;}
+  @media (max-width:800px){#main{flex-direction:column;}#passage-panel{width:100%!important;height:42vh;border-bottom:1px solid var(--border);}#resizer{display:none;}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+<div id="start-screen">
+  <div class="start-card">
+    <h1>IELTS Academic Reading</h1>
+    <div class="sub">Computer-Delivered Simulation &middot; Test 307</div>
+    <div class="resume-banner" id="resume-banner">
+      <strong>&#9201; Saved session found</strong>
+      <div id="resume-info"></div>
+      <div class="resume-actions">
+        <button onclick="resumeTest()">Resume Test</button>
+        <button class="btn-ghost" onclick="discardSaved()">Start Fresh</button>
+      </div>
+    </div>
+    <label for="cand-name">Candidate Name</label>
+    <input type="text" id="cand-name" placeholder="Enter your full name" autocomplete="off">
+    <label for="cand-num">Candidate Number</label>
+    <input type="text" id="cand-num" placeholder="e.g. 123456" autocomplete="off">
+    <button onclick="startTest()">Start Test</button>
+  </div>
+</div>
+
+<div id="topbar">
+  <div class="top-left">
+    <span class="mock-label">IELTS Academic Reading &middot; Test 307</span>
+    <span id="autosave-indicator"><span class="dot"></span><span id="autosave-text">Saved</span></span>
+  </div>
+  <div id="timer-wrap">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <div id="timer">60:00</div>
+  </div>
+  <div class="top-actions">
+    <button class="icon-btn" id="notepad-btn" title="Notepad" onclick="toggleNotepad()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></button>
+    <button class="icon-btn" title="Full screen" onclick="toggleFullscreen()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
+    <button class="btn-submit" onclick="confirmSubmit()">Submit</button>
+  </div>
+</div>
+
+<div id="notepad-panel" class="hidden">
+  <div class="notepad-header">
+    <span class="notepad-title">Notepad</span>
+    <button class="icon-btn" title="Close" onclick="toggleNotepad()" style="width:28px;height:28px"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <textarea id="notepad-text" placeholder="Type your notes here&hellip;"></textarea>
+</div>
+
+<div id="sel-toolbar">
+  <button type="button" id="sel-note-btn">Note</button><span class="sep"></span><button type="button" id="sel-hl-btn">Highlight</button>
+</div>
+
+<div id="main">
+  <div id="passage-panel">
+
+    <!-- PASSAGE 1 -->
+    <div class="passage-content active" id="pc-0">
+      <div class="part-header">PART 1</div>
+      <h2>READING PASSAGE 1</h2>
+      <div class="time-note">You should spend about 20 minutes on Questions 1&ndash;13, which are based on Reading Passage 1 below.</div>
+      <div class="passage-title">The Endurance and the Mary Rose</div>
+      <p>In March 2022, Sir Ernest Shackleton's ship, the <em>Endurance</em> was discovered in the Weddell Sea 107 years after it had sunk, destroyed by sea ice while attempting a land crossing of Antarctica. The story of the miraculous escape and survival of the crew meant that news of the well-preserved wreck's discovery was met with much excitement among historians and the sailing community. The Falklands Maritime Heritage Trust (FMHT), who found the vessel, emphasised both the difficulty of the mission and the remarkable condition of the <em>Endurance</em> after more than a century underwater. The wreck was quickly declared a designated monument under the International Antarctic Treaty. The non-intrusive expedition will not remove anything from the ship but instead will document and film the finds, which include Shackleton's undamaged cabin.</p>
+      <p>Many shipwreck enthusiasts and historians assumed the next step after the discovery of such an important ship would be to raise it, preserving the historic vessel for future generations to admire. While the <em>Endurance</em> has survived a century underwater, it is inevitable that it will decay unless it is raised. However, it seems increasingly unlikely that this will happen. One reason is that the ship's owner, Sir Ernest's granddaughter, Alexandra Shackleton, is against the move. Another may be the progress made with documenting underwater sites through 3D images and recordings. It could be argued that the knowledge contained in shipwrecks can be accessed without the need for costly recovery operations, like that of the <em>Mary Rose</em>, which cost over &pound;8 million from its discovery in 1971 to its raising in 1982. The story of that ship and the long and complex process of recovering it might explain why there was some resistance to raising the <em>Endurance</em>.</p>
+      <p>The <em>Mary Rose</em> was discovered in the sea off the south coast of England in 1971. The ship, King Henry VIII's favourite, sank in 1545 during the Battle of the Solent, killing all 500 people on board. What many do not realise is that there were attempts to raise the <em>Mary Rose</em> soon after it went down. Cables connected the wreck to two ships, which sailed off in opposite directions in the hope that the resulting tension would bring the <em>Mary Rose</em> to the surface. The last of these unsuccessful attempts took place in 1552 and it was to be almost 300 years before several of the ship's bronze and iron guns were rediscovered by divers. During the early 19th century, it was common practice to blow up shipwrecks, believing them to be dangerous to other ships. It was therefore assumed that the <em>Mary Rose</em> was lost forever.</p>
+      <p>By the twentieth century, attitudes towards shipwrecks had changed. Historians realised that a huge amount of information was contained within a ship that had been underwater for centuries. It was to widespread excitement that it was announced in 1971 that the <em>Mary Rose</em> had been discovered in the Solent, off the coast of Portsmouth, England. By the end of the decade, the Mary Rose Trust had been formed to carry out the recovery of the ship and her contents. The Trust appointed a wide range of staff, including administrators, conservators, fundraisers and archeologists. Artefacts, sometimes still contained in the original chests, were brought up, examined, recorded and stored in controlled environments. Over 19,000 objects, from cooking pots and cutlery to medical equipment and religious artefacts were recovered, providing a fascinating insight into everyday life in sixteenth century England.</p>
+      <p>It was always the intention of the Mary Rose Trust to raise the ship and preserve her for future generations. A committee of experts was set up to decide on the best method of lifting the hull out of the water, and this was finally achieved in 1982. In the end, a purpose-built lifting frame was commissioned and placed over the <em>Mary Rose</em>. The frame contained 11 cross beams, each weighing 2 tons, to be placed over the 11 strongest points of the ship. Under each of the lifting points, tunnels had to be dug beneath the hull to get bolts and wires into position. The legs of the lifting frame were extended gradually over a period of days and once the wreck was hanging, it was moved, while still underwater to a cradle, using a huge crane. This was one of the hardest parts of the procedure as the legs of the lifting frame had to fit the holes on the cradle. Finally, the hull of the famous ship was transferred to a barge and brought into Portsmouth harbour.</p>
+      <p>Since going on display in Portsmouth, the <em>Mary Rose</em> has been preserved through complex and expensive processes. It is fascinating to visit her in her port of origin; yet, one can understand the concerns of those involved in the discovery of the <em>Endurance</em>. Technology has given us the means to experience the historic ship through film and photography, with much less expense than raising and displaying her in a museum. Perhaps the Shackleton family is right to let the great explorer's ship rest in peace.</p>
+    </div>
+
+    <!-- PASSAGE 2 -->
+    <div class="passage-content" id="pc-1">
+      <div class="part-header">PART 2</div>
+      <h2>READING PASSAGE 2</h2>
+      <div class="time-note">You should spend about 20 minutes on Questions 14&ndash;26, which are based on Reading Passage 2.</div>
+      <div class="passage-title">Camouflage* and mimicry* in nature</div>
+      <p><strong>A</strong>&nbsp; Over thousands of millions of years of evolution, species have acquired numerous clever techniques to help them adapt to their surroundings, thrive, and reproduce. Of these, those which most inspire humans include camouflage and mimicry. Species are most commonly motivated to use these techniques simply in order to survive. The need for survival has caused many prey animals to develop ways of avoiding detection by those above them in the food chain. For predators, stealth is the secret of successful hunting, and hiding in plain sight is one strategy they use. For both these groups, camouflage helps them blend in with their surroundings to mask their identity or location. However, not all creatures are able to use the same camouflage tactics. Species with feathers or scales, for example, are able to shed them regularly and relatively quickly, whereas those with fur cannot replace their outer layer so easily.</p>
+      <p><strong>B</strong>&nbsp; Habitat and behaviour also influence how species use camouflage. Zebras live in herds so, although their black and white striped coats stand out on the sand-coloured savannah, it is not easy for their predators to identify and track one individual animal. The zebra's main predator is the lion and since lions are colour blind, the zebra's need for disguise is limited. The lion, however, hunts a variety of prey which makes its coat the perfect colour for undercover stalking. Certain species, such as the Arctic Fox change colour according to the seasons: brown in summer; white in winter, keeping them hidden all year round. One of the cleverest types of camouflage is called countershading. Sharks, for example, are darker on top of their bodies and lighter underneath. From above, they blend in with the darker deep water, helping them avoid human predators, and from below their prey cannot easily detect them as their underbelly is a similar colour to the lighter shallower water.</p>
+      <p><strong>C</strong>&nbsp; There are two main ways species achieve these remarkable feats of camouflage: pigments and physical structures. Biochromes are natural microscopic pigments, which absorb some wavelengths of light but reflect others, which appears to make them change colour. Some species of octopus can change not only their colour but their pattern and the thickness of their skin. Another way species camouflage themselves is through the use of microscopic physical structures that function as prisms that reflect and scatter light. The resulting colour is different from that of their skin. Polar bears have black skin and translucent fur but appear white due to the reflections from sunlight and snow. Another mechanism for changing colour is diet. Nudibranchs, a kind of sea slug, feed on species which contain pigments giving them bright purple, orange and red colouration. Their colour changes can be for the purposes of self-concealment or as a warning that they are poisonous.</p>
+      <p><strong>D</strong>&nbsp; While most forms of camouflage are visual, some species are able to hide their smell, often by masking themselves with the smell of another creature. This is known as olfactory camouflage. Dog owners might recognise this behaviour in their pets, which have been known to roll in fox urine to disguise their own scent. A more cunning version of this is demonstrated by the Californian ground squirrel, which chews up and spits out rattlesnake skin before applying the paste to its tail. Evidence is emerging for olfactory camouflage in birds with recent studies suggesting the oil produced in the preen gland may change its odour to prevent detection by predators.</p>
+      <p><strong>E</strong>&nbsp; Another example of natural selection is mimicry, which takes a variety of forms in the animal kingdom. Batesian mimicry, named after naturalist Henry Walter Bates, is where a harmless species evolves to resemble a more dangerous one. Several insects, such as hoverflies and clearwing moths mimic bees and wasps, since it would be to their advantage to appear more threatening than they actually are. Hoverflies have developed the black and yellow colouration of wasps and bees while clearwing moths mimic them by buzzing in flight. M&uuml;llerian mimicry, on the other hand, is when two or more dangerous, unrelated creatures mimic each other's warning signals, thereby keeping predators away from them all.</p>
+      <p><strong>F</strong>&nbsp; Many species use mimicry to confuse predators or acquire other benefits. Cuckoos can make themselves resemble a hawk in flight with the result that potential predators flee. They are well-known for laying their eggs in other birds' nests, but what is less well-known is that individual cuckoos choose to mimic only one host species. Those who have chosen the meadow pipit produce spotted eggs, whereas those who mimic the dunnock lay turquoise eggs to avoid their parasitical behaviour being detected. They may also be able to change the shape and size of the eggs in addition to the colour, to further confuse their hosts. There is apparently no limit to the ingenuity to be found in nature.</p>
+      <p class="glossary"><strong>*</strong> <em>Camouflage</em> is a way of hiding in nature.<br><strong>*</strong> <em>Mimicry</em> (in nature) means copying the appearance or behaviour of another species.</p>
+    </div>
+
+    <!-- PASSAGE 3 -->
+    <div class="passage-content" id="pc-2">
+      <div class="part-header">PART 3</div>
+      <h2>READING PASSAGE 3</h2>
+      <div class="time-note">You should spend about 20 minutes on Questions 27&ndash;40, which are based on Reading Passage 3 below.</div>
+      <div class="passage-title">The Sapir-Whorf hypotheses</div>
+      <p>According to linguist, Edward Sapir, humans' perception of the world around them is very much dependent on the particular language their society uses. This idea came to be known as linguistic determinism. Writing in the 1920's Sapir expressed the idea that speakers of different languages inhabit distinct worlds, rather than the same world with different names attached to objects and actions. Sapir places a huge importance on language as the shaper rather than the reflector of reality. Sapir's student, Benjamin Lee Whorf, extended his teacher's view further, describing the world as a 'kaleidoscopic flux of impressions' &ndash; or complex mixture of elements that needs to be organised into meaning. This is done through the linguistic systems in our minds. Thus, from the chaos of reality, thousands of separate versions of reality emerge, a unique one for each language. The second hypothesis, linguistic relativism, is the view that speakers of each language view the world differently.</p>
+      <p>Both Sapir and Whorf drew evidence from their work with native American languages, noticing that in the Hopi language, there is no past, present and future tense but actions are divided into 'manifest' and 'unmanifested'. 'Manifest' refers to actual events, past, present and even future, whereas 'unmanifested' includes dreams, thoughts, the distant past and the future. This and similar differences, they argue, suggest a completely different experience of the world. While their work is interesting, it should be put into context. At the time they were formulating their hypotheses, the US government was encouraging the assimilation of native Americans. Linguists like Sapir and Whorf were documenting their languages, which were considered both endangered and 'exotic'. The 'othering' of these tribal cultures may have caused them to overstate the effect of linguistic differences.</p>
+      <p>Very few people accept the 'strong' form of the hypotheses, that our language completely determines our world view. However, there is still interest in a weaker form of Sapir and Whorf's ideas. Behavioural economist, Keith Chen, has compared the spending and saving habits of people who speak 'futured' languages with those whose languages do not contain a future tense. After accounting for a wide range of other variables, Chen found that people who use a future tense see the future as something 'other' and far away, which discourages the saving habit. Conversely, those who do not have a distinct tense to talk about the future, view the future with more immediacy as a time not too distant that they need to save for. Despite the research conducted so painstakingly by Chen, anecdotal evidence that we all possess suggests that spending and saving behaviour depends on a range of factors including, crucially, personality.</p>
+      <p>For linguist George Lakoff, the pervasive use of metaphor in language supports the view that language shapes the way we see the world. Argument, for instance, is often expressed using the language of war: your position is indefensible, she attacked my position, he shot down all my arguments. Lakoff invites us to consider how we would see the concept of argument if it was expressed using the language of dance instead of war. Would the world be more peaceful if we gracefully approached our dance (argument) partner to work together to create something beautiful? This may be fanciful, but it seems to suggest that language reflects our view of reality and not the other way around. Lakoff uses the phrase 'time is money' to illustrate this. Surely, it is the importance we place on money that has led to so many expressions in our language comparing the two valuable commodities in phrases such as waste time, use your time profitably and budget your time.</p>
+      <p>So-called 'gendered' languages provide an interesting context to investigate the Sapir-Whorf hypotheses. In Spanish, for instance, the masculine plural form 'alumnos' would be used to refer to a group of students containing 99 females and one male. This is because Spanish plural forms are masculine by default. English speakers who learn Spanish assume that in such a case, the feminine form 'alumnas' would be more appropriate or preferably, a gender-neutral form, which mirrors their own language. Academic Jennifer Prewitt-Freilino claims that countries with gendered languages have higher than average levels of gender inequality. She nevertheless concedes that when speaking a genderless language, people's minds may focus on the masculine, for example mentally picturing a man when they hear the word 'chairperson'. This suggests that culture carries more weight than language when it comes to the way we interact with our social reality.</p>
+      <p>There are many who have challenged even the weaker form of the Sapir-Whorf hypotheses. Philosopher Martin Heidegger, a contemporary of Sapir and Whorf rejected the idea that language conditions our view of reality, citing the fact that every human being innovates with language and creates new utterances based on new realities they experience. Some cite the existence of words that cannot be translated into other languages as support for the hypotheses. The word 'hygge' (pronounced hoo-guh) in Norwegian and Danish needs a whole sentence to express its definition in English: a feeling of cosiness and surrounding yourself with the things that make you feel good. Clearly, this concept exists in every culture, but for those who do not speak Danish or Norwegian, it is difficult to say whether a translation of 'hygge' is an accurate reflection of its precise meaning when used by Danes and Norwegians.</p>
+      <p>There is no consensus on the precise relationship between language and perception. It is too complex a matter for that, and the controversy will continue. However, both learning languages and learning about languages foster inter-cultural understanding and most would agree, therefore, that this should be encouraged.</p>
+    </div>
+
+  </div>
+
+  <div id="resizer"><div class="handle">&#8942;&#8942;</div></div>
+
+  <div id="questions-panel">
+    <!-- ================= PART 1 ================= -->
+    <div id="qs-0">
+      <div class="q-section">
+        <div class="q-section-header">Questions 1&ndash;5</div>
+        <div class="q-section-intro">Do the following statements agree with the information given in Reading Passage 1? Write <strong>TRUE</strong> if the statement agrees with the information, <strong>FALSE</strong> if the statement contradicts the information, or <strong>NOT GIVEN</strong> if there is no information on this.</div>
+        <div class="question" id="q1"><div class="q-num">1</div><div class="q-body"><div class="q-text">No-one knows what happened to the <em>Endurance</em>.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q1','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q1','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q1','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+        <div class="question" id="q2"><div class="q-num">2</div><div class="q-body"><div class="q-text">The <em>Endurance</em> was harder to locate than other shipwrecks.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q2','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q2','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q2','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+        <div class="question" id="q3"><div class="q-num">3</div><div class="q-body"><div class="q-text">The FMHT plan to bring objects to the surface as soon as possible.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q3','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q3','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q3','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+        <div class="question" id="q4"><div class="q-num">4</div><div class="q-body"><div class="q-text">The condition of the <em>Endurance</em> will degenerate in the future.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q4','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q4','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q4','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+        <div class="question" id="q5"><div class="q-num">5</div><div class="q-body"><div class="q-text">There is not enough money available to lift the whole ship.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q5','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q5','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q5','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+      </div>
+
+      <div class="q-section">
+        <div class="q-section-header">Questions 6&ndash;9</div>
+        <div class="q-section-intro">Complete each sentence with the correct ending, <strong>A&ndash;H</strong>, from the box below.</div>
+        <div class="info-box">
+          <strong>A</strong> only a few artefacts were recovered.<br>
+          <strong>B</strong> people were reluctant to believe it.<br>
+          <strong>C</strong> shipwrecks were more highly valued.<br>
+          <strong>D</strong> they were immediately brought to the surface.<br>
+          <strong>E</strong> everyone on board perished.<br>
+          <strong>F</strong> people believed the ship had been destroyed.<br>
+          <strong>G</strong> a large number of people started working on the project.<br>
+          <strong>H</strong> there was no interest in raising the ship.
+        </div>
+        <div class="question" id="q6"><div class="q-num">6</div><div class="q-body"><div class="q-text">When the <em>Mary Rose</em> sank,</div><select class="dd-select" id="dd-q6" data-opts="A,B,C,D,E,F,G,H" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q6')"></select></div></div>
+        <div class="question" id="q7"><div class="q-num">7</div><div class="q-body"><div class="q-text">When the <em>Mary Rose</em>'s guns were found,</div><select class="dd-select" id="dd-q7" data-opts="A,B,C,D,E,F,G,H" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q7')"></select></div></div>
+        <div class="question" id="q8"><div class="q-num">8</div><div class="q-body"><div class="q-text">When the <em>Mary Rose</em> was rediscovered,</div><select class="dd-select" id="dd-q8" data-opts="A,B,C,D,E,F,G,H" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q8')"></select></div></div>
+        <div class="question" id="q9"><div class="q-num">9</div><div class="q-body"><div class="q-text">After the foundation of the Mary Rose Trust,</div><select class="dd-select" id="dd-q9" data-opts="A,B,C,D,E,F,G,H" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q9')"></select></div></div>
+      </div>
+
+      <div class="q-section">
+        <div class="q-section-header">Questions 10&ndash;13</div>
+        <div class="q-section-intro">Complete the sentences below. Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</div>
+        <div class="question"><div class="q-num">10</div><div class="q-body"><div class="q-text">The <em>Mary Rose</em> was raised with the help of a specially designed <input class="fill-input inline" id="q10" oninput="markFill('q10')" style="width:160px" placeholder="&hellip;"></div></div></div>
+        <div class="question"><div class="q-num">11</div><div class="q-body"><div class="q-text">A number of heavy <input class="fill-input inline" id="q11" oninput="markFill('q11')" style="width:160px" placeholder="&hellip;"> were positioned above specific points of the wreck.</div></div></div>
+        <div class="question"><div class="q-num">12</div><div class="q-body"><div class="q-text">Bolts and cables could only be put in place due to the construction of a number of <input class="fill-input inline" id="q12" oninput="markFill('q12')" style="width:160px" placeholder="&hellip;"> under the ship.</div></div></div>
+        <div class="question"><div class="q-num">13</div><div class="q-body"><div class="q-text">After gradually lifting the hull, a crane was used for the underwater transfer to <input class="fill-input inline" id="q13" oninput="markFill('q13')" style="width:160px" placeholder="&hellip;"></div></div></div>
+      </div>
+    </div>
+
+    <!-- ================= PART 2 ================= -->
+    <div id="qs-1" style="display:none">
+      <div class="q-section">
+        <div class="q-section-header">Questions 14&ndash;19</div>
+        <div class="q-section-intro">Reading Passage 2 has six paragraphs, <strong>A&ndash;F</strong>. Choose the correct heading for each paragraph from the list of headings below.</div>
+        <div class="info-box">
+          <span class="box-title">List of Headings</span>
+          <strong>i</strong> The role of scent<br>
+          <strong>ii</strong> The importance of diet<br>
+          <strong>iii</strong> Factors affecting how different species hide<br>
+          <strong>iv</strong> New evidence of camouflage<br>
+          <strong>v</strong> No need to hide<br>
+          <strong>vi</strong> Reasons for concealment in nature<br>
+          <strong>vii</strong> How creatures hide themselves<br>
+          <strong>viii</strong> An unusual case of specialisation<br>
+          <strong>ix</strong> Two types of imitation
+        </div>
+        <div class="question" id="q14"><div class="q-num">14</div><div class="q-body"><div class="q-text">Paragraph A</div><select class="dd-select" id="dd-q14" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q14')"></select></div></div>
+        <div class="question" id="q15"><div class="q-num">15</div><div class="q-body"><div class="q-text">Paragraph B</div><select class="dd-select" id="dd-q15" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q15')"></select></div></div>
+        <div class="question" id="q16"><div class="q-num">16</div><div class="q-body"><div class="q-text">Paragraph C</div><select class="dd-select" id="dd-q16" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q16')"></select></div></div>
+        <div class="question" id="q17"><div class="q-num">17</div><div class="q-body"><div class="q-text">Paragraph D</div><select class="dd-select" id="dd-q17" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q17')"></select></div></div>
+        <div class="question" id="q18"><div class="q-num">18</div><div class="q-body"><div class="q-text">Paragraph E</div><select class="dd-select" id="dd-q18" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q18')"></select></div></div>
+        <div class="question" id="q19"><div class="q-num">19</div><div class="q-body"><div class="q-text">Paragraph F</div><select class="dd-select" id="dd-q19" data-opts="i,ii,iii,iv,v,vi,vii,viii,ix" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q19')"></select></div></div>
+      </div>
+
+      <div class="q-section">
+        <div class="q-section-header">Questions 20&ndash;23</div>
+        <div class="q-section-intro">Complete the summary below using words from Reading Passage 2. Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</div>
+        <div class="info-box notes">
+          Some species use a type of camouflage called <strong>20</strong> <input class="fill-input inline" id="q20" oninput="markFill('q20')" style="width:150px" placeholder="&hellip;"> to avoid detection by prey and predators from different angles. Some species are able to alter their colour due to the possession of specific types of pigments, known as <strong>21</strong> <input class="fill-input inline" id="q21" oninput="markFill('q21')" style="width:150px" placeholder="&hellip;">, which react differently to different types of light. Others possess a kind of prism that spreads out light while remaining invisible because it is <strong>22</strong> <input class="fill-input inline" id="q22" oninput="markFill('q22')" style="width:150px" placeholder="&hellip;"> in size. Changes in <strong>23</strong> <input class="fill-input inline" id="q23" oninput="markFill('q23')" style="width:150px" placeholder="&hellip;"> can also cause an alteration in colour in some species.
+        </div>
+      </div>
+
+      <div class="q-section">
+        <div class="q-section-header">Questions 24&ndash;26</div>
+        <div class="q-section-intro">Choose the correct answer, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>.</div>
+        <div class="question" id="q24"><div class="q-num">24</div><div class="q-body">
+          <div class="q-text">New research on bird populations indicates that:</div>
+          <div class="mcq-options">
+            <label class="mcq-opt" onclick="selectMCQ(this,'q24','A')"><span class="radio-dot"></span>A previous findings were inaccurate.</label>
+            <label class="mcq-opt" onclick="selectMCQ(this,'q24','B')"><span class="radio-dot"></span>B birds may mask their own scent.</label>
+            <label class="mcq-opt" onclick="selectMCQ(this,'q24','C')"><span class="radio-dot"></span>C predatory birds secrete preen oil.</label>
+            <label class="mcq-opt" onclick="selectMCQ(this,'q24','D')"><span class="radio-dot"></span>D birds' odour is undetectable.</label>
+          </div>
+        </div></div>
+        <div class="question" id="q25"><div class="q-num">25</div><div class="q-body">
+          <div class="q-text">Batesian mimicry is:</div>
+          <div class="mcq-options">
+            <label class="mcq-opt" onclick="selectMCQ(this,'q25','A')"><span class="radio-dot"></span>A beneficial to multiple species.</label>
+            <label class="mcq-opt" onclick="selectMCQ(this,'q25','B')"><span class="radio-dot"></span>B defined by colour changes.</label>
+            <label class="mcq-opt" onclick="selectMCQ(this,'q25','C')"><span class="radio-dot"></span>C the way other insects copy bees and wasps.</label>
+            <label class="mcq-opt" onclick="selectMCQ(this,'q25','D')"><span class="radio-dot"></span>D a way to appear threatening.</label>
+          </div>
+        </div></div>
+        <div class="question" id="q26"><div class="q-num">26</div><div class="q-body">
+          <div class="q-text">According to the text, cuckoos:</div>
+          <div class="mcq-options">
+            <label class="mcq-opt" onclick="selectMCQ(this,'q26','A')"><span class="radio-dot"></span>A only use the nests of two bird species.</label>
+            <label class="mcq-opt" onclick="selectMCQ(this,'q26','B')"><span class="radio-dot"></span>B are rarely caught in their mimicry.</label>
+            <label class="mcq-opt" onclick="selectMCQ(this,'q26','C')"><span class="radio-dot"></span>C can lay eggs of different colours.</label>
+            <label class="mcq-opt" onclick="selectMCQ(this,'q26','D')"><span class="radio-dot"></span>D have few natural predators.</label>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- ================= PART 3 ================= -->
+    <div id="qs-2" style="display:none">
+      <div class="q-section">
+        <div class="q-section-header">Questions 27&ndash;28</div>
+        <div class="q-section-intro">Choose <strong>TWO</strong> letters, <strong>A&ndash;F</strong>. Which TWO statements reflect the ideas of Edward Sapir and/or Benjamin Lee Whorf as given in the text?</div>
+        <div class="info-box">
+          <strong>A</strong> Some languages are more efficient than others at categorising reality.<br>
+          <strong>B</strong> Differences between languages have been exaggerated.<br>
+          <strong>C</strong> The language you speak has a profound effect on your life.<br>
+          <strong>D</strong> People who speak the same language may perceive reality differently.<br>
+          <strong>E</strong> Without language the world doesn't make sense.<br>
+          <strong>F</strong> Learning multiple languages is beneficial to individuals.
+        </div>
+        <div class="pair-hint">&#9888; Choose <strong>TWO</strong> different letters &mdash; pick one in Q27 and another in Q28.</div>
+        <div class="question" id="q27"><div class="q-num">27</div><div class="q-body"><div class="q-text">First answer:</div>
+          <select class="dd-select" id="dd-q27" onchange="selectPair(this,'q27','q28')">
+            <option value="" disabled selected>Select a letter&hellip;</option>
+            <option value="A">A &mdash; some languages more efficient</option>
+            <option value="B">B &mdash; differences exaggerated</option>
+            <option value="C">C &mdash; profound effect on your life</option>
+            <option value="D">D &mdash; same language, different realities</option>
+            <option value="E">E &mdash; without language, no sense</option>
+            <option value="F">F &mdash; learning languages beneficial</option>
+          </select></div></div>
+        <div class="question" id="q28"><div class="q-num">28</div><div class="q-body"><div class="q-text">Second answer:</div>
+          <select class="dd-select" id="dd-q28" onchange="selectPair(this,'q28','q27')">
+            <option value="" disabled selected>Select a letter&hellip;</option>
+            <option value="A">A &mdash; some languages more efficient</option>
+            <option value="B">B &mdash; differences exaggerated</option>
+            <option value="C">C &mdash; profound effect on your life</option>
+            <option value="D">D &mdash; same language, different realities</option>
+            <option value="E">E &mdash; without language, no sense</option>
+            <option value="F">F &mdash; learning languages beneficial</option>
+          </select></div></div>
+      </div>
+
+      <div class="q-section">
+        <div class="q-section-header">Questions 29&ndash;30</div>
+        <div class="q-section-intro">Choose <strong>TWO</strong> letters, <strong>A&ndash;F</strong>. Which TWO statements reflect Sapir and Whorf's work with American Indian languages?</div>
+        <div class="info-box">
+          <strong>A</strong> They found structural differences between those languages and English.<br>
+          <strong>B</strong> Without English, native Americans are unlikely to integrate properly.<br>
+          <strong>C</strong> Speakers of those languages find it difficult to relate to future time.<br>
+          <strong>D</strong> They believe more should be done to protect minority languages.<br>
+          <strong>E</strong> The way things are categorised in the language influence the speaker's worldview.<br>
+          <strong>F</strong> They have more logical categories to divide up human experience.
+        </div>
+        <div class="pair-hint">&#9888; Choose <strong>TWO</strong> different letters &mdash; pick one in Q29 and another in Q30.</div>
+        <div class="question" id="q29"><div class="q-num">29</div><div class="q-body"><div class="q-text">First answer:</div>
+          <select class="dd-select" id="dd-q29" onchange="selectPair(this,'q29','q30')">
+            <option value="" disabled selected>Select a letter&hellip;</option>
+            <option value="A">A &mdash; structural differences from English</option>
+            <option value="B">B &mdash; need English to integrate</option>
+            <option value="C">C &mdash; difficulty relating to future time</option>
+            <option value="D">D &mdash; protect minority languages</option>
+            <option value="E">E &mdash; categories shape worldview</option>
+            <option value="F">F &mdash; more logical categories</option>
+          </select></div></div>
+        <div class="question" id="q30"><div class="q-num">30</div><div class="q-body"><div class="q-text">Second answer:</div>
+          <select class="dd-select" id="dd-q30" onchange="selectPair(this,'q30','q29')">
+            <option value="" disabled selected>Select a letter&hellip;</option>
+            <option value="A">A &mdash; structural differences from English</option>
+            <option value="B">B &mdash; need English to integrate</option>
+            <option value="C">C &mdash; difficulty relating to future time</option>
+            <option value="D">D &mdash; protect minority languages</option>
+            <option value="E">E &mdash; categories shape worldview</option>
+            <option value="F">F &mdash; more logical categories</option>
+          </select></div></div>
+      </div>
+
+      <div class="q-section">
+        <div class="q-section-header">Questions 31&ndash;34</div>
+        <div class="q-section-intro">Look at the following people and the list of statements below. Match each person with the correct statement, <strong>A&ndash;G</strong>.</div>
+        <div class="info-box">
+          <strong>A</strong> The way we use language to represent other things affects how we see the world.<br>
+          <strong>B</strong> Language is one of the main causes of social injustice.<br>
+          <strong>C</strong> Untranslatable words confirm the Sapir-Whorf hypotheses.<br>
+          <strong>D</strong> The linguistic creativity of individuals disproves Sapir-Whorf.<br>
+          <strong>E</strong> Language affects our perceptions at a largely subconscious level.<br>
+          <strong>F</strong> Social attitudes and prejudice are not necessarily caused by language alone.<br>
+          <strong>G</strong> Grammatical structures in a language can affect the way people live.
+        </div>
+        <div class="question" id="q31"><div class="q-num">31</div><div class="q-body"><div class="q-text">Keith Chen</div><select class="dd-select" id="dd-q31" data-opts="A,B,C,D,E,F,G" data-ph="Select a statement&hellip;" onchange="selectDropdown(this,'q31')"></select></div></div>
+        <div class="question" id="q32"><div class="q-num">32</div><div class="q-body"><div class="q-text">George Lakoff</div><select class="dd-select" id="dd-q32" data-opts="A,B,C,D,E,F,G" data-ph="Select a statement&hellip;" onchange="selectDropdown(this,'q32')"></select></div></div>
+        <div class="question" id="q33"><div class="q-num">33</div><div class="q-body"><div class="q-text">Jennifer Prewitt-Freilino</div><select class="dd-select" id="dd-q33" data-opts="A,B,C,D,E,F,G" data-ph="Select a statement&hellip;" onchange="selectDropdown(this,'q33')"></select></div></div>
+        <div class="question" id="q34"><div class="q-num">34</div><div class="q-body"><div class="q-text">Martin Heidegger</div><select class="dd-select" id="dd-q34" data-opts="A,B,C,D,E,F,G" data-ph="Select a statement&hellip;" onchange="selectDropdown(this,'q34')"></select></div></div>
+      </div>
+
+      <div class="q-section">
+        <div class="q-section-header">Questions 35&ndash;39</div>
+        <div class="q-section-intro">Do the following statements agree with the claims of the writer in Reading Passage 3? Write <strong>YES</strong> if the statement agrees with the writer's claims, <strong>NO</strong> if the statement contradicts the writer's claims, or <strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this.</div>
+        <div class="question" id="q35"><div class="q-num">35</div><div class="q-body"><div class="q-text">Historical attitudes to non-European languages should be considered when evaluating Sapir-Whorf.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q35','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q35','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q35','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+        <div class="question" id="q36"><div class="q-num">36</div><div class="q-body"><div class="q-text">Chen failed to take account of individual differences in people's characters.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q36','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q36','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q36','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+        <div class="question" id="q37"><div class="q-num">37</div><div class="q-body"><div class="q-text">Chen's research on savings habits lacks methodological rigour.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q37','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q37','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q37','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+        <div class="question" id="q38"><div class="q-num">38</div><div class="q-body"><div class="q-text">Lakoff provides strong evidence that our language shapes the way we behave.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q38','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q38','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q38','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+        <div class="question" id="q39"><div class="q-num">39</div><div class="q-body"><div class="q-text">Metaphors are a reflection of the way people see the world.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q39','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q39','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q39','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+      </div>
+
+      <div class="q-section">
+        <div class="q-section-header">Question 40</div>
+        <div class="q-section-intro">Choose the correct letter, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>.</div>
+        <div class="question" id="q40"><div class="q-num">40</div><div class="q-body">
+          <div class="q-text">Which of the options is a summary of the writer's position in the passage?</div>
+          <div class="mcq-options">
+            <label class="mcq-opt" onclick="selectMCQ(this,'q40','A')"><span class="radio-dot"></span>A The Sapir-Whorf hypotheses have broadly been rejected.</label>
+            <label class="mcq-opt" onclick="selectMCQ(this,'q40','B')"><span class="radio-dot"></span>B More focused research is needed to test the hypotheses.</label>
+            <label class="mcq-opt" onclick="selectMCQ(this,'q40','C')"><span class="radio-dot"></span>C Culture has more influence than language on people's behaviour.</label>
+            <label class="mcq-opt" onclick="selectMCQ(this,'q40','D')"><span class="radio-dot"></span>D Sapir and Whorf's original ideas have been misunderstood.</label>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="bottombar">
+  <div class="part-tabs">
+    <div class="part-tab active" id="ptab-0" onclick="switchPassage(0)">Part 1: <span class="count" id="pcount-0">0 of 13</span></div>
+    <div class="part-tab" id="ptab-1" onclick="switchPassage(1)">Part 2: <span class="count" id="pcount-1">0 of 13</span></div>
+    <div class="part-tab" id="ptab-2" onclick="switchPassage(2)">Part 3: <span class="count" id="pcount-2">0 of 14</span></div>
+  </div>
+  <div class="q-circles" id="q-circles"></div>
+  <div class="nav-arrows">
+    <button class="nav-arrow" onclick="prevQ()">&lsaquo;</button>
+    <button class="nav-arrow" onclick="nextQ()">&rsaquo;</button>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="submit-modal">
+  <div class="modal">
+    <h2>Submit Your Test?</h2>
+    <p>You are about to submit your test. This action cannot be undone.</p>
+    <div class="score-grid" id="score-grid" style="display:none">
+      <div class="score-card"><div class="val" id="sc-answered">0</div><div class="lbl">Answered</div></div>
+      <div class="score-card"><div class="val" id="sc-unanswered">40</div><div class="lbl">Unanswered</div></div>
+      <div class="score-card"><div class="val" id="sc-pct">0%</div><div class="lbl">Completion</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="closeModal()">Cancel</button>
+      <button class="btn-modal primary" onclick="submitTest()">Submit Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="results-modal">
+  <div class="modal">
+    <h2>Test Complete</h2>
+    <p id="results-cand"></p>
+    <div class="score-grid">
+      <div class="score-card"><div class="val" id="r-correct" style="color:var(--success)">&mdash;</div><div class="lbl">Correct</div></div>
+      <div class="score-card"><div class="val" id="r-wrong" style="color:var(--accent-red)">&mdash;</div><div class="lbl">Incorrect</div></div>
+      <div class="score-card"><div class="val" id="r-unanswered">&mdash;</div><div class="lbl">Unanswered</div></div>
+    </div>
+    <div style="margin:14px 0 12px;background:var(--accent);border-radius:12px;padding:18px 22px;text-align:center;color:#fff">
+      <div style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-bottom:4px">IELTS Band Score</div>
+      <div id="r-band" style="font-size:48px;font-weight:700;line-height:1">&mdash;</div>
+      <div id="r-band-label" style="font-size:13px;margin-top:6px;opacity:.85">&mdash;</div>
+    </div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:6px">Your Answers vs Correct Answers</div>
+    <div class="ans-table-wrap"><table class="ans-table"><thead><tr><th>Q</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr></thead><tbody id="ans-table-body"></tbody></table></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:10px">Green = correct &middot; Red = incorrect &middot; Band scores are approximate for Academic Reading.</p>
+    <p id="pdf-status" style="font-size:13px;color:var(--success);margin-top:8px;font-weight:500"></p>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="redownloadPDF()">Download PDF again</button>
+      <button class="btn-modal primary" onclick="document.getElementById('results-modal').classList.add('hidden')">Close &amp; Review</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   ANSWER KEY
+   ============================================================ */
+var ANSWERS = {
+  q1:'FALSE', q2:'NOT GIVEN', q3:'FALSE', q4:'TRUE', q5:'NOT GIVEN',
+  q6:'E', q7:'F', q8:'C', q9:'G',
+  q10:'lifting frame', q11:'cross beams', q12:'tunnels', q13:'cradle',
+  q14:'vi', q15:'iii', q16:'vii', q17:'i', q18:'ix', q19:'viii',
+  q20:'countershading', q21:'biochromes', q22:'microscopic', q23:'diet',
+  q24:'B', q25:'D', q26:'C',
+  q31:'G', q32:'A', q33:'F', q34:'D',
+  q35:'YES', q36:'YES', q37:'NOT GIVEN', q38:'NO', q39:'YES',
+  q40:'C'
+};
+
+var ALT = {
+  q10:['lifting frame','lifting-frame','a lifting frame'],
+  q11:['cross beams','crossbeams','cross-beams'],
+  q12:['tunnels','tunnel'],
+  q13:['cradle','a cradle','the cradle'],
+  q20:['countershading','counter-shading','counter shading'],
+  q21:['biochromes','biochrome']
+};
+
+var PAIR_GROUPS = {
+  q27: { partner:'q28', correct:['C','E'], label:'Q27/Q28' },
+  q28: { partner:'q27', correct:['C','E'], label:'Q27/Q28' },
+  q29: { partner:'q30', correct:['A','E'], label:'Q29/Q30' },
+  q30: { partner:'q29', correct:['A','E'], label:'Q29/Q30' }
+};
+
+var PART_RANGES = [[1,13],[14,26],[27,40]];
+var userAnswers = {}, currentPassage = 0, submitted = false;
+var candidateName='', candidateNumber='';
+var seconds = 60*60;
+var timerEl = document.getElementById('timer');
+var timerInterval = null;
+
+/* Fill dropdowns that declare their options with data-opts */
+(function initSelects(){
+  document.querySelectorAll('select[data-opts]').forEach(function(s){
+    var ph = document.createElement('option');
+    ph.value = ''; ph.disabled = true; ph.selected = true;
+    ph.innerHTML = s.getAttribute('data-ph') || 'Select\u2026';
+    s.appendChild(ph);
+    s.getAttribute('data-opts').split(',').forEach(function(v){
+      var o = document.createElement('option');
+      o.value = v; o.textContent = v;
+      s.appendChild(o);
+    });
+  });
+})();
+
+/* ============================================================
+   AUTO-SAVE
+   ============================================================ */
+var STORAGE_KEY = 'ielts_reading_307_session';
+var autosaveInterval = null;
+var autosaveListenersAdded = false;
+var autosaveIndicator = document.getElementById('autosave-indicator');
+var autosaveText = document.getElementById('autosave-text');
+
+function showAutosaveSaving(){
+  autosaveIndicator.classList.add('show','saving');
+  autosaveText.textContent = 'Saving\u2026';
+}
+function showAutosaveSaved(){
+  autosaveIndicator.classList.add('show');
+  autosaveIndicator.classList.remove('saving');
+  var t = new Date();
+  autosaveText.textContent = 'Saved ' + t.toTimeString().slice(0,8);
+  setTimeout(function(){ autosaveIndicator.classList.remove('show'); }, 2500);
+}
+function getPassageWidth(){
+  var pw = document.getElementById('passage-panel');
+  return pw ? (pw.style.width || pw.offsetWidth + 'px') : '';
+}
+function saveSession(silent){
+  if(submitted) return;
+  if(!silent) showAutosaveSaving();
+  try{
+    var data = {
+      version: 3,
+      timestamp: Date.now(),
+      candidateName: candidateName,
+      candidateNumber: candidateNumber,
+      seconds: seconds,
+      currentPassage: currentPassage,
+      userAnswers: userAnswers,
+      notepad: document.getElementById('notepad-text').value,
+      passageWidth: getPassageWidth(),
+      started: true
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    if(!silent) showAutosaveSaved();
+  }catch(e){ console.warn('Autosave failed:', e); }
+}
+function loadSession(){
+  try{
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return null;
+    var d = JSON.parse(raw);
+    if(!d || !d.started) return null;
+    return d;
+  }catch(e){ return null; }
+}
+function clearSession(){ try{ localStorage.removeItem(STORAGE_KEY); }catch(e){} }
+function formatTime(sec){
+  var m = Math.floor(sec/60), s = sec%60;
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+
+(function checkSavedSession(){
+  var saved = loadSession();
+  if(!saved) return;
+  var banner = document.getElementById('resume-banner');
+  var info = document.getElementById('resume-info');
+  var answered = 0;
+  for(var i=1;i<=40;i++){ if(saved.userAnswers && saved.userAnswers['q'+i]) answered++; }
+  var when = new Date(saved.timestamp).toLocaleString();
+  info.innerHTML = '<strong>' + escapeHtml(saved.candidateName || 'Anonymous') + '</strong> &middot; ' + answered + '/40 answered &middot; ' + formatTime(saved.seconds) + ' remaining<br><span style="opacity:.75">Saved ' + when + '</span>';
+  banner.classList.add('show');
+  document.getElementById('cand-name').value = saved.candidateName || '';
+  document.getElementById('cand-num').value = saved.candidateNumber || '';
+})();
+
+function resumeTest(){
+  var saved = loadSession();
+  if(!saved){ startTest(); return; }
+  candidateName = saved.candidateName || 'Anonymous';
+  candidateNumber = saved.candidateNumber || 'N/A';
+  seconds = saved.seconds || 60*60;
+  userAnswers = saved.userAnswers || {};
+  currentPassage = saved.currentPassage || 0;
+  if(saved.notepad) document.getElementById('notepad-text').value = saved.notepad;
+  if(saved.passageWidth){ document.getElementById('passage-panel').style.width = saved.passageWidth; }
+
+  document.getElementById('start-screen').classList.add('hidden');
+  restoreAnswersUI();
+  buildCircles();
+  updatePartCounts();
+  if(currentPassage !== 0) switchPassage(currentPassage);
+  updateTimerDisplay();
+  startTimer();
+  startAutosave();
+  showAutosaveSaved();
+}
+function discardSaved(){
+  clearSession();
+  document.getElementById('resume-banner').classList.remove('show');
+  document.getElementById('cand-name').value = '';
+  document.getElementById('cand-num').value = '';
+}
+
+function restoreAnswersUI(){
+  for(var id in userAnswers){
+    var val = userAnswers[id];
+    if(!val) continue;
+    var dd = document.getElementById('dd-'+id);
+    if(dd){ dd.value = val; dd.classList.add('answered'); continue; }
+    var fi = document.getElementById(id);
+    if(fi && fi.tagName === 'INPUT'){ fi.value = val; fi.classList.add('answered'); continue; }
+    var tfnWrap = document.querySelector('#'+id+' .tfn-options');
+    if(tfnWrap){
+      tfnWrap.querySelectorAll('.tfn-btn').forEach(function(b){
+        if(b.textContent.trim() === val) b.classList.add('selected');
+      });
+      continue;
+    }
+    var mcqWrap = document.querySelector('#'+id+' .mcq-options');
+    if(mcqWrap){
+      mcqWrap.querySelectorAll('.mcq-opt').forEach(function(l){
+        if(l.textContent.trim().charAt(0) === val) l.classList.add('selected');
+      });
+    }
+  }
+}
+
+function startAutosave(){
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  autosaveInterval = setInterval(function(){ saveSession(false); }, 5000);
+  if(autosaveListenersAdded) return;
+  autosaveListenersAdded = true;
+  document.addEventListener('visibilitychange', function(){ if(document.hidden) saveSession(true); });
+  window.addEventListener('beforeunload', function(){ saveSession(true); });
+}
+
+function startTest(){
+  candidateName = document.getElementById('cand-name').value.trim() || 'Anonymous';
+  candidateNumber = document.getElementById('cand-num').value.trim() || 'N/A';
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('resume-banner').classList.remove('show');
+  clearSession();
+  buildCircles();
+  updatePartCounts();
+  startTimer();
+  startAutosave();
+  saveSession(true);
+}
+function startTimer(){
+  if(timerInterval) clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(function(){
+    if(submitted) return;
+    seconds--;
+    if(seconds <= 0){ clearInterval(timerInterval); submitTest(); return; }
+    updateTimerDisplay();
+  }, 1000);
+}
+function updateTimerDisplay(){
+  timerEl.textContent = formatTime(Math.max(0,seconds));
+  timerEl.classList.toggle('warn', seconds < 300);
+}
+
+function switchPassage(idx){
+  currentPassage = idx;
+  document.querySelectorAll('.part-tab').forEach(function(t,i){ t.classList.toggle('active', i===idx); });
+  document.querySelectorAll('.passage-content').forEach(function(p,i){ p.classList.toggle('active', i===idx); });
+  document.querySelectorAll('#qs-0,#qs-1,#qs-2').forEach(function(q,i){ q.style.display = i===idx ? '' : 'none'; });
+  buildCircles();
+  document.getElementById('questions-panel').scrollTop = 0;
+  document.getElementById('passage-panel').scrollTop = 0;
+  saveSession(true);
+}
+function buildCircles(){
+  var wrap = document.getElementById('q-circles');
+  wrap.innerHTML = '';
+  var range = PART_RANGES[currentPassage];
+  var start = range[0], end = range[1];
+  for(var i=start;i<=end;i++){
+    var d = document.createElement('div');
+    d.className = 'q-circle';
+    d.textContent = i;
+    var a = userAnswers['q'+i];
+    if(a && a.toString().trim()) d.classList.add('answered');
+    d.onclick = (function(n){ return function(){ scrollToQ(n); }; })(i);
+    wrap.appendChild(d);
+  }
+}
+function updatePartCounts(){
+  PART_RANGES.forEach(function(r, idx){
+    var s = r[0], e = r[1], a = 0;
+    for(var i=s;i<=e;i++){ if(userAnswers['q'+i] && userAnswers['q'+i].toString().trim()) a++; }
+    document.getElementById('pcount-'+idx).textContent = a + ' of ' + (e-s+1);
+  });
+}
+function scrollToQ(num){
+  var p = num<=13?0:num<=26?1:2;
+  if(p !== currentPassage) switchPassage(p);
+  setTimeout(function(){
+    var el = document.getElementById('q'+num);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+  },50);
+}
+function prevQ(){ document.getElementById('questions-panel').scrollBy({top:-240,behavior:'smooth'}); }
+function nextQ(){ document.getElementById('questions-panel').scrollBy({top:240,behavior:'smooth'}); }
+
+function selectTFN(btn, qId, val){
+  btn.closest('.tfn-options').querySelectorAll('.tfn-btn').forEach(function(b){ b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectMCQ(label, qId, val){
+  label.closest('.mcq-options').querySelectorAll('.mcq-opt').forEach(function(l){ l.classList.remove('selected'); });
+  label.classList.add('selected');
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectDropdown(sel, qId){
+  var val = sel.value;
+  sel.classList.toggle('answered', !!val);
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function markFill(id){
+  var el = document.getElementById(id);
+  var val = el.value.trim();
+  el.classList.toggle('answered', val.length > 0);
+  userAnswers[id] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectPair(sel, qId, partnerId){
+  var val = sel.value;
+  var partner = document.getElementById('dd-'+partnerId);
+  var partnerVal = partner ? partner.value : '';
+  if(val && partnerVal && val === partnerVal){
+    partner.value = '';
+    partner.classList.remove('answered');
+    userAnswers[partnerId] = '';
+  }
+  sel.classList.toggle('answered', !!val);
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+
+/* ============================================================
+   HIGHLIGHT / NOTE TOOLBAR
+   ============================================================ */
+var _savedRange = null;
+function hideSelToolbar(){ var tb=document.getElementById('sel-toolbar'); if(tb) tb.style.display='none'; _savedRange=null; }
+function showSelToolbar(x,y){
+  var tb=document.getElementById('sel-toolbar'); if(!tb) return;
+  tb.style.display='block';
+  var tw=tb.offsetWidth||140, th=tb.offsetHeight||36;
+  var left=x-tw/2, top=y-th-10;
+  if(left+tw>window.innerWidth-8) left=window.innerWidth-tw-8;
+  if(left<8) left=8;
+  if(top<60) top=y+12;
+  tb.style.left=left+'px'; tb.style.top=top+'px';
+}
+function getPassageSelection(){
+  var sel=window.getSelection();
+  if(!sel||sel.isCollapsed||sel.rangeCount===0) return null;
+  var range=sel.getRangeAt(0);
+  var p1=document.getElementById('passage-panel');
+  var p2=document.getElementById('questions-panel');
+  var node=range.commonAncestorContainer;
+  if(!((p1&&p1.contains(node))||(p2&&p2.contains(node)))) return null;
+  if(!sel.toString().trim()) return null;
+  /* never wrap form controls in a <mark> - it breaks the answer inputs */
+  var frag=range.cloneContents();
+  if(frag.querySelector && frag.querySelector('input,select,textarea,button,label')) return null;
+  return {sel:sel,range:range};
+}
+function onPassageMouseUp(e){
+  setTimeout(function(){
+    var data=getPassageSelection();
+    if(!data){ var tb=document.getElementById('sel-toolbar'); if(e&&e.target&&tb&&tb.contains(e.target)) return; hideSelToolbar(); return; }
+    _savedRange=data.range.cloneRange();
+    var rect=data.range.getBoundingClientRect();
+    showSelToolbar(rect.left+rect.width/2, rect.top);
+  },10);
+}
+function applyMark(cls){
+  if(!_savedRange) return;
+  try{ var m=document.createElement('mark'); m.className=cls; _savedRange.surroundContents(m); }
+  catch(e){ try{ var f=_savedRange.extractContents(); var m2=document.createElement('mark'); m2.className=cls; m2.appendChild(f); _savedRange.insertNode(m2); }catch(e2){} }
+  var s=window.getSelection(); if(s) s.removeAllRanges();
+  hideSelToolbar();
+}
+(function(){
+  var hl=document.getElementById('sel-hl-btn');
+  if(hl) hl.addEventListener('mousedown',function(e){e.preventDefault();applyMark('hl');});
+  var nb=document.getElementById('sel-note-btn');
+  if(nb) nb.addEventListener('mousedown',function(e){
+    e.preventDefault();
+    var text=_savedRange?_savedRange.toString().trim():'';
+    applyMark('hl-note');
+    if(text){ var ta=document.getElementById('notepad-text'); if(ta){ ta.value+=(ta.value&&!ta.value.endsWith('\n')?'\n':'')+'\u2022 '+text; saveSession(true); var p=document.getElementById('notepad-panel'); if(p&&p.classList.contains('hidden')) toggleNotepad(); } }
+  });
+  var pp=document.getElementById('passage-panel');
+  if(pp) pp.addEventListener('mouseup',onPassageMouseUp);
+  var qp=document.getElementById('questions-panel');
+  if(qp) qp.addEventListener('mouseup',onPassageMouseUp);
+  document.addEventListener('mousedown',function(e){ var tb=document.getElementById('sel-toolbar'); if(!tb||tb.style.display==='none') return; if(tb.contains(e.target)) return; setTimeout(function(){ var s=window.getSelection(); if(!s||s.isCollapsed) hideSelToolbar(); },150); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') hideSelToolbar(); });
+  /* hide the toolbar when either panel scrolls, since it is fixed-position */
+  if(pp) pp.addEventListener('scroll',hideSelToolbar);
+  if(qp) qp.addEventListener('scroll',hideSelToolbar);
+})();
+
+function toggleNotepad(){
+  var panel=document.getElementById('notepad-panel');
+  var btn=document.getElementById('notepad-btn');
+  panel.classList.toggle('hidden');
+  btn.classList.toggle('active', !panel.classList.contains('hidden'));
+  if(!panel.classList.contains('hidden')) document.getElementById('notepad-text').focus();
+  saveSession(true);
+}
+function toggleFullscreen(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function(){});
+  else document.exitFullscreen().catch(function(){});
+}
+document.getElementById('notepad-text').addEventListener('input', function(){ saveSession(true); });
+
+/* ============================================================
+   SCORING
+   ============================================================ */
+function getBandScore(c){
+  if(c>=39) return {band:'9.0',level:'Expert User'};
+  if(c>=37) return {band:'8.5',level:'Very Good User'};
+  if(c>=35) return {band:'8.0',level:'Very Good User'};
+  if(c>=33) return {band:'7.5',level:'Good User'};
+  if(c>=30) return {band:'7.0',level:'Good User'};
+  if(c>=27) return {band:'6.5',level:'Competent User'};
+  if(c>=23) return {band:'6.0',level:'Competent User'};
+  if(c>=19) return {band:'5.5',level:'Modest User'};
+  if(c>=15) return {band:'5.0',level:'Modest User'};
+  if(c>=13) return {band:'4.5',level:'Limited User'};
+  if(c>=10) return {band:'4.0',level:'Limited User'};
+  return {band:'3.5',level:'Extremely Limited'};
+}
+function normalize(s){
+  return (s||'').toString().trim().toLowerCase().replace(/[()]/g,'').replace(/\s+/g,' ').replace(/\.$/,'');
+}
+/* Each letter in a "choose TWO" pair is marked on its own, in either order. */
+function pairResult(qId){
+  var g = PAIR_GROUPS[qId];
+  if(!g) return null;
+  var mine = (userAnswers[qId]||'').toString().trim().toUpperCase();
+  if(!mine) return null;
+  var theirs = (userAnswers[g.partner]||'').toString().trim().toUpperCase();
+  if(mine === theirs) return false;          // duplicate letters can't both score
+  return g.correct.indexOf(mine) !== -1;     // each letter judged on its own
+}
+function checkCorrect(id){
+  if(PAIR_GROUPS[id]) return pairResult(id);
+  var ans = ANSWERS[id];
+  var user = (userAnswers[id]||'').toString().trim();
+  if(!user) return null;
+  var nU = normalize(user);
+  if(ALT[id]){ for(var k=0;k<ALT[id].length;k++){ if(nU === normalize(ALT[id][k])) return true; } }
+  return nU === normalize(ans);
+}
+function correctAnswerLabel(id){
+  if(PAIR_GROUPS[id]){
+    var g = PAIR_GROUPS[id];
+    return g.correct.join(' or ') + ' (any order, ' + g.label + ')';
+  }
+  return ANSWERS[id];
+}
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function confirmSubmit(){
+  var count=0;
+  for(var i=1;i<=40;i++){ if(userAnswers['q'+i]&&userAnswers['q'+i].toString().trim()) count++; }
+  document.getElementById('sc-answered').textContent=count;
+  document.getElementById('sc-unanswered').textContent=40-count;
+  document.getElementById('sc-pct').textContent=Math.round(count/40*100)+'%';
+  document.getElementById('score-grid').style.display='grid';
+  document.getElementById('submit-modal').classList.remove('hidden');
+}
+function closeModal(){ document.getElementById('submit-modal').classList.add('hidden'); }
+
+function submitTest(){
+  submitted=true;
+  if(timerInterval) clearInterval(timerInterval);
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  document.getElementById('submit-modal').classList.add('hidden');
+  clearSession();
+
+  var correct=0, wrong=0, unanswered=0;
+  var tbody=document.getElementById('ans-table-body');
+  tbody.innerHTML='';
+  var pdfRows=[];
+
+  for(var num=1;num<=40;num++){
+    var id='q'+num;
+    var result=checkCorrect(id);
+    var userRaw=(userAnswers[id]||'').toString().trim();
+    var correctAns=correctAnswerLabel(id);
+
+    var yourCell, resultCell, resText;
+    if(result===null){
+      unanswered++;
+      yourCell='<span class="blank">&mdash;</span>';
+      resultCell='<span class="blank">Unanswered</span>';
+      resText='Unanswered';
+    } else if(result){
+      correct++;
+      yourCell='<span class="ok">'+escapeHtml(userRaw)+'</span>';
+      resultCell='<span class="ok">&#10003; Correct</span>';
+      resText='Correct';
+    } else {
+      wrong++;
+      yourCell='<span class="bad">'+escapeHtml(userRaw||'-')+'</span>';
+      resultCell='<span class="bad">&#10007; Incorrect</span>';
+      resText='Incorrect';
+    }
+
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td style="font-weight:700;color:var(--accent)">'+num+'</td><td>'+yourCell+'</td><td><strong>'+escapeHtml(correctAns)+'</strong></td><td>'+resultCell+'</td>';
+    tbody.appendChild(tr);
+    pdfRows.push([String(num), userRaw||'-', correctAns, resText]);
+  }
+
+  document.getElementById('r-correct').textContent=correct;
+  document.getElementById('r-wrong').textContent=wrong;
+  document.getElementById('r-unanswered').textContent=unanswered;
+  var bs=getBandScore(correct);
+  document.getElementById('r-band').textContent=bs.band;
+  document.getElementById('r-band-label').textContent=bs.level+' \u00B7 '+correct+' / 40 correct';
+  document.getElementById('results-cand').textContent='Candidate: '+candidateName+'  \u00B7  Number: '+candidateNumber;
+  document.getElementById('results-modal').classList.remove('hidden');
+  window._lastPdfData={correct:correct,wrong:wrong,unanswered:unanswered,bs:bs,pdfRows:pdfRows};
+  try{
+    generateResultsPDF(correct,wrong,unanswered,bs,pdfRows);
+    document.getElementById('pdf-status').textContent='Candidate response PDF downloaded.';
+  }catch(e){
+    document.getElementById('pdf-status').textContent='PDF download failed. Use the button below.';
+    document.getElementById('pdf-status').style.color='var(--accent-red)';
+  }
+}
+function redownloadPDF(){
+  if(!window._lastPdfData) return;
+  var d=window._lastPdfData;
+  try{ generateResultsPDF(d.correct,d.wrong,d.unanswered,d.bs,d.pdfRows); }catch(e){}
+}
+
+function generateResultsPDF(correct,wrong,unanswered,bandInfo,rows){
+  var jsPDF=window.jspdf.jsPDF;
+  var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  var pageWidth=doc.internal.pageSize.getWidth();
+  doc.setFillColor(30,58,95); doc.rect(0,0,pageWidth,28,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(16); doc.setFont('helvetica','bold');
+  doc.text('IELTS Academic Reading \u00B7 Test 307',14,12);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Candidate Response Report',14,20);
+  doc.text(new Date().toLocaleString(),pageWidth-14,20,{align:'right'});
+  doc.setTextColor(26,24,20); doc.setFontSize(11); doc.setFont('helvetica','bold');
+  doc.text('Candidate Name:',14,38); doc.setFont('helvetica','normal'); doc.text(candidateName||'Anonymous',52,38);
+  doc.setFont('helvetica','bold'); doc.text('Candidate Number:',14,45); doc.setFont('helvetica','normal'); doc.text(candidateNumber||'-',58,45);
+  doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.text('Score Summary',14,56);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Correct: '+correct+'    Incorrect: '+wrong+'    Unanswered: '+unanswered,14,64);
+  doc.setFont('helvetica','bold'); doc.setTextColor(30,58,95); doc.setFontSize(14);
+  doc.text('Band Score: '+bandInfo.band+'  ('+bandInfo.level+')',14,72);
+  doc.setTextColor(26,24,20); doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text(correct+' / 40 correct',14,79);
+  doc.autoTable({
+    startY:86, head:[['Q','Your Answer','Correct Answer','Result']], body:rows, theme:'grid',
+    styles:{fontSize:8,cellPadding:2.2,overflow:'linebreak',valign:'middle'},
+    headStyles:{fillColor:[30,58,95],textColor:255,fontStyle:'bold',fontSize:8},
+    columnStyles:{0:{cellWidth:18,halign:'center'},1:{cellWidth:50},2:{cellWidth:70},3:{cellWidth:35,halign:'center'}},
+    didParseCell:function(data){
+      if(data.section==='body'&&data.column.index===3){
+        var t=data.cell.raw||'';
+        if(t.indexOf('Correct')!==-1 && t.indexOf('Incorrect')===-1){data.cell.styles.textColor=[5,150,105];data.cell.styles.fontStyle='bold';}
+        else if(t.indexOf('Incorrect')!==-1){data.cell.styles.textColor=[225,29,72];data.cell.styles.fontStyle='bold';}
+        else {data.cell.styles.textColor=[107,114,128];data.cell.styles.fontStyle='italic';}
+      }
+    },
+    margin:{left:14,right:14}
+  });
+  var finalY=doc.lastAutoTable.finalY+12;
+  doc.setFontSize(8); doc.setTextColor(107,114,128);
+  doc.text('This report shows your answers against the official answer key.',14,finalY);
+  var safeName=(candidateName||'Candidate').replace(/[^a-zA-Z0-9]/g,'_').slice(0,20);
+  var safeNum=(candidateNumber||'NA').replace(/[^a-zA-Z0-9]/g,'_').slice(0,15);
+  doc.save('IELTS_Test307_'+safeName+'_'+safeNum+'_'+new Date().toISOString().slice(0,10)+'.pdf');
+}
+
+/* ============================================================
+   RESIZER
+   ============================================================ */
+var resizer=document.getElementById('resizer');
+var passPanel=document.getElementById('passage-panel');
+var isResizing=false,startX,startW;
+resizer.addEventListener('mousedown',function(e){ isResizing=true; startX=e.clientX; startW=passPanel.offsetWidth; resizer.classList.add('dragging'); document.body.style.userSelect='none'; document.body.style.cursor='col-resize'; });
+document.addEventListener('mousemove',function(e){ if(!isResizing) return; var dx=e.clientX-startX; passPanel.style.width=Math.min(Math.max(startW+dx,280),window.innerWidth-320)+'px'; });
+document.addEventListener('mouseup',function(){ if(isResizing){ isResizing=false; resizer.classList.remove('dragging'); document.body.style.userSelect=''; document.body.style.cursor=''; saveSession(true); } });
+
+(function(){
+  var saved = loadSession();
+  if(saved && saved.passageWidth){ document.getElementById('passage-panel').style.width = saved.passageWidth; }
+})();
+</script>
+</body>
+</html>

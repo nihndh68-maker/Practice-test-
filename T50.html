@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Academic Reading · Practice Test 7</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fff;--border:#e5e7eb;--border-soft:#f3f4f6;--accent:#1e3a5f;--accent-red:#e11d48;--accent-red-hover:#be123c;--text:#1f2937;--muted:#6b7280;--success:#059669;--passage-width:52%;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+  #start-screen{position:fixed;inset:0;background:#f8fafc;display:flex;align-items:center;justify-content:center;z-index:500;}
+  #start-screen.hidden{display:none;}
+  .start-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:40px 44px;max-width:460px;width:92%;box-shadow:0 10px 40px rgba(0,0,0,.08);}
+  .start-card h1{font-size:20px;margin-bottom:4px;font-weight:600;}
+  .start-card .sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .start-card label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;}
+  .start-card input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;margin-bottom:16px;font-family:inherit;}
+  .start-card input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.12);}
+  .start-card button{width:100%;padding:12px;background:var(--accent-red);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;}
+  .start-card button:hover{background:var(--accent-red-hover);}
+  .resume-banner{display:none;background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12.5px;color:#92400e;line-height:1.5;}
+  .resume-banner.show{display:block;}
+  .resume-banner .resume-actions{margin-top:8px;display:flex;gap:8px;}
+  .resume-banner .resume-actions button{width:auto;margin:0;padding:6px 12px;font-size:12px;border-radius:6px;}
+  .resume-banner .resume-actions .btn-ghost{background:#fff;color:#92400e;border:1px solid #fbbf24;}
+  #topbar{background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;flex-shrink:0;z-index:100;}
+  .top-left{display:flex;align-items:center;gap:12px;}
+  .mock-label{font-size:15px;font-weight:500;}
+  #autosave-indicator{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--success);font-weight:500;opacity:0;transition:opacity .4s ease;}
+  #autosave-indicator.show{opacity:1;}
+  #autosave-indicator .dot{width:7px;height:7px;border-radius:50%;background:var(--success);}
+  #autosave-indicator.saving .dot{background:#f59e0b;animation:blink .8s infinite;}
+  #autosave-indicator.saving{color:#f59e0b;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+  #timer-wrap{display:flex;align-items:center;gap:6px;color:var(--accent-red);font-weight:600;}
+  #timer{font-size:18px;font-weight:600;letter-spacing:0.02em;min-width:52px;}
+  #timer.warn{animation:pulse 1s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .top-actions{display:flex;align-items:center;gap:8px;}
+  .icon-btn{width:36px;height:36px;border:none;background:transparent;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;}
+  .icon-btn:hover{background:var(--border-soft);color:var(--text);}
+  .btn-submit{background:#e5e7eb;color:var(--text);border:none;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;}
+  .btn-submit:hover{background:#d1d5db;}
+  .icon-btn.active{background:#fff1f2;color:var(--accent-red);}
+  #notepad-panel{position:fixed;top:56px;right:0;width:320px;height:calc(100vh - 56px - 56px);background:#fff;border-left:1px solid var(--border);box-shadow:-4px 0 24px rgba(0,0,0,.08);z-index:150;display:flex;flex-direction:column;transition:transform .2s ease;}
+  #notepad-panel.hidden{transform:translateX(100%);pointer-events:none;}
+  .notepad-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+  .notepad-title{font-size:15px;font-weight:600;color:var(--accent-red);}
+  #notepad-text{flex:1;border:none;resize:none;padding:14px 16px;font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.55;outline:none;}
+  #main{display:flex;flex:1;overflow:hidden;}
+  #passage-panel{width:var(--passage-width);background:#fff;overflow-y:auto;padding:24px 28px 40px;flex-shrink:0;}
+  .part-header{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:4px;}
+  #passage-panel h2{font-size:22px;font-weight:700;color:var(--accent);margin-bottom:18px;letter-spacing:-0.3px;}
+  .passage-title{text-align:center;font-family:'Source Serif 4',Georgia,serif;font-size:18px;font-weight:600;color:var(--accent);margin-bottom:22px;}
+  #passage-panel p{font-family:'Source Serif 4',Georgia,serif;font-size:15px;line-height:1.75;margin-bottom:16px;}
+  #passage-panel strong{font-weight:700;color:var(--accent);}
+  #passage-panel em{font-style:italic;}
+  #resizer{width:5px;background:transparent;cursor:col-resize;flex-shrink:0;position:relative;z-index:10;}
+  #resizer::before{content:'';position:absolute;top:0;bottom:0;left:2px;width:1px;background:var(--accent-red);}
+  #resizer:hover::before,#resizer.dragging::before{width:3px;left:1px;}
+  #resizer .handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:28px;background:#fff;border:1px solid var(--accent-red);border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--accent-red);font-size:10px;}
+  #questions-panel{flex:1;overflow-y:auto;padding:20px 24px 80px;background:#fff;}
+  .q-section{margin-bottom:28px;}
+  .q-section-header{font-size:15px;font-weight:600;margin-bottom:8px;}
+  .q-section-intro{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:16px;}
+  .question{padding:12px 0;border-bottom:1px solid var(--border-soft);display:flex;gap:12px;align-items:flex-start;}
+  .question:last-child{border-bottom:none;}
+  .q-num{min-width:26px;height:26px;color:var(--muted);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px;}
+  .q-body{flex:1;}
+  .q-text{font-size:14px;line-height:1.55;margin-bottom:10px;}
+  .tfn-options,.mcq-options{display:flex;flex-direction:column;gap:6px;}
+  .tfn-options.horizontal{flex-direction:row;flex-wrap:wrap;gap:8px;}
+  .tfn-btn,.mcq-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:13.5px;transition:all .12s;}
+  .tfn-btn:hover,.mcq-opt:hover{border-color:#94a3b8;background:#f8fafc;}
+  .tfn-btn.selected,.mcq-opt.selected{border-color:var(--accent-red);background:#fff1f2;}
+  .tfn-btn .radio-dot,.mcq-opt .radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid #cbd5e1;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .tfn-btn.selected .radio-dot,.mcq-opt.selected .radio-dot{border-color:var(--accent-red);}
+  .tfn-btn.selected .radio-dot::after,.mcq-opt.selected .radio-dot::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--accent-red);}
+  .fill-input{border:1.5px solid var(--border);border-radius:6px;padding:7px 12px;font-size:14px;font-family:inherit;width:100%;max-width:220px;transition:border-color .15s;}
+  .fill-input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .fill-input.answered{border-color:var(--success);background:#f0fdf4;}
+  .dd-select{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 36px 10px 12px;font-size:13.5px;font-family:inherit;background-color:#fff;cursor:pointer;transition:border-color .15s;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 12px center;}
+  .dd-select:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .dd-select.answered{border-color:var(--success);background-color:#f0fdf4;}
+  .pair-hint{font-size:12.5px;color:#b45309;background:#fffbeb;border:1px solid #fcd34d;border-radius:6px;padding:6px 10px;margin-bottom:10px;}
+  #bottombar{border-top:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0;gap:12px;min-height:56px;}
+  .part-tabs{display:flex;gap:8px;flex-shrink:0;}
+  .part-tab{padding:8px 16px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .part-tab:hover{border-color:#94a3b8;color:var(--text);}
+  .part-tab.active{border-color:var(--accent-red);color:var(--accent);box-shadow:0 0 0 1px var(--accent-red);}
+  .part-tab .count{font-weight:400;color:var(--muted);}
+  .q-circles{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;flex:1;padding:0 8px;}
+  .q-circle{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;}
+  .q-circle:hover{border-color:#94a3b8;color:var(--text);}
+  .q-circle.answered{background:var(--success);border-color:var(--success);color:#fff;}
+  .nav-arrows{display:flex;gap:6px;flex-shrink:0;}
+  .nav-arrow{width:36px;height:36px;border:1.5px solid var(--border);border-radius:50%;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:16px;}
+  .nav-arrow:hover{border-color:#94a3b8;color:var(--text);}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;}
+  .modal-overlay.hidden{display:none;}
+  .modal{background:#fff;border-radius:12px;padding:28px 32px;max-width:720px;width:94%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+  .modal h2{font-size:20px;margin-bottom:10px;}
+  .modal p{font-size:14px;line-height:1.6;color:var(--muted);margin-bottom:16px;}
+  .score-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0;}
+  .score-card{background:#f8fafc;border-radius:10px;padding:14px;text-align:center;}
+  .score-card .val{font-size:26px;font-weight:700;color:var(--accent);}
+  .score-card .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+  .modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;}
+  .btn-modal{padding:9px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;}
+  .btn-modal:hover{background:#f8fafc;}
+  .btn-modal.primary{background:var(--accent-red);color:#fff;border-color:var(--accent-red);}
+  .btn-modal.primary:hover{background:var(--accent-red-hover);}
+  .ans-table-wrap{margin:12px 0;max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;}
+  .ans-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .ans-table th{position:sticky;top:0;background:var(--accent);color:#fff;padding:8px 10px;text-align:left;font-weight:600;font-size:11px;}
+  .ans-table td{padding:6px 10px;border-bottom:1px solid var(--border);}
+  .ans-table tr:nth-child(even) td{background:#f8fafc;}
+  .ans-table .ok{color:var(--success);font-weight:600;}
+  .ans-table .bad{color:var(--accent-red);font-weight:600;}
+  .ans-table .blank{color:var(--muted);font-style:italic;}
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px;}
+  .passage-content{display:none;}
+  .passage-content.active{display:block;}
+  mark.hl{background:#fef08a;padding:0 2px;border-radius:2px;}
+  mark.hl-note{background:#bbf7d0;padding:0 2px;border-radius:2px;border-bottom:2px solid #16a34a;}
+  #sel-toolbar{position:fixed;z-index:300;display:none;background:#1e3a5f;color:#fff;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);font-size:13px;font-weight:500;overflow:hidden;white-space:nowrap;}
+  #sel-toolbar button{background:transparent;border:none;color:#fff;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:500;font-family:inherit;}
+  #sel-toolbar button:hover{background:rgba(255,255,255,.15);}
+  #sel-toolbar .sep{display:inline-block;width:1px;height:14px;background:rgba(255,255,255,.35);vertical-align:middle;}
+  @media (max-width:800px){#main{flex-direction:column;}#passage-panel{width:100%!important;height:42vh;border-bottom:1px solid var(--border);}#resizer{display:none;}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+<div id="start-screen">
+  <div class="start-card">
+    <h1>IELTS Academic Reading</h1>
+    <div class="sub">Computer-Delivered Simulation &middot; Practice Test 7</div>
+    <div class="resume-banner" id="resume-banner">
+      <strong>&#9201; Saved session found</strong>
+      <div id="resume-info"></div>
+      <div class="resume-actions">
+        <button onclick="resumeTest()">Resume Test</button>
+        <button class="btn-ghost" onclick="discardSaved()">Start Fresh</button>
+      </div>
+    </div>
+    <label for="cand-name">Candidate Name</label>
+    <input type="text" id="cand-name" placeholder="Enter your full name" autocomplete="off">
+    <label for="cand-num">Candidate Number</label>
+    <input type="text" id="cand-num" placeholder="e.g. 123456" autocomplete="off">
+    <button onclick="startTest()">Start Test</button>
+  </div>
+</div>
+
+<div id="topbar">
+  <div class="top-left">
+    <span class="mock-label">IELTS Academic Reading &middot; Practice Test 7</span>
+    <span id="autosave-indicator"><span class="dot"></span><span id="autosave-text">Saved</span></span>
+  </div>
+  <div id="timer-wrap">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <div id="timer">60:00</div>
+  </div>
+  <div class="top-actions">
+    <button class="icon-btn" id="notepad-btn" title="Notepad" onclick="toggleNotepad()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></button>
+    <button class="icon-btn" title="Full screen" onclick="toggleFullscreen()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
+    <button class="btn-submit" onclick="confirmSubmit()">Submit</button>
+  </div>
+</div>
+
+<div id="notepad-panel" class="hidden">
+  <div class="notepad-header">
+    <span class="notepad-title">Notepad</span>
+    <button class="icon-btn" title="Close" onclick="toggleNotepad()" style="width:28px;height:28px"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <textarea id="notepad-text" placeholder="Type your notes here&hellip;"></textarea>
+</div>
+
+<div id="sel-toolbar">
+  <button type="button" id="sel-note-btn">Note</button><span class="sep"></span><button type="button" id="sel-hl-btn">Highlight</button>
+</div>
+
+<div id="main">
+  <div id="passage-panel">
+<div class="passage-content active" id="pc-0">
+<div class="part-header">PART 1</div>
+<h2>READING PASSAGE 1</h2>
+<p><em>You should spend about 20 minutes on Questions 1&ndash;13, which are based on Reading Passage 1 below.</em></p>
+<div class="passage-title">The Dover Bronze Age Boat</div>
+<p>It was 1992. In England, workmen were building a new road through the heart of Dover, to connect the ancient port and the Channel Tunnel, which, when it opened just two years later, was to be the first land link between Britain and Europe for over 10,000 years. A small team from the Canterbury Archaeological Trust (CAT) worked alongside the workmen, recording new discoveries brought to light by the machines.</p>
+<p>At the base of a deep shaft six metres below the modern streets a wooden structure was revealed. Cleaning away the waterlogged site overlying the timbers, archaeologists realised its true nature. They had found a prehistoric boat, preserved by the type of sediment in which it was buried. It was then named the Dover Bronze-Age Boat.</p>
+<p>About nine metres of the boat's length was recovered; one end lay beyond the excavation and had to be left. What survived consisted essentially of four intricately carved oak planks: two on the bottom, joined along a central seam by a complicated system of wedges and timbers, and two at the side, curved and stitched to the others. The seams had been made watertight by pads of moss, fixed by wedges and yew stitches.</p>
+<p>The timbers that closed the recovered end of the boat had been removed in antiquity when it was abandoned, but much about its original shape could be deduced. There was also evidence for missing upper side planks. The boat was not a wreck, but had been deliberately discarded, dismantled and broken. Perhaps it had been 'ritually killed' at the end of its life, like other Bronze-Age objects.</p>
+<p>With hindsight, it was significant that the boat was found and studied by mainstream archaeologists who naturally focused on its cultural context. At the time, ancient boats were often considered only from a narrower technological perspective, but news about the Dover boat reached a broad audience. In 2002, on the tenth anniversary of the discovery, the Dover Bronze-Age Boat Trust hosted a conference, where this meeting of different traditions became apparent. Alongside technical papers about the boat, other speakers explored its social and economic contexts, and the religious perceptions of boats in Bronze-Age societies. Many speakers came from overseas, and debate about cultural connections was renewed.</p>
+<p>Within seven years of excavation, the Dover boat had been conserved and displayed, but it was apparent that there were issues that could not be resolved simply by studying the old wood. Experimental archaeology seemed to be the solution: a boat reconstruction, half-scale or full-sized, would permit assessment of the different hypotheses regarding its build and the missing end. The possibility of returning to Dover to search for the boat's unexcavated northern end was explored, but practical and financial difficulties were insurmountable &ndash; and there was no guarantee that the timbers had survived the previous decade in the changed environment.</p>
+<p>Detailed proposals to reconstruct the boat were drawn up in 2004. Archaeological evidence was beginning to suggest a Bronze-Age community straddling the Channel, brought together by the sea, rather than separated by it. In a region today divided by languages and borders, archaeologists had a duty to inform the general public about their common cultural heritage.</p>
+<p>The boat project began in England but it was conceived from the start as a European collaboration. Reconstruction was only part of a scheme that would include a major exhibition and an extensive educational and outreach programme. Discussions began early in 2005 with archaeological bodies, universities and heritage organisations either side of the Channel. There was much enthusiasm and support, and an official launch of the project was held at an international seminar in France in 2007. Financial support was confirmed in 2008 and the project then named BOAT 1550BC got under way in June 2011.</p>
+<p>A small team began to make the boat at the start of 2012 on the Roman Lawn outside Dover museum. A full-scale reconstruction of a mid-section had been made in 1996, primarily to see how Bronze-Age replica tools performed. In 2012, however, the hull shape was at the centre of the work, so modern power tools were used to carve the oak planks, before turning to prehistoric tools for finishing. It was decided to make the replica half-scale for reasons of cost and time, and synthetic materials were used for the stitching, owing to doubts about the seeding and tight timetable.</p>
+<p>Meanwhile, the exhibition was being prepared ready for opening in July 2012 at the Castle Museum in Boulogne-sur-Mer. Entitled 'Beyond the Horizon: Societies of the Channel &amp; North Sea 3,500 years ago', it brought together for the first time a remarkable collection of Bronze-Age objects, including many new discoveries for commercial archaeology and some of the great treasure of the past. The reconstructed boat, as a symbol of the maritime connections that bound together the communities either side of the Channel, was the centerpiece.</p>
+</div>
+<div class="passage-content" id="pc-1">
+<div class="part-header">PART 2</div>
+<h2>READING PASSAGE 2</h2>
+<p><em>You should spend about 20 minutes on Questions 14&ndash;26, which are based on Reading Passage 2.</em></p>
+<div class="passage-title">The Changing Role of Airports</div>
+<p><strong>A</strong>&nbsp; In recent times developing commercial revenues has become more challenging for airports due to a combination of factors, such as increased competition from Internet shopping, restrictions on certain sales, such as tobacco, and new security procedures that have had an impact on the dwell time of passengers. Moreover, the global economic downturn has caused a reduction in passenger numbers while those that are travelling generally have less money to spend. This has meant that the share of revenue from non-aeronautical revenues actually peaked at 54% at the turn of the century and has subsequently declined slightly. Meanwhile, the pressures to control the level of aeronautical revenues are as strong as ever due to the poor financial health of many airlines and the rapid rise of the low-cost carrier sector.</p>
+<p><strong>B</strong>&nbsp; Some of the more obvious solutions to growing commercial revenues, such as extending the merchandising space or expanding the variety of shopping opportunities, have already been tried to their limit at many airports. A more radical solution is to find new sources of commercial revenue within the terminal, and this has been explored by many airports over the last decade or so. As a result, many terminals are now much more than just shopping malls and offer an array of entertainment, leisure, and beauty and wellness facilities. At this stage of facilities provision, the airport also has the possibility of taking on the role of the final destination rather than merely a facilitator of access.</p>
+<p><strong>C</strong>&nbsp; At the same time, airports have been developing and expanding the range of services that they provide specifically for the business traveller in the terminal. This includes offering business centres that supply support services, meeting or conference rooms and other space for special events. Within this context, Jarach (2001) discusses how dedicated meetings facilities located within the terminal and managed directly by the airport operator may be regarded as an expansion of the concept of airline lounges or as a way to reconvert abandoned or underused areas of terminal buildings. Previously it was primarily airport hotels and other facilities offered in the surrounding area of the airport that had the potential to take on this role and become active as a business space (McNeill, 2009).</p>
+<p><strong>D</strong>&nbsp; When an airport location can be promoted as a business venue, this may increase the overall appeal of the airport and help it become more competitive in both attracting and retaining airlines and their passengers. In particular, the presence of meeting facilities could become one of the determining factors taken into consideration when business people are choosing airlines and where they change their planes. This enhanced attractiveness itself may help to improve the airport operator's financial position and future prospects, but clearly this will be dependent on the competitive advantage that the airport is able to achieve in comparison with other venues.</p>
+<p><strong>E</strong>&nbsp; In 2011, an online airport survey was conducted and some of the areas investigated included the provision and use of meeting facilities at airports and the perceived role and importance of these facilities in generating income and raising passenger numbers. In total, there were responses from staff at 154 airports and 68% of these answered 'yes' to the question: Does your airport own and have meetings facilities available for hire? The existence of meeting facilities therefore seems high at airports. In addition, 28% of respondents that did not have meeting facilities stated that they were likely to invest in them during the next five years. The survey also asked to what extent respondents agreed or disagreed with a number of statements about the meeting facilities at their airport. 49% of respondents agreed that they have put more investment into them during recent years; 41% agreed that they would invest more in the immediate future. These are fairly high proportions considering the recent economic climate.</p>
+<p><strong>F</strong>&nbsp; The survey also asked airports with meeting facilities to estimate what proportion of users are from the local area, i.e. within a 90-minute drive from the airport, or from abroad. Their findings show that meeting facilities provided by the majority of respondents tend to serve local versus non-local or foreign needs. 63% of respondents estimated that over 60% of users are from the local area. Only 3% estimated that over 80% of users are from abroad. It is therefore not surprising that the facilities are of limited importance when it comes to increasing use of flights at the airport: 16% of respondents estimated that none of the users of their meeting facilities use flights when travelling to or from them, while 56% estimated that 20% or fewer of the users of their facilities use flights.</p>
+<p><strong>G</strong>&nbsp; The survey asked respondents with meeting facilities to estimate how much revenue their airport earned from its meeting facilities during the last financial year. Average revenue per airport was just $12,959. Meeting facilities are effectively a non-aeronautical source of airport revenue. Only 1% of respondents generated more than 20% non-aeronautical revenue from their meetings facilities; none generated more than 40%. Given the focus on local demand, it is not surprising that less than a third of respondents agreed that their meeting facilities support business and tourism development in their home region or country.</p>
+<p><strong>H</strong>&nbsp; The findings of this study suggest that few airports provide meetings facilities as a serious commercial venture. It may be that, as owners of large property, space is available for meeting facilities at airports and could play an important role in serving the needs of the airport, its partners, and stakeholders such as government and the local community. Thus, while the local orientation means that competition with other airports is likely to be minimal, competition with local providers of meetings facilities is likely to be much greater.</p>
+</div>
+<div class="passage-content" id="pc-2">
+<div class="part-header">PART 3</div>
+<h2>READING PASSAGE 3</h2>
+<p><em>You should spend about 20 minutes on Questions 27&ndash;40, which are based on Reading Passage 3 below.</em></p>
+<div class="passage-title">Is Photography Art?</div>
+<p>This may seem a pointless question today. Surrounded as we are by thousands of photographs, most of us take for granted that, in addition to supplying information and seducing customers, camera images also serve as decoration, afford spiritual enrichment, and provide significant insights into the passing scene. But in the decades following the discovery of photography, this question reflected the search for ways to fit the mechanical medium into the traditional schemes of artistic expression.</p>
+<p>The much-publicized pronouncement by painter Paul Delaroche that the daguerreotype<sup>*</sup> signalled the end of painting is perplexing because this clever artist also forecast the usefulness of the medium for graphic artists in a letter written in 1839. Nevertheless, it is symptomatic of the swing between the outright rejection and qualified acceptance of the medium that was fairly typical of the artistic establishment. Discussion of the role of photography in art was especially spirited in France, where the internal policies of the time had created a large pool of artists, but it was also taken up by important voices in England. In both countries, public interest in this topic was a reflection of the belief that national stature and achievement in the arts were related.</p>
+<p>From the maze of conflicting statements and heated articles on the subject, three main positions about the potential of camera art emerged. The simplest, entertained by many painters and a section of the public, was that photographs should not be considered 'art' because they were made with a mechanical device and by physical and chemical phenomena instead of by human hand and spirit; to some, camera images seemed to have more in common with fabric produced by machinery in a mill than with handmade creations fired by inspiration. The second widely held view, shared by painters, some photographers, and some critics, was that photographs would be useful to art but should not be considered equal in creativeness to drawing and painting. Lastly, by assuming that the process was comparable to other techniques such as etching and lithography, a fair number of individuals realized that camera images were or could be as significant as handmade works of art and that they might have a positive influence on the arts and on culture in general.</p>
+<p>Artists reacted to photography in various ways. Many portrait painters &ndash; miniaturists in particular &ndash; who realized that photography represented the 'handwriting on the wall' became involved with daguerreotyping or paper photography in an effort to save their careers; some incorporated it with painting, while others renounced painting altogether. Still other painters, the most prominent among them the French painter, Jean-Auguste-Dominique Ingres, began almost immediately to use photography to make a record of their own output and also to provide themselves with source material for poses and backgrounds, vigorously denying at the same time its influence on their vision or its claims as art.</p>
+<p>The view that photographs might be worthwhile to artists was enunciated in considerable detail by Lacan and Francis Wey. The latter, an art and literary critic, who eventually recognised that camera images could be inspired as well as informative, suggested that they would lead to greater naturalness in the graphic depiction of anatomy, clothing, likeness, expression, and landscape. By studying photographs, true artists, he claimed, would be relieved of menial tasks and become free to devote themselves to the more important spiritual aspects of their work.</p>
+<p>Wey left unstated what the incompetent artist might do as an alternative, but according to the influential French critic and poet Charles Baudelaire, writing in response to an exhibition of photography in 1859, lazy and untalented painters would become photographers. Fired by a belief in art as an imaginative embodiment of cultivated ideas and dreams, Baudelaire regarded photography as 'a very humble servant of art and science'; a medium largely unable to transcend 'external reality'. For this critic, photography was linked with 'the great industrial madness' of the time, which in his eyes exercised disastrous consequences on the spiritual qualities of life and art.</p>
+<p>Eugene Delacroix was the most prominent of the French artists who welcomed photography as help-mate but recognized its limitations. Regretting that 'such a wonderful invention' had arrived so late in his lifetime, he still took lessons in daguerreotyping, and both commissioned and collected photographs. Delacroix's enthusiasm for the medium can be sensed in a journal entry noting that if photographs were used as they should be, an artist might 'raise himself to heights that we do not yet know'.</p>
+<p>The question of whether the photograph was document or art aroused interest in England also. The most important statement on this matter was an unsigned article that concluded that while photography had a role to play, it should not be 'constrained' into 'competition' with art; a more stringent viewpoint led critic Philip Gilbert Hamerton to dismiss camera images as 'narrow in range, emphatic in assertion, telling one truth for ten falsehoods'.</p>
+<p>These writers reflected the opposition of a section of the cultural elite in England and France to the 'cheapening of art' which the growing acceptance and purchase of camera pictures by the middle class represented. Technology made photographic images a common sight in the shop windows of Regent Street and Piccadilly in London and the commercial boulevards of Paris. In London, for example, there were at the time some commercial establishments where portraits, landscapes, and photographic reproductions of works of art could be bought. This appeal to the middle class convinced the elite that photographs would foster a desire for realism instead of idealism, even though some critics recognized that the work of individual photographers might display an uplifting style and substance that was consistent with the defining characteristics of art.</p>
+<p style="font-size:12.5px;color:var(--muted)">* daguerreotype &ndash; an early type of photograph, made on a metal plate.</p>
+</div>
+</div>
+
+  <div id="resizer"><div class="handle">&#8942;&#8942;</div></div>
+
+  <div id="questions-panel">
+<div id="qs-0"><div class="q-section"><div class="q-section-header">Questions 1&ndash;5</div><div class="q-section-intro">Complete the flow chart below. Write <strong>NO MORE THAN ONE WORD</strong> from the passage.</div><div style="padding:12px 16px;font-size:13.5px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:16px;line-height:2;text-align:center;line-height:1.8"><strong style="color:var(--accent)">Key Events</strong><br>1992 &ndash; the boat was discovered during the construction of a <strong>1</strong> <input class="fill-input" id="q1" oninput="markFill('q1')" style="width:130px;display:inline-block;vertical-align:middle" placeholder="&hellip;"><br>&darr;<br>2002 &ndash; an international <strong>2</strong> <input class="fill-input" id="q2" oninput="markFill('q2')" style="width:130px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> was held to gather information<br>&darr;<br>2004 &ndash; <strong>3</strong> <input class="fill-input" id="q3" oninput="markFill('q3')" style="width:130px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> for the reconstruction were produced<br>&darr;<br>2007 &ndash; the <strong>4</strong> <input class="fill-input" id="q4" oninput="markFill('q4')" style="width:130px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> of BOAT 1550BC took place<br>&darr;<br>2012 &ndash; the Bronze Age <strong>5</strong> <input class="fill-input" id="q5" oninput="markFill('q5')" style="width:130px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> featured the boat and other projects</div></div>
+<div class="q-section"><div class="q-section-header">Questions 6&ndash;9</div><div class="q-section-intro">Do the following statements agree with the information given in Reading Passage 1? Write <strong>TRUE</strong>, <strong>FALSE</strong> or <strong>NOT GIVEN</strong>.</div><div class="question" id="q6"><div class="q-num">6</div><div class="q-body"><div class="q-text">Archaeologists realised that the boat had been damaged on purpose.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q6','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q6','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q6','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q7"><div class="q-num">7</div><div class="q-body"><div class="q-text">Initially, only the technological aspects of the boat were examined.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q7','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q7','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q7','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q8"><div class="q-num">8</div><div class="q-body"><div class="q-text">Archaeologists went back to the site to try and find the missing northern end of the boat.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q8','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q8','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q8','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q9"><div class="q-num">9</div><div class="q-body"><div class="q-text">Evidence found in 2004 suggested that the Bronze-Age Boat had been used for trade.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q9','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q9','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q9','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+</div>
+<div class="q-section"><div class="q-section-header">Questions 10&ndash;13</div><div class="q-section-intro">Answer the questions below. Write <strong>NO MORE THAN THREE WORDS OR A NUMBER</strong> from the passage.</div><div class="question" id="q10"><div class="q-num">10</div><div class="q-body"><div class="q-text">How far under the ground was the boat found?</div><input class="fill-input" id="q10" oninput="markFill('q10')" style="max-width:260px" placeholder="Your answer&hellip;"></div></div>
+<div class="question" id="q11"><div class="q-num">11</div><div class="q-body"><div class="q-text">What natural material had been secured to the boat to prevent water entering?</div><input class="fill-input" id="q11" oninput="markFill('q11')" style="max-width:260px" placeholder="Your answer&hellip;"></div></div>
+<div class="question" id="q12"><div class="q-num">12</div><div class="q-body"><div class="q-text">What aspect of the boat was the focus of the 2012 reconstruction?</div><input class="fill-input" id="q12" oninput="markFill('q12')" style="max-width:260px" placeholder="Your answer&hellip;"></div></div>
+<div class="question" id="q13"><div class="q-num">13</div><div class="q-body"><div class="q-text">Which two factors influenced the decision not to make a full scale reconstruction of the boat?</div><input class="fill-input" id="q13" oninput="markFill('q13')" style="max-width:260px" placeholder="Your answer&hellip;"></div></div>
+</div>
+</div>
+<div id="qs-1" style="display:none"><div class="q-section"><div class="q-section-header">Questions 14&ndash;18</div><div class="q-section-intro">The text has eight paragraphs, <strong>A&ndash;H</strong>. Which paragraph contains the following information? NB You may use any letter more than once.</div><div class="question" id="q14"><div class="q-num">14</div><div class="q-body"><div class="q-text">evidence that a significant number of airports provide meeting facilities</div><select class="dd-select" id="dd-q14" onchange="selectDropdown(this,'q14')"><option value="" disabled selected>Select a paragraph&hellip;</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select></div></div>
+<div class="question" id="q15"><div class="q-num">15</div><div class="q-body"><div class="q-text">a statement regarding the fact that no further developments are possible in some areas of airport trade</div><select class="dd-select" id="dd-q15" onchange="selectDropdown(this,'q15')"><option value="" disabled selected>Select a paragraph&hellip;</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select></div></div>
+<div class="question" id="q16"><div class="q-num">16</div><div class="q-body"><div class="q-text">reference to the low level of income that meeting facilities produce for airports</div><select class="dd-select" id="dd-q16" onchange="selectDropdown(this,'q16')"><option value="" disabled selected>Select a paragraph&hellip;</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select></div></div>
+<div class="question" id="q17"><div class="q-num">17</div><div class="q-body"><div class="q-text">mention of the impact of budget airlines on airport income</div><select class="dd-select" id="dd-q17" onchange="selectDropdown(this,'q17')"><option value="" disabled selected>Select a paragraph&hellip;</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select></div></div>
+<div class="question" id="q18"><div class="q-num">18</div><div class="q-body"><div class="q-text">examples of airport premises that might be used for business purposes</div><select class="dd-select" id="dd-q18" onchange="selectDropdown(this,'q18')"><option value="" disabled selected>Select a paragraph&hellip;</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select></div></div>
+</div>
+<div class="q-section"><div class="q-section-header">Questions 19&ndash;22</div><div class="q-section-intro">Complete the sentences below. Choose <strong>NO MORE THAN TWO WORDS</strong> from the text for each answer.</div><div style="padding:12px 16px;font-size:13.5px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:16px;line-height:2">The length of time passengers spend shopping at airports has been affected by updated <strong>19</strong> <input class="fill-input" id="q19" oninput="markFill('q19')" style="width:150px;display:inline-block;vertical-align:middle" placeholder="&hellip;">.<br>Airports with a wide range of recreational facilities can become a <strong>20</strong> <input class="fill-input" id="q20" oninput="markFill('q20')" style="width:150px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> for people rather than a means to travel.<br>Both passengers and <strong>21</strong> <input class="fill-input" id="q21" oninput="markFill('q21')" style="width:150px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> may feel encouraged to use and develop a sense of loyalty towards airports that market their business services.<br>Airports that supply meeting facilities may need to develop a <strong>22</strong> <input class="fill-input" id="q22" oninput="markFill('q22')" style="width:150px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> over other venues.</div></div>
+<div class="q-section"><div class="q-section-header">Questions 23&ndash;26</div><div class="q-section-intro">Complete the summary below. Choose <strong>NO MORE THAN TWO WORDS</strong> from the text for each answer.</div><div style="padding:12px 16px;font-size:13.5px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:16px;line-height:2;line-height:2.2"><strong style="color:var(--accent)">Survey findings</strong><br>Despite financial constraints due to the <strong>23</strong> <input class="fill-input" id="q23" oninput="markFill('q23')" style="width:160px;display:inline-block;vertical-align:middle" placeholder="&hellip;">, a significant percentage of airports provide and wish to further support business meeting facilities. Also, just under 30% of the airports surveyed plan to provide these facilities within <strong>24</strong> <input class="fill-input" id="q24" oninput="markFill('q24')" style="width:160px;display:inline-block;vertical-align:middle" placeholder="&hellip;">. However, the main users of the facilities are <strong>25</strong> <input class="fill-input" id="q25" oninput="markFill('q25')" style="width:160px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> and as many as 16% of respondents to the survey stated that their users did not take any <strong>26</strong> <input class="fill-input" id="q26" oninput="markFill('q26')" style="width:160px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> at the airport.</div></div>
+</div>
+<div id="qs-2" style="display:none"><div class="q-section"><div class="q-section-header">Questions 27&ndash;30</div><div class="q-section-intro">Choose the correct letter, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>.</div><div class="question" id="q27"><div class="q-num">27</div><div class="q-body"><div class="q-text">What is the writer's main point in the first paragraph?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q27','A')"><span class="radio-dot"></span>A Photography is used for many different purposes</label><label class="mcq-opt" onclick="selectMCQ(this,'q27','B')"><span class="radio-dot"></span>B Photographers and artists have the same principal aims</label><label class="mcq-opt" onclick="selectMCQ(this,'q27','C')"><span class="radio-dot"></span>C Photography has not always been a readily accepted art form</label><label class="mcq-opt" onclick="selectMCQ(this,'q27','D')"><span class="radio-dot"></span>D Photographers today are more creative than those of the past</label></div></div></div>
+<div class="question" id="q28"><div class="q-num">28</div><div class="q-body"><div class="q-text">What public view about artists was shared by the French and the English?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q28','A')"><span class="radio-dot"></span>A that only artists could reflect a culture's true values</label><label class="mcq-opt" onclick="selectMCQ(this,'q28','B')"><span class="radio-dot"></span>B that only artists were qualified to judge photography</label><label class="mcq-opt" onclick="selectMCQ(this,'q28','C')"><span class="radio-dot"></span>C that artists could lose work as a result of photography</label><label class="mcq-opt" onclick="selectMCQ(this,'q28','D')"><span class="radio-dot"></span>D that artistic success raised a country's international profile</label></div></div></div>
+<div class="question" id="q29"><div class="q-num">29</div><div class="q-body"><div class="q-text">What does the writer mean in the fourth paragraph by 'the handwriting on the wall'?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q29','A')"><span class="radio-dot"></span>A an example of poor talent</label><label class="mcq-opt" onclick="selectMCQ(this,'q29','B')"><span class="radio-dot"></span>B a message that cannot be trusted</label><label class="mcq-opt" onclick="selectMCQ(this,'q29','C')"><span class="radio-dot"></span>C an advertisement for something new</label><label class="mcq-opt" onclick="selectMCQ(this,'q29','D')"><span class="radio-dot"></span>D a signal that something bad will happen</label></div></div></div>
+<div class="question" id="q30"><div class="q-num">30</div><div class="q-body"><div class="q-text">What was the result of the widespread availability of photographs to the middle classes?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q30','A')"><span class="radio-dot"></span>A the most educated worried about its impact on public taste</label><label class="mcq-opt" onclick="selectMCQ(this,'q30','B')"><span class="radio-dot"></span>B it helped artists appreciate the merits of photography</label><label class="mcq-opt" onclick="selectMCQ(this,'q30','C')"><span class="radio-dot"></span>C improvements were made in photographic methods</label><label class="mcq-opt" onclick="selectMCQ(this,'q30','D')"><span class="radio-dot"></span>D it led to a reduction in price of photographs</label></div></div></div>
+</div>
+<div class="q-section"><div class="q-section-header">Questions 31&ndash;34</div><div class="q-section-intro">Complete the summary of paragraph 3 using the list of words, <strong>A&ndash;G</strong>, below.</div><div style="padding:12px 16px;font-size:13.5px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:16px;line-height:2;line-height:1.9;columns:2"><strong style="color:var(--accent)">List of words</strong><br><strong>A</strong>&nbsp; inventive<br><strong>B</strong>&nbsp; similar<br><strong>C</strong>&nbsp; beneficial<br><strong>D</strong>&nbsp; next<br><strong>E</strong>&nbsp; mixed<br><strong>F</strong>&nbsp; justified<br><strong>G</strong>&nbsp; inferior</div><div style="padding:12px 16px;font-size:13.5px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:16px;line-height:2;line-height:2.3"><strong style="color:var(--accent)">Camera art</strong><br>In the early days of photography, opinions on its future were <span id="q31"><strong>31</strong> <select class="dd-select" id="dd-q31" onchange="selectDropdown(this,'q31')" style="width:auto;min-width:120px;display:inline-block;padding:6px 32px 6px 10px;vertical-align:middle"><option value="" disabled selected>Select&hellip;</option><option value="A">A inventive</option><option value="B">B similar</option><option value="C">C beneficial</option><option value="D">D next</option><option value="E">E mixed</option><option value="F">F justified</option><option value="G">G inferior</option></select></span>, but three clear views emerged. A large number of artists and ordinary people saw photographs as <span id="q32"><strong>32</strong> <select class="dd-select" id="dd-q32" onchange="selectDropdown(this,'q32')" style="width:auto;min-width:120px;display:inline-block;padding:6px 32px 6px 10px;vertical-align:middle"><option value="" disabled selected>Select&hellip;</option><option value="A">A inventive</option><option value="B">B similar</option><option value="C">C beneficial</option><option value="D">D next</option><option value="E">E mixed</option><option value="F">F justified</option><option value="G">G inferior</option></select></span> to paintings because of the way they were produced. Another popular view was that photographs could have a role to play in the art world, despite the photographer being less <span id="q33"><strong>33</strong> <select class="dd-select" id="dd-q33" onchange="selectDropdown(this,'q33')" style="width:auto;min-width:120px;display:inline-block;padding:6px 32px 6px 10px;vertical-align:middle"><option value="" disabled selected>Select&hellip;</option><option value="A">A inventive</option><option value="B">B similar</option><option value="C">C beneficial</option><option value="D">D next</option><option value="E">E mixed</option><option value="F">F justified</option><option value="G">G inferior</option></select></span>. Finally, a smaller number of people suspected that the impact of photography on art and society could be <span id="q34"><strong>34</strong> <select class="dd-select" id="dd-q34" onchange="selectDropdown(this,'q34')" style="width:auto;min-width:120px;display:inline-block;padding:6px 32px 6px 10px;vertical-align:middle"><option value="" disabled selected>Select&hellip;</option><option value="A">A inventive</option><option value="B">B similar</option><option value="C">C beneficial</option><option value="D">D next</option><option value="E">E mixed</option><option value="F">F justified</option><option value="G">G inferior</option></select></span>.</div></div>
+<div class="q-section"><div class="q-section-header">Questions 35&ndash;40</div><div class="q-section-intro">Look at the following statements and the list of people, <strong>A&ndash;E</strong>, below. Match each statement with the correct person. NB You may use any letter more than once.</div><div style="padding:12px 16px;font-size:13.5px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:16px;line-height:2;line-height:1.9"><strong>A</strong>&nbsp; Jean-Auguste-Dominique Ingres<br><strong>B</strong>&nbsp; Francis Wey<br><strong>C</strong>&nbsp; Charles Baudelaire<br><strong>D</strong>&nbsp; Eugene Delacroix<br><strong>E</strong>&nbsp; Philip Gilbert Hamerton</div><div class="question" id="q35"><div class="q-num">35</div><div class="q-body"><div class="q-text">He claimed that photography would make paintings more realistic.</div><select class="dd-select" id="dd-q35" onchange="selectDropdown(this,'q35')"><option value="" disabled selected>Select a person&hellip;</option><option value="A">A &ndash; Jean-Auguste-Dominique Ingres</option><option value="B">B &ndash; Francis Wey</option><option value="C">C &ndash; Charles Baudelaire</option><option value="D">D &ndash; Eugene Delacroix</option><option value="E">E &ndash; Philip Gilbert Hamerton</option></select></div></div>
+<div class="question" id="q36"><div class="q-num">36</div><div class="q-body"><div class="q-text">He highlighted the limitations and deceptions of the camera.</div><select class="dd-select" id="dd-q36" onchange="selectDropdown(this,'q36')"><option value="" disabled selected>Select a person&hellip;</option><option value="A">A &ndash; Jean-Auguste-Dominique Ingres</option><option value="B">B &ndash; Francis Wey</option><option value="C">C &ndash; Charles Baudelaire</option><option value="D">D &ndash; Eugene Delacroix</option><option value="E">E &ndash; Philip Gilbert Hamerton</option></select></div></div>
+<div class="question" id="q37"><div class="q-num">37</div><div class="q-body"><div class="q-text">He documented his production of artwork by photographing his works.</div><select class="dd-select" id="dd-q37" onchange="selectDropdown(this,'q37')"><option value="" disabled selected>Select a person&hellip;</option><option value="A">A &ndash; Jean-Auguste-Dominique Ingres</option><option value="B">B &ndash; Francis Wey</option><option value="C">C &ndash; Charles Baudelaire</option><option value="D">D &ndash; Eugene Delacroix</option><option value="E">E &ndash; Philip Gilbert Hamerton</option></select></div></div>
+<div class="question" id="q38"><div class="q-num">38</div><div class="q-body"><div class="q-text">He noted the potential for photography to enrich artistic talent.</div><select class="dd-select" id="dd-q38" onchange="selectDropdown(this,'q38')"><option value="" disabled selected>Select a person&hellip;</option><option value="A">A &ndash; Jean-Auguste-Dominique Ingres</option><option value="B">B &ndash; Francis Wey</option><option value="C">C &ndash; Charles Baudelaire</option><option value="D">D &ndash; Eugene Delacroix</option><option value="E">E &ndash; Philip Gilbert Hamerton</option></select></div></div>
+<div class="question" id="q39"><div class="q-num">39</div><div class="q-body"><div class="q-text">He based some of the scenes in his paintings on photographs.</div><select class="dd-select" id="dd-q39" onchange="selectDropdown(this,'q39')"><option value="" disabled selected>Select a person&hellip;</option><option value="A">A &ndash; Jean-Auguste-Dominique Ingres</option><option value="B">B &ndash; Francis Wey</option><option value="C">C &ndash; Charles Baudelaire</option><option value="D">D &ndash; Eugene Delacroix</option><option value="E">E &ndash; Philip Gilbert Hamerton</option></select></div></div>
+<div class="question" id="q40"><div class="q-num">40</div><div class="q-body"><div class="q-text">He felt photography was part of the trend towards greater mechanisation.</div><select class="dd-select" id="dd-q40" onchange="selectDropdown(this,'q40')"><option value="" disabled selected>Select a person&hellip;</option><option value="A">A &ndash; Jean-Auguste-Dominique Ingres</option><option value="B">B &ndash; Francis Wey</option><option value="C">C &ndash; Charles Baudelaire</option><option value="D">D &ndash; Eugene Delacroix</option><option value="E">E &ndash; Philip Gilbert Hamerton</option></select></div></div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="bottombar">
+  <div class="part-tabs">
+    <div class="part-tab active" id="ptab-0" onclick="switchPassage(0)">Part 1: <span class="count" id="pcount-0">0 of 13</span></div>
+    <div class="part-tab" id="ptab-1" onclick="switchPassage(1)">Part 2: <span class="count" id="pcount-1">0 of 13</span></div>
+    <div class="part-tab" id="ptab-2" onclick="switchPassage(2)">Part 3: <span class="count" id="pcount-2">0 of 14</span></div>
+  </div>
+  <div class="q-circles" id="q-circles"></div>
+  <div class="nav-arrows">
+    <button class="nav-arrow" onclick="prevQ()">&lsaquo;</button>
+    <button class="nav-arrow" onclick="nextQ()">&rsaquo;</button>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="submit-modal">
+  <div class="modal">
+    <h2>Submit Your Test?</h2>
+    <p>You are about to submit your test. This action cannot be undone.</p>
+    <div class="score-grid" id="score-grid" style="display:none">
+      <div class="score-card"><div class="val" id="sc-answered">0</div><div class="lbl">Answered</div></div>
+      <div class="score-card"><div class="val" id="sc-unanswered">40</div><div class="lbl">Unanswered</div></div>
+      <div class="score-card"><div class="val" id="sc-pct">0%</div><div class="lbl">Completion</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="closeModal()">Cancel</button>
+      <button class="btn-modal primary" onclick="submitTest()">Submit Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="results-modal">
+  <div class="modal">
+    <h2>Test Complete</h2>
+    <p id="results-cand"></p>
+    <div class="score-grid">
+      <div class="score-card"><div class="val" id="r-correct" style="color:var(--success)">&mdash;</div><div class="lbl">Correct</div></div>
+      <div class="score-card"><div class="val" id="r-wrong" style="color:var(--accent-red)">&mdash;</div><div class="lbl">Incorrect</div></div>
+      <div class="score-card"><div class="val" id="r-unanswered">&mdash;</div><div class="lbl">Unanswered</div></div>
+    </div>
+    <div style="margin:14px 0 12px;background:var(--accent);border-radius:12px;padding:18px 22px;text-align:center;color:#fff">
+      <div style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-bottom:4px">IELTS Band Score</div>
+      <div id="r-band" style="font-size:48px;font-weight:700;line-height:1">&mdash;</div>
+      <div id="r-band-label" style="font-size:13px;margin-top:6px;opacity:.85">&mdash;</div>
+    </div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:6px">Your Answers vs Correct Answers</div>
+    <div class="ans-table-wrap"><table class="ans-table"><thead><tr><th>Q</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr></thead><tbody id="ans-table-body"></tbody></table></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:10px">Green = correct &middot; Red = incorrect &middot; Band scores are approximate for Academic Reading.</p>
+    <p id="pdf-status" style="font-size:13px;color:var(--success);margin-top:8px;font-weight:500"></p>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="redownloadPDF()">Download PDF again</button>
+      <button class="btn-modal primary" onclick="document.getElementById('results-modal').classList.add('hidden')">Close &amp; Review</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   ANSWER KEY
+   ============================================================ */
+var ANSWERS = {
+  q1:'road', q2:'conference', q3:'proposals', q4:'launch', q5:'exhibition',
+  q6:'TRUE', q7:'FALSE', q8:'FALSE', q9:'NOT GIVEN',
+  q10:'6', q11:'moss', q12:'hull shape', q13:'cost and time',
+  q14:'E', q15:'B', q16:'G', q17:'A', q18:'C',
+  q19:'security procedures', q20:'final destination', q21:'airlines', q22:'competitive advantage',
+  q23:'economic downturn', q24:'five years', q25:'local', q26:'flights',
+  q27:'C', q28:'D', q29:'D', q30:'A',
+  q31:'E', q32:'G', q33:'A', q34:'C',
+  q35:'B', q36:'E', q37:'A', q38:'D', q39:'A', q40:'C'
+};
+
+var ALT = {
+  q1:['road','a road','new road'], q2:['conference'], q3:['proposals','proposal'], q4:['launch'], q5:['exhibition'],
+  q10:['6','six','6 metres','six metres','6 meters','six meters','6m'],
+  q11:['moss','pads of moss'], q12:['hull','hull shape','the hull shape','the hull'], q13:['cost and time','time and cost'],
+  q19:['security procedures'], q20:['final destination','the final destination'], q21:['airlines'],
+  q22:['competitive advantage','a competitive advantage'], q23:['economic downturn','global economic downturn'],
+  q24:['five years','5 years','the next five years'], q25:['local','local people','local area','local users'], q26:['flights','flight']
+};
+
+var KEY_LABELS = { q10:'6 (metres)', q11:'(pads of) moss', q12:'hull (shape)', q25:'local (people)' };
+
+var PAIR_GROUPS = {};
+
+var PART_RANGES = [[1,13],[14,26],[27,40]];
+var userAnswers = {}, currentPassage = 0, submitted = false;
+var candidateName='', candidateNumber='';
+var seconds = 60*60;
+var timerEl = document.getElementById('timer');
+var timerInterval = null;
+
+/* ============================================================
+   AUTO-SAVE
+   ============================================================ */
+var STORAGE_KEY = 'ielts_reading_practice7_session';
+var autosaveInterval = null;
+var autosaveListenersAdded = false;
+var autosaveIndicator = document.getElementById('autosave-indicator');
+var autosaveText = document.getElementById('autosave-text');
+
+function showAutosaveSaving(){
+  autosaveIndicator.classList.add('show','saving');
+  autosaveText.textContent = 'Saving\u2026';
+}
+function showAutosaveSaved(){
+  autosaveIndicator.classList.add('show');
+  autosaveIndicator.classList.remove('saving');
+  var t = new Date();
+  autosaveText.textContent = 'Saved ' + t.toTimeString().slice(0,8);
+  setTimeout(function(){ autosaveIndicator.classList.remove('show'); }, 2500);
+}
+function getPassageWidth(){
+  var pw = document.getElementById('passage-panel');
+  return pw ? (pw.style.width || pw.offsetWidth + 'px') : '';
+}
+function saveSession(silent){
+  if(submitted) return;
+  if(!silent) showAutosaveSaving();
+  try{
+    var data = {
+      version: 3,
+      timestamp: Date.now(),
+      candidateName: candidateName,
+      candidateNumber: candidateNumber,
+      seconds: seconds,
+      currentPassage: currentPassage,
+      userAnswers: userAnswers,
+      notepad: document.getElementById('notepad-text').value,
+      passageWidth: getPassageWidth(),
+      started: true
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    if(!silent) showAutosaveSaved();
+  }catch(e){ console.warn('Autosave failed:', e); }
+}
+function loadSession(){
+  try{
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return null;
+    var d = JSON.parse(raw);
+    if(!d || !d.started) return null;
+    return d;
+  }catch(e){ return null; }
+}
+function clearSession(){ try{ localStorage.removeItem(STORAGE_KEY); }catch(e){} }
+function formatTime(sec){
+  var m = Math.floor(sec/60), s = sec%60;
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+
+(function checkSavedSession(){
+  var saved = loadSession();
+  if(!saved) return;
+  var banner = document.getElementById('resume-banner');
+  var info = document.getElementById('resume-info');
+  var answered = 0;
+  for(var i=1;i<=40;i++){ if(saved.userAnswers && saved.userAnswers['q'+i]) answered++; }
+  var when = new Date(saved.timestamp).toLocaleString();
+  info.innerHTML = '<strong>' + escapeHtml(saved.candidateName || 'Anonymous') + '</strong> &middot; ' + answered + '/40 answered &middot; ' + formatTime(saved.seconds) + ' remaining<br><span style="opacity:.75">Saved ' + when + '</span>';
+  banner.classList.add('show');
+  document.getElementById('cand-name').value = saved.candidateName || '';
+  document.getElementById('cand-num').value = saved.candidateNumber || '';
+})();
+
+function resumeTest(){
+  var saved = loadSession();
+  if(!saved){ startTest(); return; }
+  candidateName = saved.candidateName || 'Anonymous';
+  candidateNumber = saved.candidateNumber || 'N/A';
+  seconds = saved.seconds || 60*60;
+  userAnswers = saved.userAnswers || {};
+  currentPassage = saved.currentPassage || 0;
+  if(saved.notepad) document.getElementById('notepad-text').value = saved.notepad;
+  if(saved.passageWidth){ document.getElementById('passage-panel').style.width = saved.passageWidth; }
+
+  document.getElementById('start-screen').classList.add('hidden');
+  restoreAnswersUI();
+  buildCircles();
+  updatePartCounts();
+  if(currentPassage !== 0) switchPassage(currentPassage);
+  updateTimerDisplay();
+  startTimer();
+  startAutosave();
+  showAutosaveSaved();
+}
+function discardSaved(){
+  clearSession();
+  document.getElementById('resume-banner').classList.remove('show');
+  document.getElementById('cand-name').value = '';
+  document.getElementById('cand-num').value = '';
+}
+
+function restoreAnswersUI(){
+  for(var id in userAnswers){
+    var val = userAnswers[id];
+    if(!val) continue;
+    var dd = document.getElementById('dd-'+id);
+    if(dd){ dd.value = val; dd.classList.add('answered'); continue; }
+    var fi = document.getElementById(id);
+    if(fi && fi.tagName === 'INPUT'){ fi.value = val; fi.classList.add('answered'); continue; }
+    var tfnWrap = document.querySelector('#'+id+' .tfn-options');
+    if(tfnWrap){
+      tfnWrap.querySelectorAll('.tfn-btn').forEach(function(b){
+        if(b.textContent.trim() === val) b.classList.add('selected');
+      });
+      continue;
+    }
+    var mcqWrap = document.querySelector('#'+id+' .mcq-options');
+    if(mcqWrap){
+      mcqWrap.querySelectorAll('.mcq-opt').forEach(function(l){
+        if(l.textContent.trim().charAt(0) === val) l.classList.add('selected');
+      });
+    }
+  }
+}
+
+function startAutosave(){
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  autosaveInterval = setInterval(function(){ saveSession(false); }, 5000);
+  if(autosaveListenersAdded) return;
+  autosaveListenersAdded = true;
+  document.addEventListener('visibilitychange', function(){ if(document.hidden) saveSession(true); });
+  window.addEventListener('beforeunload', function(){ saveSession(true); });
+}
+
+function startTest(){
+  candidateName = document.getElementById('cand-name').value.trim() || 'Anonymous';
+  candidateNumber = document.getElementById('cand-num').value.trim() || 'N/A';
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('resume-banner').classList.remove('show');
+  clearSession();
+  buildCircles();
+  updatePartCounts();
+  startTimer();
+  startAutosave();
+  saveSession(true);
+}
+function startTimer(){
+  if(timerInterval) clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(function(){
+    if(submitted) return;
+    seconds--;
+    if(seconds <= 0){ clearInterval(timerInterval); submitTest(); return; }
+    updateTimerDisplay();
+  }, 1000);
+}
+function updateTimerDisplay(){
+  timerEl.textContent = formatTime(Math.max(0,seconds));
+  timerEl.classList.toggle('warn', seconds < 300);
+}
+
+function switchPassage(idx){
+  currentPassage = idx;
+  document.querySelectorAll('.part-tab').forEach(function(t,i){ t.classList.toggle('active', i===idx); });
+  document.querySelectorAll('.passage-content').forEach(function(p,i){ p.classList.toggle('active', i===idx); });
+  document.querySelectorAll('#qs-0,#qs-1,#qs-2').forEach(function(q,i){ q.style.display = i===idx ? '' : 'none'; });
+  buildCircles();
+  document.getElementById('questions-panel').scrollTop = 0;
+  saveSession(true);
+}
+function buildCircles(){
+  var wrap = document.getElementById('q-circles');
+  wrap.innerHTML = '';
+  var range = PART_RANGES[currentPassage];
+  var start = range[0], end = range[1];
+  for(var i=start;i<=end;i++){
+    var d = document.createElement('div');
+    d.className = 'q-circle';
+    d.textContent = i;
+    var a = userAnswers['q'+i];
+    if(a && a.toString().trim()) d.classList.add('answered');
+    d.onclick = (function(n){ return function(){ scrollToQ(n); }; })(i);
+    wrap.appendChild(d);
+  }
+}
+function updatePartCounts(){
+  PART_RANGES.forEach(function(r, idx){
+    var s = r[0], e = r[1], a = 0;
+    for(var i=s;i<=e;i++){ if(userAnswers['q'+i] && userAnswers['q'+i].toString().trim()) a++; }
+    document.getElementById('pcount-'+idx).textContent = a + ' of ' + (e-s+1);
+  });
+}
+function scrollToQ(num){
+  var p = num<=13?0:num<=26?1:2;
+  if(p !== currentPassage) switchPassage(p);
+  setTimeout(function(){
+    var el = document.getElementById('q'+num);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+  },50);
+}
+function prevQ(){ document.getElementById('questions-panel').scrollBy({top:-240,behavior:'smooth'}); }
+function nextQ(){ document.getElementById('questions-panel').scrollBy({top:240,behavior:'smooth'}); }
+
+function selectTFN(btn, qId, val){
+  btn.closest('.tfn-options').querySelectorAll('.tfn-btn').forEach(function(b){ b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectMCQ(label, qId, val){
+  label.closest('.mcq-options').querySelectorAll('.mcq-opt').forEach(function(l){ l.classList.remove('selected'); });
+  label.classList.add('selected');
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectDropdown(sel, qId){
+  var val = sel.value;
+  sel.classList.toggle('answered', !!val);
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function markFill(id){
+  var el = document.getElementById(id);
+  var val = el.value.trim();
+  el.classList.toggle('answered', val.length > 0);
+  userAnswers[id] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectPair(sel, qId, partnerId){
+  var val = sel.value;
+  var partner = document.getElementById('dd-'+partnerId);
+  var partnerVal = partner ? partner.value : '';
+  if(val && partnerVal && val === partnerVal){
+    partner.value = '';
+    partner.classList.remove('answered');
+    userAnswers[partnerId] = '';
+  }
+  sel.classList.toggle('answered', !!val);
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+
+/* ============================================================
+   HIGHLIGHT / NOTE TOOLBAR
+   ============================================================ */
+var _savedRange = null;
+function hideSelToolbar(){ var tb=document.getElementById('sel-toolbar'); if(tb) tb.style.display='none'; _savedRange=null; }
+function showSelToolbar(x,y){
+  var tb=document.getElementById('sel-toolbar'); if(!tb) return;
+  tb.style.display='block';
+  var tw=tb.offsetWidth||140, th=tb.offsetHeight||36;
+  var left=x-tw/2, top=y-th-10;
+  if(left+tw>window.innerWidth-8) left=window.innerWidth-tw-8;
+  if(left<8) left=8;
+  if(top<60) top=y+12;
+  tb.style.left=left+'px'; tb.style.top=top+'px';
+}
+function getPassageSelection(){
+  var sel=window.getSelection();
+  if(!sel||sel.isCollapsed||sel.rangeCount===0) return null;
+  var range=sel.getRangeAt(0);
+  var p1=document.getElementById('passage-panel');
+  var p2=document.getElementById('questions-panel');
+  var node=range.commonAncestorContainer;
+  if(!((p1&&p1.contains(node))||(p2&&p2.contains(node)))) return null;
+  if(!sel.toString().trim()) return null;
+  /* never wrap form controls in a <mark> - it breaks the answer inputs */
+  var frag=range.cloneContents();
+  if(frag.querySelector && frag.querySelector('input,select,textarea,button,label')) return null;
+  return {sel:sel,range:range};
+}
+function onPassageMouseUp(e){
+  setTimeout(function(){
+    var data=getPassageSelection();
+    if(!data){ var tb=document.getElementById('sel-toolbar'); if(e&&e.target&&tb&&tb.contains(e.target)) return; hideSelToolbar(); return; }
+    _savedRange=data.range.cloneRange();
+    var rect=data.range.getBoundingClientRect();
+    showSelToolbar(rect.left+rect.width/2, rect.top);
+  },10);
+}
+function applyMark(cls){
+  if(!_savedRange) return;
+  try{ var m=document.createElement('mark'); m.className=cls; _savedRange.surroundContents(m); }
+  catch(e){ try{ var f=_savedRange.extractContents(); var m2=document.createElement('mark'); m2.className=cls; m2.appendChild(f); _savedRange.insertNode(m2); }catch(e2){} }
+  var s=window.getSelection(); if(s) s.removeAllRanges();
+  hideSelToolbar();
+}
+(function(){
+  var hl=document.getElementById('sel-hl-btn');
+  if(hl) hl.addEventListener('mousedown',function(e){e.preventDefault();applyMark('hl');});
+  var nb=document.getElementById('sel-note-btn');
+  if(nb) nb.addEventListener('mousedown',function(e){
+    e.preventDefault();
+    var text=_savedRange?_savedRange.toString().trim():'';
+    applyMark('hl-note');
+    if(text){ var ta=document.getElementById('notepad-text'); if(ta){ ta.value+=(ta.value&&!ta.value.endsWith('\n')?'\n':'')+'\u2022 '+text; saveSession(true); var p=document.getElementById('notepad-panel'); if(p&&p.classList.contains('hidden')) toggleNotepad(); } }
+  });
+  var pp=document.getElementById('passage-panel');
+  if(pp) pp.addEventListener('mouseup',onPassageMouseUp);
+  var qp=document.getElementById('questions-panel');
+  if(qp) qp.addEventListener('mouseup',onPassageMouseUp);
+  document.addEventListener('mousedown',function(e){ var tb=document.getElementById('sel-toolbar'); if(!tb||tb.style.display==='none') return; if(tb.contains(e.target)) return; setTimeout(function(){ var s=window.getSelection(); if(!s||s.isCollapsed) hideSelToolbar(); },150); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') hideSelToolbar(); });
+  /* hide the toolbar when either panel scrolls, since it is fixed-position */
+  if(pp) pp.addEventListener('scroll',hideSelToolbar);
+  if(qp) qp.addEventListener('scroll',hideSelToolbar);
+})();
+
+function toggleNotepad(){
+  var panel=document.getElementById('notepad-panel');
+  var btn=document.getElementById('notepad-btn');
+  panel.classList.toggle('hidden');
+  btn.classList.toggle('active', !panel.classList.contains('hidden'));
+  if(!panel.classList.contains('hidden')) document.getElementById('notepad-text').focus();
+  saveSession(true);
+}
+function toggleFullscreen(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function(){});
+  else document.exitFullscreen().catch(function(){});
+}
+document.getElementById('notepad-text').addEventListener('input', function(){ saveSession(true); });
+
+/* ============================================================
+   SCORING
+   ============================================================ */
+function getBandScore(c){
+  if(c>=39) return {band:'9.0',level:'Expert User'};
+  if(c>=37) return {band:'8.5',level:'Very Good User'};
+  if(c>=35) return {band:'8.0',level:'Very Good User'};
+  if(c>=33) return {band:'7.5',level:'Good User'};
+  if(c>=30) return {band:'7.0',level:'Good User'};
+  if(c>=27) return {band:'6.5',level:'Competent User'};
+  if(c>=23) return {band:'6.0',level:'Competent User'};
+  if(c>=19) return {band:'5.5',level:'Modest User'};
+  if(c>=15) return {band:'5.0',level:'Modest User'};
+  if(c>=13) return {band:'4.5',level:'Limited User'};
+  if(c>=10) return {band:'4.0',level:'Limited User'};
+  return {band:'3.5',level:'Extremely Limited'};
+}
+function normalize(s){
+  return (s||'').toString().trim().toLowerCase().replace(/[()]/g,'').replace(/\s+/g,' ').replace(/\.$/,'');
+}
+/* Each letter in a "choose TWO" pair is marked on its own, in either order. */
+function pairResult(qId){
+  var g = PAIR_GROUPS[qId];
+  if(!g) return null;
+  var mine = (userAnswers[qId]||'').toString().trim().toUpperCase();
+  if(!mine) return null;
+  var theirs = (userAnswers[g.partner]||'').toString().trim().toUpperCase();
+  if(mine === theirs) return false;          // duplicate letters can't both score
+  return g.correct.indexOf(mine) !== -1;     // each letter judged on its own
+}
+function checkCorrect(id){
+  if(PAIR_GROUPS[id]) return pairResult(id);
+  var ans = ANSWERS[id];
+  var user = (userAnswers[id]||'').toString().trim();
+  if(!user) return null;
+  var nU = normalize(user);
+  if(ALT[id]){ for(var k=0;k<ALT[id].length;k++){ if(nU === normalize(ALT[id][k])) return true; } }
+  return nU === normalize(ans);
+}
+function correctAnswerLabel(id){
+  if(PAIR_GROUPS[id]){
+    var other = (id === 'q23' || id === 'q24') ? 'Q23/Q24' : 'Q25/Q26';
+    var letters = PAIR_GROUPS[id].correct.join(' or ');
+    return letters + ' (any order, ' + other + ')';
+  }
+  return KEY_LABELS[id] || ANSWERS[id];
+}
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function confirmSubmit(){
+  var count=0;
+  for(var i=1;i<=40;i++){ if(userAnswers['q'+i]&&userAnswers['q'+i].toString().trim()) count++; }
+  document.getElementById('sc-answered').textContent=count;
+  document.getElementById('sc-unanswered').textContent=40-count;
+  document.getElementById('sc-pct').textContent=Math.round(count/40*100)+'%';
+  document.getElementById('score-grid').style.display='grid';
+  document.getElementById('submit-modal').classList.remove('hidden');
+}
+function closeModal(){ document.getElementById('submit-modal').classList.add('hidden'); }
+
+function submitTest(){
+  submitted=true;
+  if(timerInterval) clearInterval(timerInterval);
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  document.getElementById('submit-modal').classList.add('hidden');
+  clearSession();
+
+  var correct=0, wrong=0, unanswered=0;
+  var tbody=document.getElementById('ans-table-body');
+  tbody.innerHTML='';
+  var pdfRows=[];
+
+  for(var num=1;num<=40;num++){
+    var id='q'+num;
+    var result=checkCorrect(id);
+    var userRaw=(userAnswers[id]||'').toString().trim();
+    var correctAns=correctAnswerLabel(id);
+
+    var yourCell, resultCell, resText;
+    if(result===null){
+      unanswered++;
+      yourCell='<span class="blank">&mdash;</span>';
+      resultCell='<span class="blank">Unanswered</span>';
+      resText='Unanswered';
+    } else if(result){
+      correct++;
+      yourCell='<span class="ok">'+escapeHtml(userRaw)+'</span>';
+      resultCell='<span class="ok">&#10003; Correct</span>';
+      resText='Correct';
+    } else {
+      wrong++;
+      yourCell='<span class="bad">'+escapeHtml(userRaw||'-')+'</span>';
+      resultCell='<span class="bad">&#10007; Incorrect</span>';
+      resText='Incorrect';
+    }
+
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td style="font-weight:700;color:var(--accent)">'+num+'</td><td>'+yourCell+'</td><td><strong>'+escapeHtml(correctAns)+'</strong></td><td>'+resultCell+'</td>';
+    tbody.appendChild(tr);
+    pdfRows.push([String(num), userRaw||'-', correctAns, resText]);
+  }
+
+  document.getElementById('r-correct').textContent=correct;
+  document.getElementById('r-wrong').textContent=wrong;
+  document.getElementById('r-unanswered').textContent=unanswered;
+  var bs=getBandScore(correct);
+  document.getElementById('r-band').textContent=bs.band;
+  document.getElementById('r-band-label').textContent=bs.level+' \u00B7 '+correct+' / 40 correct';
+  document.getElementById('results-cand').textContent='Candidate: '+candidateName+'  \u00B7  Number: '+candidateNumber;
+  document.getElementById('results-modal').classList.remove('hidden');
+  window._lastPdfData={correct:correct,wrong:wrong,unanswered:unanswered,bs:bs,pdfRows:pdfRows};
+  try{
+    generateResultsPDF(correct,wrong,unanswered,bs,pdfRows);
+    document.getElementById('pdf-status').textContent='Candidate response PDF downloaded.';
+  }catch(e){
+    document.getElementById('pdf-status').textContent='PDF download failed. Use the button below.';
+    document.getElementById('pdf-status').style.color='var(--accent-red)';
+  }
+}
+function redownloadPDF(){
+  if(!window._lastPdfData) return;
+  var d=window._lastPdfData;
+  try{ generateResultsPDF(d.correct,d.wrong,d.unanswered,d.bs,d.pdfRows); }catch(e){}
+}
+
+function generateResultsPDF(correct,wrong,unanswered,bandInfo,rows){
+  var jsPDF=window.jspdf.jsPDF;
+  var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  var pageWidth=doc.internal.pageSize.getWidth();
+  doc.setFillColor(30,58,95); doc.rect(0,0,pageWidth,28,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(16); doc.setFont('helvetica','bold');
+  doc.text('IELTS Academic Reading \u00B7 Practice Test 7',14,12);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Candidate Response Report',14,20);
+  doc.text(new Date().toLocaleString(),pageWidth-14,20,{align:'right'});
+  doc.setTextColor(26,24,20); doc.setFontSize(11); doc.setFont('helvetica','bold');
+  doc.text('Candidate Name:',14,38); doc.setFont('helvetica','normal'); doc.text(candidateName||'Anonymous',52,38);
+  doc.setFont('helvetica','bold'); doc.text('Candidate Number:',14,45); doc.setFont('helvetica','normal'); doc.text(candidateNumber||'-',58,45);
+  doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.text('Score Summary',14,56);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Correct: '+correct+'    Incorrect: '+wrong+'    Unanswered: '+unanswered,14,64);
+  doc.setFont('helvetica','bold'); doc.setTextColor(30,58,95); doc.setFontSize(14);
+  doc.text('Band Score: '+bandInfo.band+'  ('+bandInfo.level+')',14,72);
+  doc.setTextColor(26,24,20); doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text(correct+' / 40 correct',14,79);
+  doc.autoTable({
+    startY:86, head:[['Q','Your Answer','Correct Answer','Result']], body:rows, theme:'grid',
+    styles:{fontSize:8,cellPadding:2.2,overflow:'linebreak',valign:'middle'},
+    headStyles:{fillColor:[30,58,95],textColor:255,fontStyle:'bold',fontSize:8},
+    columnStyles:{0:{cellWidth:18,halign:'center'},1:{cellWidth:50},2:{cellWidth:70},3:{cellWidth:35,halign:'center'}},
+    didParseCell:function(data){
+      if(data.section==='body'&&data.column.index===3){
+        var t=data.cell.raw||'';
+        if(t.indexOf('Correct')!==-1 && t.indexOf('Incorrect')===-1){data.cell.styles.textColor=[5,150,105];data.cell.styles.fontStyle='bold';}
+        else if(t.indexOf('Incorrect')!==-1){data.cell.styles.textColor=[225,29,72];data.cell.styles.fontStyle='bold';}
+        else {data.cell.styles.textColor=[107,114,128];data.cell.styles.fontStyle='italic';}
+      }
+    },
+    margin:{left:14,right:14}
+  });
+  var finalY=doc.lastAutoTable.finalY+12;
+  doc.setFontSize(8); doc.setTextColor(107,114,128);
+  doc.text('This report shows your answers against the official answer key.',14,finalY);
+  var safeName=(candidateName||'Candidate').replace(/[^a-zA-Z0-9]/g,'_').slice(0,20);
+  var safeNum=(candidateNumber||'NA').replace(/[^a-zA-Z0-9]/g,'_').slice(0,15);
+  doc.save('IELTS_Reading7_'+safeName+'_'+safeNum+'_'+new Date().toISOString().slice(0,10)+'.pdf');
+}
+
+/* ============================================================
+   RESIZER
+   ============================================================ */
+var resizer=document.getElementById('resizer');
+var passPanel=document.getElementById('passage-panel');
+var isResizing=false,startX,startW;
+resizer.addEventListener('mousedown',function(e){ isResizing=true; startX=e.clientX; startW=passPanel.offsetWidth; resizer.classList.add('dragging'); document.body.style.userSelect='none'; document.body.style.cursor='col-resize'; });
+document.addEventListener('mousemove',function(e){ if(!isResizing) return; var dx=e.clientX-startX; passPanel.style.width=Math.min(Math.max(startW+dx,280),window.innerWidth-320)+'px'; });
+document.addEventListener('mouseup',function(){ if(isResizing){ isResizing=false; resizer.classList.remove('dragging'); document.body.style.userSelect=''; document.body.style.cursor=''; saveSession(true); } });
+
+(function(){
+  var saved = loadSession();
+  if(saved && saved.passageWidth){ document.getElementById('passage-panel').style.width = saved.passageWidth; }
+})();
+</script>
+</body>
+</html>

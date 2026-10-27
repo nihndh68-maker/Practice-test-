@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Academic Reading · Test 318</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fff;--border:#e5e7eb;--border-soft:#f3f4f6;--accent:#1e3a5f;--accent-red:#e11d48;--accent-red-hover:#be123c;--text:#1f2937;--muted:#6b7280;--success:#059669;--passage-width:52%;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+  #start-screen{position:fixed;inset:0;background:#f8fafc;display:flex;align-items:center;justify-content:center;z-index:500;}
+  #start-screen.hidden{display:none;}
+  .start-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:40px 44px;max-width:460px;width:92%;box-shadow:0 10px 40px rgba(0,0,0,.08);}
+  .start-card h1{font-size:20px;margin-bottom:4px;font-weight:600;}
+  .start-card .sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .start-card label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;}
+  .start-card input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;margin-bottom:16px;font-family:inherit;}
+  .start-card input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.12);}
+  .start-card button{width:100%;padding:12px;background:var(--accent-red);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;}
+  .start-card button:hover{background:var(--accent-red-hover);}
+  .resume-banner{display:none;background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12.5px;color:#92400e;line-height:1.5;}
+  .resume-banner.show{display:block;}
+  .resume-banner .resume-actions{margin-top:8px;display:flex;gap:8px;}
+  .resume-banner .resume-actions button{width:auto;margin:0;padding:6px 12px;font-size:12px;border-radius:6px;}
+  .resume-banner .resume-actions .btn-ghost{background:#fff;color:#92400e;border:1px solid #fbbf24;}
+  #topbar{background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;flex-shrink:0;z-index:100;}
+  .top-left{display:flex;align-items:center;gap:12px;}
+  .mock-label{font-size:15px;font-weight:500;}
+  #autosave-indicator{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--success);font-weight:500;opacity:0;transition:opacity .4s ease;}
+  #autosave-indicator.show{opacity:1;}
+  #autosave-indicator .dot{width:7px;height:7px;border-radius:50%;background:var(--success);}
+  #autosave-indicator.saving .dot{background:#f59e0b;animation:blink .8s infinite;}
+  #autosave-indicator.saving{color:#f59e0b;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+  #timer-wrap{display:flex;align-items:center;gap:6px;color:var(--accent-red);font-weight:600;}
+  #timer{font-size:18px;font-weight:600;letter-spacing:0.02em;min-width:52px;}
+  #timer.warn{animation:pulse 1s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .top-actions{display:flex;align-items:center;gap:8px;}
+  .icon-btn{width:36px;height:36px;border:none;background:transparent;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;}
+  .icon-btn:hover{background:var(--border-soft);color:var(--text);}
+  .btn-submit{background:#e5e7eb;color:var(--text);border:none;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;}
+  .btn-submit:hover{background:#d1d5db;}
+  .icon-btn.active{background:#fff1f2;color:var(--accent-red);}
+  #notepad-panel{position:fixed;top:56px;right:0;width:320px;height:calc(100vh - 56px - 56px);background:#fff;border-left:1px solid var(--border);box-shadow:-4px 0 24px rgba(0,0,0,.08);z-index:150;display:flex;flex-direction:column;transition:transform .2s ease;}
+  #notepad-panel.hidden{transform:translateX(100%);pointer-events:none;}
+  .notepad-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+  .notepad-title{font-size:15px;font-weight:600;color:var(--accent-red);}
+  #notepad-text{flex:1;border:none;resize:none;padding:14px 16px;font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.55;outline:none;}
+  #main{display:flex;flex:1;overflow:hidden;}
+  #passage-panel{width:var(--passage-width);background:#fff;overflow-y:auto;padding:24px 28px 40px;flex-shrink:0;}
+  .part-header{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:4px;}
+  #passage-panel h2{font-size:22px;font-weight:700;color:var(--accent);margin-bottom:6px;letter-spacing:-0.3px;}
+  .time-note{font-size:12.5px;color:var(--muted);margin-bottom:16px;line-height:1.5;}
+  .passage-title{text-align:center;font-family:'Source Serif 4',Georgia,serif;font-size:18px;font-weight:600;color:var(--accent);margin-bottom:22px;}
+  #passage-panel p{font-family:'Source Serif 4',Georgia,serif;font-size:15px;line-height:1.75;margin-bottom:16px;}
+  #passage-panel strong{font-weight:700;color:var(--accent);}
+  #passage-panel em{font-style:italic;}
+  #resizer{width:5px;background:transparent;cursor:col-resize;flex-shrink:0;position:relative;z-index:10;}
+  #resizer::before{content:'';position:absolute;top:0;bottom:0;left:2px;width:1px;background:var(--accent-red);}
+  #resizer:hover::before,#resizer.dragging::before{width:3px;left:1px;}
+  #resizer .handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:28px;background:#fff;border:1px solid var(--accent-red);border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--accent-red);font-size:10px;}
+  #questions-panel{flex:1;overflow-y:auto;padding:20px 24px 80px;background:#fff;}
+  .q-section{margin-bottom:28px;}
+  .q-section-header{font-size:15px;font-weight:600;margin-bottom:8px;}
+  .q-section-intro{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:16px;}
+  .info-box{padding:12px 16px;font-size:13px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:14px;line-height:1.9;}
+  .info-box.notes{font-size:13.5px;line-height:2.1;}
+  .info-box .box-title{display:block;font-weight:600;color:var(--accent);margin-bottom:2px;}
+  .question{padding:12px 0;border-bottom:1px solid var(--border-soft);display:flex;gap:12px;align-items:flex-start;}
+  .question:last-child{border-bottom:none;}
+  .q-num{min-width:26px;height:26px;color:var(--muted);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px;}
+  .q-body{flex:1;}
+  .q-text{font-size:14px;line-height:1.55;margin-bottom:10px;}
+  .tfn-options,.mcq-options{display:flex;flex-direction:column;gap:6px;}
+  .tfn-options.horizontal{flex-direction:row;flex-wrap:wrap;gap:8px;}
+  .tfn-btn,.mcq-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:13.5px;transition:all .12s;}
+  .tfn-btn:hover,.mcq-opt:hover{border-color:#94a3b8;background:#f8fafc;}
+  .tfn-btn.selected,.mcq-opt.selected{border-color:var(--accent-red);background:#fff1f2;}
+  .tfn-btn .radio-dot,.mcq-opt .radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid #cbd5e1;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .tfn-btn.selected .radio-dot,.mcq-opt.selected .radio-dot{border-color:var(--accent-red);}
+  .tfn-btn.selected .radio-dot::after,.mcq-opt.selected .radio-dot::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--accent-red);}
+  .fill-input{border:1.5px solid var(--border);border-radius:6px;padding:7px 12px;font-size:14px;font-family:inherit;width:100%;max-width:240px;transition:border-color .15s;}
+  .fill-input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .fill-input.answered{border-color:var(--success);background:#f0fdf4;}
+  .fill-input.inline{display:inline-block;vertical-align:middle;margin:0 2px;}
+  .dd-select{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 36px 10px 12px;font-size:13.5px;font-family:inherit;background-color:#fff;cursor:pointer;transition:border-color .15s;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 12px center;}
+  .dd-select:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .dd-select.answered{border-color:var(--success);background-color:#f0fdf4;}
+  #bottombar{border-top:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0;gap:12px;min-height:56px;}
+  .part-tabs{display:flex;gap:8px;flex-shrink:0;}
+  .part-tab{padding:8px 16px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .part-tab:hover{border-color:#94a3b8;color:var(--text);}
+  .part-tab.active{border-color:var(--accent-red);color:var(--accent);box-shadow:0 0 0 1px var(--accent-red);}
+  .part-tab .count{font-weight:400;color:var(--muted);}
+  .q-circles{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;flex:1;padding:0 8px;}
+  .q-circle{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;}
+  .q-circle:hover{border-color:#94a3b8;color:var(--text);}
+  .q-circle.answered{background:var(--success);border-color:var(--success);color:#fff;}
+  .nav-arrows{display:flex;gap:6px;flex-shrink:0;}
+  .nav-arrow{width:36px;height:36px;border:1.5px solid var(--border);border-radius:50%;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:16px;}
+  .nav-arrow:hover{border-color:#94a3b8;color:var(--text);}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;}
+  .modal-overlay.hidden{display:none;}
+  .modal{background:#fff;border-radius:12px;padding:28px 32px;max-width:720px;width:94%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+  .modal h2{font-size:20px;margin-bottom:10px;}
+  .modal p{font-size:14px;line-height:1.6;color:var(--muted);margin-bottom:16px;}
+  .score-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0;}
+  .score-card{background:#f8fafc;border-radius:10px;padding:14px;text-align:center;}
+  .score-card .val{font-size:26px;font-weight:700;color:var(--accent);}
+  .score-card .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+  .modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;}
+  .btn-modal{padding:9px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;}
+  .btn-modal:hover{background:#f8fafc;}
+  .btn-modal.primary{background:var(--accent-red);color:#fff;border-color:var(--accent-red);}
+  .btn-modal.primary:hover{background:var(--accent-red-hover);}
+  .ans-table-wrap{margin:12px 0;max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;}
+  .ans-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .ans-table th{position:sticky;top:0;background:var(--accent);color:#fff;padding:8px 10px;text-align:left;font-weight:600;font-size:11px;}
+  .ans-table td{padding:6px 10px;border-bottom:1px solid var(--border);}
+  .ans-table tr:nth-child(even) td{background:#f8fafc;}
+  .ans-table .ok{color:var(--success);font-weight:600;}
+  .ans-table .bad{color:var(--accent-red);font-weight:600;}
+  .ans-table .blank{color:var(--muted);font-style:italic;}
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px;}
+  .passage-content{display:none;}
+  .passage-content.active{display:block;}
+  mark.hl{background:#fef08a;padding:0 2px;border-radius:2px;}
+  mark.hl-note{background:#bbf7d0;padding:0 2px;border-radius:2px;border-bottom:2px solid #16a34a;}
+  #sel-toolbar{position:fixed;z-index:300;display:none;background:#1e3a5f;color:#fff;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);font-size:13px;font-weight:500;overflow:hidden;white-space:nowrap;}
+  #sel-toolbar button{background:transparent;border:none;color:#fff;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:500;font-family:inherit;}
+  #sel-toolbar button:hover{background:rgba(255,255,255,.15);}
+  #sel-toolbar .sep{display:inline-block;width:1px;height:14px;background:rgba(255,255,255,.35);vertical-align:middle;}
+  @media (max-width:800px){#main{flex-direction:column;}#passage-panel{width:100%!important;height:42vh;border-bottom:1px solid var(--border);}#resizer{display:none;}}
+  .para-label{font-weight:700;color:var(--accent);margin-right:6px;}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+<div id="start-screen">
+  <div class="start-card">
+    <h1>IELTS Academic Reading</h1>
+    <div class="sub">Computer-Delivered Simulation · Test 318</div>
+    <div class="resume-banner" id="resume-banner">
+      <strong>⏱ Saved session found</strong>
+      <div id="resume-info"></div>
+      <div class="resume-actions">
+        <button onclick="resumeTest()">Resume Test</button>
+        <button class="btn-ghost" onclick="discardSaved()">Start Fresh</button>
+      </div>
+    </div>
+    <label for="cand-name">Candidate Name</label>
+    <input type="text" id="cand-name" placeholder="Enter your full name" autocomplete="off">
+    <label for="cand-num">Candidate Number</label>
+    <input type="text" id="cand-num" placeholder="e.g. 123456" autocomplete="off">
+    <button onclick="startTest()">Start Test</button>
+  </div>
+</div>
+
+<div id="topbar">
+  <div class="top-left">
+    <span class="mock-label">IELTS Academic Reading · Test 318</span>
+    <span id="autosave-indicator"><span class="dot"></span><span id="autosave-text">Saved</span></span>
+  </div>
+  <div id="timer-wrap">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <div id="timer">60:00</div>
+  </div>
+  <div class="top-actions">
+    <button class="icon-btn" id="notepad-btn" title="Notepad" onclick="toggleNotepad()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></button>
+    <button class="icon-btn" title="Full screen" onclick="toggleFullscreen()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
+    <button class="btn-submit" onclick="confirmSubmit()">Submit</button>
+  </div>
+</div>
+
+<div id="notepad-panel" class="hidden">
+  <div class="notepad-header">
+    <span class="notepad-title">Notepad</span>
+    <button class="icon-btn" title="Close" onclick="toggleNotepad()" style="width:28px;height:28px"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <textarea id="notepad-text" placeholder="Type your notes here…"></textarea>
+</div>
+
+<div id="sel-toolbar">
+  <button type="button" id="sel-note-btn">Note</button><span class="sep"></span><button type="button" id="sel-hl-btn">Highlight</button>
+</div>
+
+<div id="main">
+  <div id="passage-panel">
+
+    <div class="passage-content active" id="pc-0">
+      <div class="part-header">PART 1</div>
+      <h2>READING PASSAGE 1</h2>
+      <div class="time-note">You should spend about 20 minutes on Questions 1–13, which are based on Reading Passage 1 below.</div>
+      <div class="passage-title">Nursing Absenteeism<br><span style="font-size:14px;font-weight:500;color:#6b7280">A LONGITUDINAL STUDY</span></div>
+      <p>Absence from work is a costly and disruptive problem for any organisation. The cost of absenteeism in Australia has been put at 1.8 million hours per day or $1400 million annually. The study reported here was conducted in the Prince William Hospital in Brisbane, Australia, where, prior to this time, few active steps had been taken to measure, understand or manage the occurrence of absenteeism.</p>
+      <p><strong>Nursing Absenteeism</strong></p>
+      <p>A prevalent attitude amongst many nurses in the group selected for study was that there was no reward or recognition for not utilising the paid sick leave entitlement allowed them in their employment conditions. Therefore, they believed they may as well take the days off, sick or otherwise. Similar attitudes have been noted by James (1989), who noted that sick leave is seen by many workers as a right, like annual holiday leave.</p>
+      <p>Miller and Norton (1986), in their survey of 865 nursing personnel, found that 73 percent felt they should be rewarded for not taking sick leave because some employees always used their sick leave. Further, 67 per cent of nurses felt that administration was not sympathetic to the problems shift work causes to employees’ personal and social lives. Only 53 percent of the respondents felt that every effort was made to schedule staff fairly.</p>
+      <p>In another longitudinal study of nurses working in two Canadian hospitals, Hacket Bycio and Guion (1989) examined the reasons why nurses took absence from work. The most frequent reason stated for absence was minor illness to self. Other causes, in decreasing order of frequency, were illness in family, family social function, work to do at home and bereavement.</p>
+      <p><strong>Method</strong></p>
+      <p>In an attempt to reduce the level of absenteeism amongst the 250 Registered and Enrolled Nurses in the present study, the Prince William management introduced three different, yet potentially complementary, strategies over 18 months.</p>
+      <p>Strategy 1: Non-financial (material) incentives: Within the established wage and salary system it was not possible to use hospital funds to support this strategy. However, it was possible to secure incentives from local businesses, including free passes to entertainment parks, theatres, restaurants, etc. At the end of each roster period, the ward with the lowest absence rate would win the prize.</p>
+      <p>Strategy 2: Flexible fair rostering: Where possible, staff were given the opportunity to determine their working schedule within the limits of clinical needs.</p>
+      <p>Strategy 3: Individual absenteeism and counselling: Each month, managers would analyse the pattern of absence of staff with excessive sick leave (greater than ten days per year for full-time employees). Characteristic patterns of potential ‘voluntary absenteeism’ such as absence before and after days off, excessive weekend and night duty absence and multiple single days off were communicated to all ward nurses and then, as necessary, followed up by action.</p>
+      <p><strong>Results</strong></p>
+      <p>Absence rates for the six months prior to the Incentive scheme ranged from 3.69 per cent to 4.32 per cent. In the following six months, they ranged between 2.87 percent and 3.96 percent. This represents a 20 percent improvement. However, analysing the absence rates on a year-to-year basis, the overall absence rate was 3.60 percent in the first year and 3.43 percent in the following year. This represents a 5 percent decrease from the first to the second year of the study. A significant decrease in absence over the two-year period could not be demonstrated.</p>
+      <p><strong>Discussion</strong></p>
+      <p>The non-financial incentive scheme did appear to assist in controlling absenteeism in the short term. As the scheme progressed it became harder to secure prizes and this contributed to the program’s losing momentum and finally ceasing. There were mixed results across wards as well. For example, in wards with staff members who had a long-term genuine illness, there was little chance of winning, and to some extent, the staffs on those wards were disempowered. Our experience would suggest that the long-term effects of incentive awards on absenteeism are questionable.</p>
+      <p>Over the time of the study, staff were given a larger degree of control in their rosters. This led to significant improvements in communication between managers and staff. A similar effect was found from the implementation of the third strategy. Many of the nurses had not realised the impact their behaviour was having on the organisation and their colleagues but there were also staff members who felt that talking to them about their absenteeism was ‘picking’ on them and this usually had a negative effect on management-employee relationships.</p>
+      <p><strong>Conclusion</strong></p>
+      <p>Although there has been some decrease in absence rates, no single strategy or combination of strategies has had a significant impact on absenteeism per se. Notwithstanding the disappointing results, it is our contention that the strategies were not in vain. A shared ownership of absenteeism and a collaborative approach to problem solving has facilitated improved cooperation and communication between management and staff. It is our belief that this improvement alone, while not tangibly measurable, has increased the ability of management to manage the effects of absenteeism more effectively since this study.</p>
+    </div>
+
+    <div class="passage-content" id="pc-1">
+      <div class="part-header">PART 2</div>
+      <h2>READING PASSAGE 2</h2>
+      <div class="time-note">You should spend about 20 minutes on Questions 14–26, which are based on Reading Passage 2 below.</div>
+      <div class="passage-title">Last Man Standing</div>
+      <p>Some 50,000 years ago, Homo sapiens beat other hominids to become the only surviving species. Kate Ravilious reveals how we did it.</p>
+      <p><strong class="para-label">A</strong> Today, there are over seven billion people living on Earth. No other species has exerted as much influence over the planet as us. But turn the clock back 80,000 years and we were one of a number of species roaming the Earth. Our own species, Homo sapiens (Latin for ‘wise man’), was most successful in Africa. In western Eurasia, the Neanderthals dominated, while Homo erectus may have lived in Indonesia. Meanwhile, an unusual finger bone and tooth, discovered in Denisova cave in Siberia in 2008, have led scientists to believe that yet another human population – the Denisovans – may also have been widespread across Asia. Somewhere along the line, these other human species died out, leaving Homo sapiens as the sole survivor. So what made us the winners in the battle for survival?</p>
+      <p><strong class="para-label">B</strong> Some 74,000 years ago, the Toba ‘supervolcano’ on the Indonesian island of Sumatra erupted. The scale of the event was so great that ash from the eruption was flung as far as eastern India, more than 2,000 kilometres away. Oxford archaeologist Mike Petraglia and his team have uncovered thousands of stone tools buried underneath the Toba ash. The mix of hand axes and spear tips have led Petraglia to speculate that Homo sapiens and Homo erectus were both living in eastern India prior to the Toba eruption. Based on careful examination of the tools and dating of the sediment layers where they were found, Petraglia and his team suggest that Homo sapiens arrived in eastern India around 78,000 years ago, migrating out of Africa and across Arabia during a favourable climate period.</p>
+      <p>After their arrival, the simple tools belonging to Homo erectus seemed to lessen in number and eventually disappear completely. ‘We think that Homo sapiens had a more efficient hunting technology, which could have given them the edge,’ says Petraglia. ‘Whether the eruption of Toba also played a role in the extinction of the Homo erectus-like species is unclear to us.’</p>
+      <p><strong class="para-label">C</strong> Some 45,000 years later, another fight for survival took place. This time, the location was Europe and the protagonists were another species, the Neanderthals. They were a highly successful species that dominated the European landscape for 300,000 years. Yet within just a few thousand years of the arrival of Homo sapiens, their numbers plummeted. They eventually disappeared from the landscape around 30,000 years ago, with their last known refuge being southern Iberia, including Gibraltar. Initially, Homo sapiens and Neanderthals lived alongside each other and had no reason to compete. But then Europe’s climate swung into a cold, inhospitable, dry phase. ‘Neanderthal and Homo sapiens populations had to retreat to refugia (pockets of habitable land). This heightened competition between the two groups,’ explains Chris Stringer, an anthropologist at the Natural History Museum in London.</p>
+      <p><strong class="para-label">D</strong> Both species were strong and stockier than the average human today, but Neanderthals were particularly robust. ‘Their skeletons show that they had broad shoulders and thick necks,’ says Stringer. ‘Homo sapiens, on the other hand, had longer forearms, which undoubtedly enabled them to throw a spear from some distance, with less danger and using relatively little energy,’ explains Stringer. This long-range ability may have given Homo sapiens an advantage in hunting. When it came to keeping warm, Homo sapiens had another skill: weaving and sewing. Archaeologists have uncovered simple needles fashioned from ivory and bone alongside Homo sapiens, dating as far back as 35,000 years ago. ‘Using this technology, we could use animal skins to make ourselves tents, warm clothes and fur boots,’ says Stringer. In contrast, Neanderthals never seemed to master sewing skills, instead relying on pinning skins together with thorns.</p>
+      <p><strong class="para-label">E</strong> A thirst for exploration provided Homo sapiens with another significant advantage over Neanderthals. Objects such as shell beads and flint tools, discovered many miles from their source, show that our ancestors travelled over large distances, in order to barter and exchange useful materials, and share ideas and knowledge. By contrast, Neanderthals tended to keep themselves to themselves, living in small groups. They misdirected their energies by only gathering resources from their immediate surroundings and perhaps failing to discover new technologies outside their territory.</p>
+      <p><strong class="para-label">F</strong> Some of these differences in behaviour may have emerged because the two species thought in different ways. By comparing skull shapes, archaeologists have shown that Homo sapiens had a more developed temporal lobe – the regions at the side of the brain, associated with listening, language and long-term memory. ‘We think that Homo sapiens had a significantly more complex language than Neanderthals and were able to comprehend and discuss concepts such as the distant past and future,’ says Stringer. Penny Spikins, an archaeologist at the University of York, has recently suggested that Homo sapiens may also have had a greater diversity of brain types than Neanderthals.</p>
+      <p>‘Our research indicates that high-precision tools, new hunting technologies and the development of symbolic communication may all have come about because they were willing to include people with “different” minds and specialised roles in their society,’ she explains. ‘We see similar kinds of injuries on male and female Neanderthal skeletons, implying there was no such division of labour,’ says Spikins.</p>
+      <p><strong class="para-label">G</strong> Thus by around 30,000 years ago, many talents and traits were well established in Homo sapiens societies but still absent from Neanderthal communities. Stringer thinks that the Neanderthals were just living in the wrong place at the wrong time. ‘They had to compete with Homo sapiens during a phase of very unstable climate across Europe. During each rapid climate fluctuation, they may have suffered greater losses of people than Homo sapiens, and thus were slowly worn down,’ he says. ‘If the climate had remained stable throughout, they might still be here.’</p>
+    </div>
+
+    <div class="passage-content" id="pc-2">
+      <div class="part-header">PART 3</div>
+      <h2>READING PASSAGE 3</h2>
+      <div class="time-note">You should spend about 20 minutes on Questions 27–40, which are based on Reading Passage 3 below.</div>
+      <div class="passage-title">Unmasking Skin</div>
+      <p><strong class="para-label">A</strong> If you took off your skin and laid it flat, it would cover an area of about twenty-one square feet, making it by far the body’s largest organ. Draped in place over our bodies, skin forms the barrier between what’s inside us and what’s outside. It protects us from a multitude of external forces. It serves as an avenue to our most intimate physical and psychological selves.</p>
+      <p><strong class="para-label">B</strong> This impervious yet permeable barrier, less than a millimetre thick in places, is composed of three layers. The outermost layer is the bloodless epidermis. The dermis includes collagen, elastin, and nerve endings. The innermost layer, subcutaneous fat, contains tissue that acts as an energy source, cushion and insulator for the body.</p>
+      <p><strong class="para-label">C</strong> From these familiar characteristics of skin emerge the profound mysteries of touch, arguably our most essential source of sensory stimulation. We can live without seeing or hearing – in fact, without any of our other senses. But babies born without effective nerve connections between skin and brain can fail to thrive and may even die.</p>
+      <p><strong class="para-label">D</strong> Laboratory experiments decades ago, now considered unethical and inhumane, kept baby monkeys from being touched by their mothers. It made no difference that the babies could see, hear and smell their mothers; without touching, the babies became apathetic, and failed to progress.</p>
+      <p><strong class="para-label">E</strong> For humans, insufficient touching in early years can have lifelong results. “In touching cultures, adult aggression is low, whereas in cultures where touch is limited, adult aggression is high,” writes Tiffany Field, director of the Touch Research Institutes at the University of Miami School of Medicine. Studies of a variety of cultures show a correspondence between high rates of physical affection in childhood and low rates of adult physical violence.</p>
+      <p><strong class="para-label">F</strong> While the effects of touching are easy to understand, the mechanics of it are less so. “Your skin has millions of nerve cells of various shapes at different depths,” explains Stanley Bolanowski, a neuroscientist and associate director of the Institute for Sensory Research at Syracuse University. “When the nerve cells are stimulated, physical energy is transformed into energy used by the nervous system and passed from the skin to the spinal cord and brain. It’s called transduction, and no one knows exactly how it takes place.” Suffice it to say that the process involves the intricate, split-second operation of a complex system of signals between neurons in the skin and brain.</p>
+      <p><strong class="para-label">G</strong> This is starting to sound very confusing until Bolanowski says: “In simple terms people perceive three basic things via skin: pressure, temperature, and pain.” And then I’m sure he’s wrong. “When I get wet, my skin feels wet,” I protest. “Close your eyes and lean back,” says Bolanowski.</p>
+      <p><strong class="para-label">H</strong> Something cold and wet is on my forehead – so wet, in fact, that I wait for water to start dripping down my cheeks. “Open your eyes.” Bolanowski says, showing me that the sensation comes from a chilled, but dry, metal cylinder. The combination of pressure and cold, he explains, is what makes my skin perceive wetness. He gives me a surgical glove to put on and has me put a finger in a glass of cold water. My finger feels wet, even though I have visual proof that it’s not touching water. My skin, which seemed so reliable, has been deceiving me my entire life. When I shower or wash my hands, I now realize, my skin feels pressure and temperature. It’s my brain that says I feel wet.</p>
+      <p><strong class="para-label">I</strong> Perceptions of pressure, temperature and pain manifest themselves in many different ways. Gentle stimulation of pressure receptors can result in ticklishness; gentle stimulation of pain receptors, in itching. Both sensations arise from a neurological transmission, not from something that physically exists. Skin, I’m realizing, is under constant assault, both from within the body and from forces outside. Repairs occur with varying success.</p>
+      <p><strong class="para-label">J</strong> Take the spot where I nicked myself with a knife while slicing fruit. I have a crusty scab surrounded by pink tissue about a quarter inch long on my right palm. Under the scab, epidermal cells are migrating into the wound to close it up. When the process is complete, the scab will fall off to reveal new epidermis. It’s only been a few days, but my little self-repair is almost complete. Likewise, we recover quickly from slight burns. If you ever happen to touch a hot burner, just put your finger in cold water. The chances are you will have no blister, little pain and no scar. Severe burns, though, are a different matter.</p>
+    </div>
+
+  </div>
+
+  <div id="resizer"><div class="handle">⋮⋮</div></div>
+
+  <div id="questions-panel">
+<div id="qs-0">
+<div class="q-section">
+<div class="q-section-header">Questions 1–7</div>
+<div class="q-section-intro">Do the following statements agree with the information given in Reading Passage 1?<br>Write <strong>YES</strong> if the statement agrees with the information, <strong>NO</strong> if the statement contradicts the information, or <strong>NOT GIVEN</strong> if there is no information on this.</div>
+<div class="question" id="q1"><div class="q-num">1</div><div class="q-body"><div class="q-text">The Prince William Hospital has been trying to reduce absenteeism amongst nurses for many years.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q1','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q1','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q1','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q2"><div class="q-num">2</div><div class="q-body"><div class="q-text">Nurses in the Prince William Hospital study believed that there were benefits in taking as little sick leave as possible.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q2','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q2','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q2','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q3"><div class="q-num">3</div><div class="q-body"><div class="q-text">Just over half the nurses in the 1986 study believed that management understood the effects that shift work had on them.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q3','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q3','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q3','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q4"><div class="q-num">4</div><div class="q-body"><div class="q-text">The Canadian study found that ‘illness in the family’ was a greater cause of absenteeism than ‘work to do at home’.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q4','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q4','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q4','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q5"><div class="q-num">5</div><div class="q-body"><div class="q-text">In relation to management attitude to absenteeism the study at the Prince William Hospital found similar results to the two 1989 studies.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q5','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q5','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q5','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q6"><div class="q-num">6</div><div class="q-body"><div class="q-text">The study at the Prince William Hospital aimed to find out the causes of absenteeism amongst 250 nurses.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q6','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q6','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q6','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q7"><div class="q-num">7</div><div class="q-body"><div class="q-text">The study at the Prince William Hospital involved changes in management practices.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q7','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q7','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q7','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 8–13</div>
+<div class="q-section-intro">Complete the notes below.<br>Choose <strong>ONE OR TWO WORDS AND/OR A NUMBER</strong> from the passage for each answer.</div>
+<div class="info-box notes">
+<span class="box-title">Strategies and results</span>
+8. In the first strategy, wards with the lowest absenteeism in different periods would win prizes donated by <input class="fill-input inline" id="q8" oninput="markFill('q8')" style="width:160px" placeholder="…">.<br>
+9. In the second strategy, staff were given more control over their <input class="fill-input inline" id="q9" oninput="markFill('q9')" style="width:140px" placeholder="…">.<br>
+10. In the third strategy, nurses who appeared to be taking <input class="fill-input inline" id="q10" oninput="markFill('q10')" style="width:120px" placeholder="…"> sick leave or <input class="fill-input inline" id="q11" oninput="markFill('q11')" style="width:160px" placeholder="…"> were identified and counselled.<br>
+11. Initially, there was a <input class="fill-input inline" id="q12" oninput="markFill('q12')" style="width:80px" placeholder="…"> per cent decrease in absenteeism.<br>
+12. The first strategy was considered ineffective and stopped.<br>
+13. The second and third strategies generally resulted in better <input class="fill-input inline" id="q13" oninput="markFill('q13')" style="width:140px" placeholder="…"> among staff.
+</div>
+</div>
+</div>
+
+<div id="qs-1" style="display:none">
+<div class="q-section">
+<div class="q-section-header">Questions 14–18</div>
+<div class="q-section-intro">The reading passage has seven paragraphs, <strong>A–G</strong>.<br>Which paragraph contains the following information?<br>Write the correct letter, <strong>A–G</strong>, in boxes 14–18.</div>
+<div class="question" id="q14"><div class="q-num">14</div><div class="q-body"><div class="q-text">a comparison of a range of physical features of Neanderthals and Homo sapiens</div><select class="dd-select" id="dd-q14" data-opts="A,B,C,D,E,F,G" data-ph="Select a paragraph…" onchange="selectDropdown(this,'q14')"></select></div></div>
+<div class="question" id="q15"><div class="q-num">15</div><div class="q-body"><div class="q-text">reference to items that were once used for trade</div><select class="dd-select" id="dd-q15" data-opts="A,B,C,D,E,F,G" data-ph="Select a paragraph…" onchange="selectDropdown(this,'q15')"></select></div></div>
+<div class="question" id="q16"><div class="q-num">16</div><div class="q-body"><div class="q-text">mention of evidence for the existence of a previously unknown human species</div><select class="dd-select" id="dd-q16" data-opts="A,B,C,D,E,F,G" data-ph="Select a paragraph…" onchange="selectDropdown(this,'q16')"></select></div></div>
+<div class="question" id="q17"><div class="q-num">17</div><div class="q-body"><div class="q-text">mention of the part played by ill fortune in the downfall of Neanderthal society</div><select class="dd-select" id="dd-q17" data-opts="A,B,C,D,E,F,G" data-ph="Select a paragraph…" onchange="selectDropdown(this,'q17')"></select></div></div>
+<div class="question" id="q18"><div class="q-num">18</div><div class="q-body"><div class="q-text">reference to the final geographical location of Neanderthals</div><select class="dd-select" id="dd-q18" data-opts="A,B,C,D,E,F,G" data-ph="Select a paragraph…" onchange="selectDropdown(this,'q18')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 19–22</div>
+<div class="q-section-intro">Complete the sentences below.<br>Choose <strong>NO MORE THAN THREE WORDS</strong> from the passage for each answer.</div>
+<div class="question" id="q19"><div class="q-num">19</div><div class="q-body"><div class="q-text">Analysis of stone tools and <input class="fill-input inline" id="ans-q19" oninput="markFill('q19')" style="width:140px" placeholder="…"> has enabled Petraglia’s team to put forward an arrival date for Homo sapiens in eastern India.</div></div></div>
+<div class="question" id="q20"><div class="q-num">20</div><div class="q-body"><div class="q-text">Homo sapiens used both <input class="fill-input inline" id="ans-q20" oninput="markFill('q20')" style="width:140px" placeholder="…"> to make sewing implements.</div></div></div>
+<div class="question" id="q21"><div class="q-num">21</div><div class="q-body"><div class="q-text">The territorial nature of Neanderthals may have limited their ability to acquire resources and <input class="fill-input inline" id="ans-q21" oninput="markFill('q21')" style="width:140px" placeholder="…">.</div></div></div>
+<div class="question" id="q22"><div class="q-num">22</div><div class="q-body"><div class="q-text">Archaeologists examined <input class="fill-input inline" id="ans-q22" oninput="markFill('q22')" style="width:140px" placeholder="…"> in order to get an insight into Neanderthal and Homo sapiens’ capacity for language and thought.</div></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 23–26</div>
+<div class="q-section-intro">Look at the following statements and the list of researchers below.<br>Match each statement with the correct researcher, <strong>A–C</strong>.</div>
+<div class="info-box"><span class="box-title">List of Researchers</span>
+<strong>A</strong> Mike Petraglia<br>
+<strong>B</strong> Chris Stringer<br>
+<strong>C</strong> Penny Spikins
+</div>
+<div class="question" id="q23"><div class="q-num">23</div><div class="q-body"><div class="q-text">No evidence can be found to suggest that Neanderthal communities allocated tasks to different members.</div><select class="dd-select" id="dd-q23" data-opts="A,B,C" data-ph="Select a researcher…" onchange="selectDropdown(this,'q23')"></select></div></div>
+<div class="question" id="q24"><div class="q-num">24</div><div class="q-body"><div class="q-text">Homo sapiens may have been able to plan ahead.</div><select class="dd-select" id="dd-q24" data-opts="A,B,C" data-ph="Select a researcher…" onchange="selectDropdown(this,'q24')"></select></div></div>
+<div class="question" id="q25"><div class="q-num">25</div><div class="q-body"><div class="q-text">Scientists cannot be sure whether a sudden natural disaster contributed to the loss of a human species.</div><select class="dd-select" id="dd-q25" data-opts="A,B,C" data-ph="Select a researcher…" onchange="selectDropdown(this,'q25')"></select></div></div>
+<div class="question" id="q26"><div class="q-num">26</div><div class="q-body"><div class="q-text">Environmental conditions restricted the areas where Homo sapiens and Neanderthals could live.</div><select class="dd-select" id="dd-q26" data-opts="A,B,C" data-ph="Select a researcher…" onchange="selectDropdown(this,'q26')"></select></div></div>
+</div>
+</div>
+
+<div id="qs-2" style="display:none">
+<div class="q-section">
+<div class="q-section-header">Questions 27–30</div>
+<div class="q-section-intro">The passage has ten paragraphs, <strong>A–J</strong>.<br>Which paragraph contains the following information?<br>Write the correct letter, <strong>A–J</strong>, in boxes 27–30.</div>
+<div class="question" id="q27"><div class="q-num">27</div><div class="q-body"><div class="q-text">the features of human skin, on and below the surface</div><select class="dd-select" id="dd-q27" data-opts="A,B,C,D,E,F,G,H,I,J" data-ph="Select a paragraph…" onchange="selectDropdown(this,'q27')"></select></div></div>
+<div class="question" id="q28"><div class="q-num">28</div><div class="q-body"><div class="q-text">an experiment in which the writer can see what is happening</div><select class="dd-select" id="dd-q28" data-opts="A,B,C,D,E,F,G,H,I,J" data-ph="Select a paragraph…" onchange="selectDropdown(this,'q28')"></select></div></div>
+<div class="question" id="q29"><div class="q-num">29</div><div class="q-body"><div class="q-text">advice on how you can avoid damage to the skin</div><select class="dd-select" id="dd-q29" data-opts="A,B,C,D,E,F,G,H,I,J" data-ph="Select a paragraph…" onchange="selectDropdown(this,'q29')"></select></div></div>
+<div class="question" id="q30"><div class="q-num">30</div><div class="q-body"><div class="q-text">cruel research methods used in the past</div><select class="dd-select" id="dd-q30" data-opts="A,B,C,D,E,F,G,H,I,J" data-ph="Select a paragraph…" onchange="selectDropdown(this,'q30')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 31–32</div>
+<div class="q-section-intro">Choose the correct letter, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>.</div>
+<div class="question" id="q31"><div class="q-num">31</div><div class="q-body"><div class="q-text">How does a lack of affectionate touching affect children?</div><div class="mcq-options">
+<label class="mcq-opt" onclick="selectMCQ(this,'q31','A')"><span class="radio-dot"></span>A It makes them apathetic.</label>
+<label class="mcq-opt" onclick="selectMCQ(this,'q31','B')"><span class="radio-dot"></span>B They are more likely to become violent adults.</label>
+<label class="mcq-opt" onclick="selectMCQ(this,'q31','C')"><span class="radio-dot"></span>C They will be less aggressive when they grow up.</label>
+<label class="mcq-opt" onclick="selectMCQ(this,'q31','D')"><span class="radio-dot"></span>D We do not really know.</label>
+</div></div></div>
+<div class="question" id="q32"><div class="q-num">32</div><div class="q-body"><div class="q-text">After the ‘wetness’ experiments, the writer says that</div><div class="mcq-options">
+<label class="mcq-opt" onclick="selectMCQ(this,'q32','A')"><span class="radio-dot"></span>A his skin is not normal.</label>
+<label class="mcq-opt" onclick="selectMCQ(this,'q32','B')"><span class="radio-dot"></span>B his skin was wet when it felt wet.</label>
+<label class="mcq-opt" onclick="selectMCQ(this,'q32','C')"><span class="radio-dot"></span>C he knew why it felt wet when it was dry.</label>
+<label class="mcq-opt" onclick="selectMCQ(this,'q32','D')"><span class="radio-dot"></span>D the experiments taught him nothing new.</label>
+</div></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 33–37</div>
+<div class="q-section-intro">Complete each sentence with the correct ending <strong>A–J</strong> from the box below.</div>
+<div class="info-box"><span class="box-title">Endings</span>
+<strong>A</strong> because it is both cold and painful.<br>
+<strong>B</strong> because the outer layer of the skin can mend itself.<br>
+<strong>C</strong> because it can be extremely thin.<br>
+<strong>D</strong> because there is light pressure on the skin.<br>
+<strong>E</strong> because we do not need the others to survive.<br>
+<strong>F</strong> because there is a good blood supply to the skin.<br>
+<strong>G</strong> because of a small amount of pain.<br>
+<strong>H</strong> because there is a low temperature and pressure.<br>
+<strong>I</strong> because it is hurting a lot.<br>
+<strong>J</strong> because all humans are capable of experiencing it.
+</div>
+<div class="question" id="q33"><div class="q-num">33</div><div class="q-body"><div class="q-text">Touch is unique among the five senses</div><select class="dd-select" id="dd-q33" data-opts="A,B,C,D,E,F,G,H,I,J" data-ph="Select an ending…" onchange="selectDropdown(this,'q33')"></select></div></div>
+<div class="question" id="q34"><div class="q-num">34</div><div class="q-body"><div class="q-text">A substance may feel wet</div><select class="dd-select" id="dd-q34" data-opts="A,B,C,D,E,F,G,H,I,J" data-ph="Select an ending…" onchange="selectDropdown(this,'q34')"></select></div></div>
+<div class="question" id="q35"><div class="q-num">35</div><div class="q-body"><div class="q-text">Something may tickle</div><select class="dd-select" id="dd-q35" data-opts="A,B,C,D,E,F,G,H,I,J" data-ph="Select an ending…" onchange="selectDropdown(this,'q35')"></select></div></div>
+<div class="question" id="q36"><div class="q-num">36</div><div class="q-body"><div class="q-text">The skin may itch</div><select class="dd-select" id="dd-q36" data-opts="A,B,C,D,E,F,G,H,I,J" data-ph="Select an ending…" onchange="selectDropdown(this,'q36')"></select></div></div>
+<div class="question" id="q37"><div class="q-num">37</div><div class="q-body"><div class="q-text">A small cut heals up quickly</div><select class="dd-select" id="dd-q37" data-opts="A,B,C,D,E,F,G,H,I,J" data-ph="Select an ending…" onchange="selectDropdown(this,'q37')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 38–40</div>
+<div class="q-section-intro">Do the following statements agree with the information given in Reading Passage 3?<br>Write <strong>TRUE</strong> if the statement agrees with the information, <strong>FALSE</strong> if the statement contradicts the information, or <strong>NOT GIVEN</strong> if there is no information on this.</div>
+<div class="question" id="q38"><div class="q-num">38</div><div class="q-body"><div class="q-text">Even scientists have difficulty understanding how our sense of touch works.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q38','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q38','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q38','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q39"><div class="q-num">39</div><div class="q-body"><div class="q-text">The skin is more sensitive to pressure than to temperature or pain.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q39','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q39','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q39','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q40"><div class="q-num">40</div><div class="q-body"><div class="q-text">The human skin is always good at repairing itself.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q40','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q40','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q40','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+</div>
+</div>
+  </div>
+</div>
+
+<div id="bottombar">
+  <div class="part-tabs">
+    <div class="part-tab active" id="ptab-0" onclick="switchPassage(0)">Part 1: <span class="count" id="pcount-0">0 of 13</span></div>
+    <div class="part-tab" id="ptab-1" onclick="switchPassage(1)">Part 2: <span class="count" id="pcount-1">0 of 13</span></div>
+    <div class="part-tab" id="ptab-2" onclick="switchPassage(2)">Part 3: <span class="count" id="pcount-2">0 of 14</span></div>
+  </div>
+  <div class="q-circles" id="q-circles"></div>
+  <div class="nav-arrows">
+    <button class="nav-arrow" onclick="prevQ()">‹</button>
+    <button class="nav-arrow" onclick="nextQ()">›</button>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="submit-modal">
+  <div class="modal">
+    <h2>Submit Your Test?</h2>
+    <p>You are about to submit your test. This action cannot be undone.</p>
+    <div class="score-grid" id="score-grid" style="display:none">
+      <div class="score-card"><div class="val" id="sc-answered">0</div><div class="lbl">Answered</div></div>
+      <div class="score-card"><div class="val" id="sc-unanswered">40</div><div class="lbl">Unanswered</div></div>
+      <div class="score-card"><div class="val" id="sc-pct">0%</div><div class="lbl">Completion</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="closeModal()">Cancel</button>
+      <button class="btn-modal primary" onclick="submitTest()">Submit Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="results-modal">
+  <div class="modal">
+    <h2>Test Complete</h2>
+    <p id="results-cand"></p>
+    <div class="score-grid">
+      <div class="score-card"><div class="val" id="r-correct" style="color:var(--success)">—</div><div class="lbl">Correct</div></div>
+      <div class="score-card"><div class="val" id="r-wrong" style="color:var(--accent-red)">—</div><div class="lbl">Incorrect</div></div>
+      <div class="score-card"><div class="val" id="r-unanswered">—</div><div class="lbl">Unanswered</div></div>
+    </div>
+    <div style="margin:14px 0 12px;background:var(--accent);border-radius:12px;padding:18px 22px;text-align:center;color:#fff">
+      <div style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-bottom:4px">IELTS Band Score</div>
+      <div id="r-band" style="font-size:48px;font-weight:700;line-height:1">—</div>
+      <div id="r-band-label" style="font-size:13px;margin-top:6px;opacity:.85">—</div>
+    </div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:6px">Your Answers vs Correct Answers</div>
+    <div class="ans-table-wrap"><table class="ans-table"><thead><tr><th>Q</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr></thead><tbody id="ans-table-body"></tbody></table></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:10px">Green = correct · Red = incorrect · Band scores are approximate for Academic Reading.</p>
+    <p id="pdf-status" style="font-size:13px;color:var(--success);margin-top:8px;font-weight:500"></p>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="redownloadPDF()">Download PDF again</button>
+      <button class="btn-modal primary" onclick="document.getElementById('results-modal').classList.add('hidden')">Close &amp; Review</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var ANSWERS = {
+  q1:'NO', q2:'NO', q3:'NO', q4:'YES', q5:'NOT GIVEN', q6:'NO', q7:'YES',
+  q8:'local businesses', q9:'working schedule', q10:'excessive', q11:'voluntary absenteeism',
+  q12:'20', q13:'communication',
+  q14:'D', q15:'E', q16:'A', q17:'G', q18:'C',
+  q19:'sediment layers', q20:'ivory and bone', q21:'technologies', q22:'skull shapes',
+  q23:'C', q24:'B', q25:'A', q26:'B',
+  q27:'B', q28:'H', q29:'J', q30:'D',
+  q31:'B', q32:'C',
+  q33:'E', q34:'H', q35:'D', q36:'G', q37:'B',
+  q38:'TRUE', q39:'NOT GIVEN', q40:'FALSE'
+};
+
+var ALT = {
+  q8:['local businesses','businesses'],
+  q9:['working schedule','work schedule','schedule','rostering','roster','rosters'],
+  q10:['excessive'],
+  q11:['voluntary absenteeism','voluntary absence'],
+  q12:['20','twenty'],
+  q13:['communication'],
+  q19:['sediment layers'],
+  q20:['ivory and bone'],
+  q21:['technologies','new technologies'],
+  q22:['skull shapes']
+};
+
+var PART_RANGES = [[1,13],[14,26],[27,40]];
+var userAnswers = {}, currentPassage = 0, submitted = false;
+var candidateName='', candidateNumber='';
+var seconds = 60*60;
+var timerEl = document.getElementById('timer');
+var timerInterval = null;
+
+(function initSelects(){
+  document.querySelectorAll('select[data-opts]').forEach(function(s){
+    var ph = document.createElement('option');
+    ph.value = ''; ph.disabled = true; ph.selected = true;
+    ph.innerHTML = s.getAttribute('data-ph') || 'Select…';
+    s.appendChild(ph);
+    s.getAttribute('data-opts').split(',').forEach(function(v){
+      var o = document.createElement('option');
+      o.value = v; o.textContent = v;
+      s.appendChild(o);
+    });
+  });
+})();
+
+var STORAGE_KEY = 'ielts_reading_318_session';
+var autosaveInterval = null;
+var autosaveListenersAdded = false;
+var autosaveIndicator = document.getElementById('autosave-indicator');
+var autosaveText = document.getElementById('autosave-text');
+
+function showAutosaveSaving(){ autosaveIndicator.classList.add('show','saving'); autosaveText.textContent = 'Saving…'; }
+function showAutosaveSaved(){
+  autosaveIndicator.classList.add('show'); autosaveIndicator.classList.remove('saving');
+  var t = new Date(); autosaveText.textContent = 'Saved ' + t.toTimeString().slice(0,8);
+  setTimeout(function(){ autosaveIndicator.classList.remove('show'); }, 2500);
+}
+function getPassageWidth(){ var pw = document.getElementById('passage-panel'); return pw ? (pw.style.width || pw.offsetWidth + 'px') : ''; }
+function saveSession(silent){
+  if(submitted) return;
+  if(!silent) showAutosaveSaving();
+  try{
+    var data = { version:3, timestamp:Date.now(), candidateName:candidateName, candidateNumber:candidateNumber,
+      seconds:seconds, currentPassage:currentPassage, userAnswers:userAnswers,
+      notepad:document.getElementById('notepad-text').value, passageWidth:getPassageWidth(), started:true };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    if(!silent) showAutosaveSaved();
+  }catch(e){}
+}
+function loadSession(){ try{ var raw=localStorage.getItem(STORAGE_KEY); if(!raw) return null; var d=JSON.parse(raw); return (d&&d.started)?d:null; }catch(e){ return null; } }
+function clearSession(){ try{ localStorage.removeItem(STORAGE_KEY); }catch(e){} }
+function formatTime(sec){ var m=Math.floor(sec/60),s=sec%60; return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'); }
+
+(function checkSavedSession(){
+  var saved = loadSession(); if(!saved) return;
+  var banner = document.getElementById('resume-banner');
+  var info = document.getElementById('resume-info');
+  var answered = 0;
+  for(var i=1;i<=40;i++){ if(saved.userAnswers && saved.userAnswers['q'+i]) answered++; }
+  var when = new Date(saved.timestamp).toLocaleString();
+  info.innerHTML = '<strong>' + escapeHtml(saved.candidateName || 'Anonymous') + '</strong> · ' + answered + '/40 answered · ' + formatTime(saved.seconds) + ' remaining<br><span style="opacity:.75">Saved ' + when + '</span>';
+  banner.classList.add('show');
+  document.getElementById('cand-name').value = saved.candidateName || '';
+  document.getElementById('cand-num').value = saved.candidateNumber || '';
+})();
+
+function resumeTest(){
+  var saved = loadSession(); if(!saved){ startTest(); return; }
+  candidateName = saved.candidateName || 'Anonymous';
+  candidateNumber = saved.candidateNumber || 'N/A';
+  seconds = saved.seconds || 60*60;
+  userAnswers = saved.userAnswers || {};
+  currentPassage = saved.currentPassage || 0;
+  if(saved.notepad) document.getElementById('notepad-text').value = saved.notepad;
+  if(saved.passageWidth) document.getElementById('passage-panel').style.width = saved.passageWidth;
+  document.getElementById('start-screen').classList.add('hidden');
+  restoreAnswersUI(); buildCircles(); updatePartCounts();
+  if(currentPassage !== 0) switchPassage(currentPassage);
+  updateTimerDisplay(); startTimer(); startAutosave(); showAutosaveSaved();
+}
+function discardSaved(){ clearSession(); document.getElementById('resume-banner').classList.remove('show'); document.getElementById('cand-name').value=''; document.getElementById('cand-num').value=''; }
+
+function restoreAnswersUI(){
+  for(var id in userAnswers){
+    var val = userAnswers[id]; if(!val) continue;
+    var dd = document.getElementById('dd-'+id);
+    if(dd){ dd.value=val; dd.classList.add('answered'); continue; }
+    var fi = document.getElementById(id);
+    if(fi && fi.tagName==='INPUT'){ fi.value=val; fi.classList.add('answered'); continue; }
+    fi = document.getElementById('ans-'+id);
+    if(fi && fi.tagName==='INPUT'){ fi.value=val; fi.classList.add('answered'); continue; }
+    var tfnWrap = document.querySelector('#'+id+' .tfn-options');
+    if(tfnWrap){ tfnWrap.querySelectorAll('.tfn-btn').forEach(function(b){ if(b.textContent.trim()===val) b.classList.add('selected'); }); continue; }
+    var mcqWrap = document.querySelector('#'+id+' .mcq-options');
+    if(mcqWrap){ mcqWrap.querySelectorAll('.mcq-opt').forEach(function(l){ if(l.textContent.trim().charAt(0)===val) l.classList.add('selected'); }); }
+  }
+}
+
+function startAutosave(){
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  autosaveInterval = setInterval(function(){ saveSession(false); }, 5000);
+  if(autosaveListenersAdded) return;
+  autosaveListenersAdded = true;
+  document.addEventListener('visibilitychange', function(){ if(document.hidden) saveSession(true); });
+  window.addEventListener('beforeunload', function(){ saveSession(true); });
+}
+
+function startTest(){
+  candidateName = document.getElementById('cand-name').value.trim() || 'Anonymous';
+  candidateNumber = document.getElementById('cand-num').value.trim() || 'N/A';
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('resume-banner').classList.remove('show');
+  clearSession(); buildCircles(); updatePartCounts(); startTimer(); startAutosave(); saveSession(true);
+}
+function startTimer(){
+  if(timerInterval) clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(function(){ if(submitted) return; seconds--; if(seconds<=0){ clearInterval(timerInterval); submitTest(); return; } updateTimerDisplay(); }, 1000);
+}
+function updateTimerDisplay(){ timerEl.textContent = formatTime(Math.max(0,seconds)); timerEl.classList.toggle('warn', seconds < 300); }
+
+function switchPassage(idx){
+  currentPassage = idx;
+  document.querySelectorAll('.part-tab').forEach(function(t,i){ t.classList.toggle('active', i===idx); });
+  document.querySelectorAll('.passage-content').forEach(function(p,i){ p.classList.toggle('active', i===idx); });
+  document.querySelectorAll('#qs-0,#qs-1,#qs-2').forEach(function(q,i){ q.style.display = i===idx ? '' : 'none'; });
+  buildCircles();
+  document.getElementById('questions-panel').scrollTop = 0;
+  document.getElementById('passage-panel').scrollTop = 0;
+  saveSession(true);
+}
+function buildCircles(){
+  var wrap = document.getElementById('q-circles'); wrap.innerHTML = '';
+  var range = PART_RANGES[currentPassage];
+  for(var i=range[0];i<=range[1];i++){
+    var d = document.createElement('div'); d.className = 'q-circle'; d.textContent = i;
+    if(userAnswers['q'+i] && userAnswers['q'+i].toString().trim()) d.classList.add('answered');
+    d.onclick = (function(n){ return function(){ scrollToQ(n); }; })(i);
+    wrap.appendChild(d);
+  }
+}
+function updatePartCounts(){
+  PART_RANGES.forEach(function(r, idx){
+    var a=0; for(var i=r[0];i<=r[1];i++){ if(userAnswers['q'+i] && userAnswers['q'+i].toString().trim()) a++; }
+    document.getElementById('pcount-'+idx).textContent = a + ' of ' + (r[1]-r[0]+1);
+  });
+}
+function scrollToQ(num){
+  var p = num<=13?0:num<=26?1:2;
+  if(p !== currentPassage) switchPassage(p);
+  setTimeout(function(){ var el=document.getElementById('q'+num); if(el) el.scrollIntoView({behavior:'smooth',block:'center'}); },50);
+}
+function prevQ(){ document.getElementById('questions-panel').scrollBy({top:-240,behavior:'smooth'}); }
+function nextQ(){ document.getElementById('questions-panel').scrollBy({top:240,behavior:'smooth'}); }
+
+function selectTFN(btn, qId, val){ btn.closest('.tfn-options').querySelectorAll('.tfn-btn').forEach(function(b){ b.classList.remove('selected'); }); btn.classList.add('selected'); userAnswers[qId]=val; updatePartCounts(); buildCircles(); saveSession(true); }
+function selectMCQ(label, qId, val){ label.closest('.mcq-options').querySelectorAll('.mcq-opt').forEach(function(l){ l.classList.remove('selected'); }); label.classList.add('selected'); userAnswers[qId]=val; updatePartCounts(); buildCircles(); saveSession(true); }
+function selectDropdown(sel, qId){ var val=sel.value; sel.classList.toggle('answered',!!val); userAnswers[qId]=val; updatePartCounts(); buildCircles(); saveSession(true); }
+function markFill(id){ var el=document.getElementById('ans-'+id) || document.getElementById(id); if(!el) return; var val=el.value.trim(); el.classList.toggle('answered',val.length>0); userAnswers[id]=val; updatePartCounts(); buildCircles(); saveSession(true); }
+
+var _savedRange = null;
+function hideSelToolbar(){ var tb=document.getElementById('sel-toolbar'); if(tb) tb.style.display='none'; _savedRange=null; }
+function showSelToolbar(x,y){ var tb=document.getElementById('sel-toolbar'); if(!tb) return; tb.style.display='block'; var tw=tb.offsetWidth||140, th=tb.offsetHeight||36; var left=x-tw/2, top=y-th-10; if(left+tw>window.innerWidth-8) left=window.innerWidth-tw-8; if(left<8) left=8; if(top<60) top=y+12; tb.style.left=left+'px'; tb.style.top=top+'px'; }
+function getPassageSelection(){ var sel=window.getSelection(); if(!sel||sel.isCollapsed||sel.rangeCount===0) return null; var range=sel.getRangeAt(0); var p1=document.getElementById('passage-panel'); var p2=document.getElementById('questions-panel'); var node=range.commonAncestorContainer; if(!((p1&&p1.contains(node))||(p2&&p2.contains(node)))) return null; if(!sel.toString().trim()) return null; var frag=range.cloneContents(); if(frag.querySelector && frag.querySelector('input,select,textarea,button,label')) return null; return {sel:sel,range:range}; }
+function onPassageMouseUp(e){ setTimeout(function(){ var data=getPassageSelection(); if(!data){ var tb=document.getElementById('sel-toolbar'); if(e&&e.target&&tb&&tb.contains(e.target)) return; hideSelToolbar(); return; } _savedRange=data.range.cloneRange(); var rect=data.range.getBoundingClientRect(); showSelToolbar(rect.left+rect.width/2, rect.top); },10); }
+function applyMark(cls){ if(!_savedRange) return; try{ var m=document.createElement('mark'); m.className=cls; _savedRange.surroundContents(m); }catch(e){ try{ var f=_savedRange.extractContents(); var m2=document.createElement('mark'); m2.className=cls; m2.appendChild(f); _savedRange.insertNode(m2); }catch(e2){} } var s=window.getSelection(); if(s) s.removeAllRanges(); hideSelToolbar(); }
+(function(){ var hl=document.getElementById('sel-hl-btn'); if(hl) hl.addEventListener('mousedown',function(e){e.preventDefault();applyMark('hl');}); var nb=document.getElementById('sel-note-btn'); if(nb) nb.addEventListener('mousedown',function(e){ e.preventDefault(); var text=_savedRange?_savedRange.toString().trim():''; applyMark('hl-note'); if(text){ var ta=document.getElementById('notepad-text'); if(ta){ ta.value+=(ta.value&&!ta.value.endsWith('\n')?'\n':'')+'• '+text; saveSession(true); var p=document.getElementById('notepad-panel'); if(p&&p.classList.contains('hidden')) toggleNotepad(); } } }); var pp=document.getElementById('passage-panel'); if(pp) pp.addEventListener('mouseup',onPassageMouseUp); var qp=document.getElementById('questions-panel'); if(qp) qp.addEventListener('mouseup',onPassageMouseUp); document.addEventListener('mousedown',function(e){ var tb=document.getElementById('sel-toolbar'); if(!tb||tb.style.display==='none') return; if(tb.contains(e.target)) return; setTimeout(function(){ var s=window.getSelection(); if(!s||s.isCollapsed) hideSelToolbar(); },150); }); document.addEventListener('keydown',function(e){ if(e.key==='Escape') hideSelToolbar(); }); if(pp) pp.addEventListener('scroll',hideSelToolbar); if(qp) qp.addEventListener('scroll',hideSelToolbar); })();
+
+function toggleNotepad(){ var panel=document.getElementById('notepad-panel'); var btn=document.getElementById('notepad-btn'); panel.classList.toggle('hidden'); btn.classList.toggle('active', !panel.classList.contains('hidden')); if(!panel.classList.contains('hidden')) document.getElementById('notepad-text').focus(); saveSession(true); }
+function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function(){}); else document.exitFullscreen().catch(function(){}); }
+document.getElementById('notepad-text').addEventListener('input', function(){ saveSession(true); });
+
+function getBandScore(c){ if(c>=39) return {band:'9.0',level:'Expert User'}; if(c>=37) return {band:'8.5',level:'Very Good User'}; if(c>=35) return {band:'8.0',level:'Very Good User'}; if(c>=33) return {band:'7.5',level:'Good User'}; if(c>=30) return {band:'7.0',level:'Good User'}; if(c>=27) return {band:'6.5',level:'Competent User'}; if(c>=23) return {band:'6.0',level:'Competent User'}; if(c>=19) return {band:'5.5',level:'Modest User'}; if(c>=15) return {band:'5.0',level:'Modest User'}; if(c>=13) return {band:'4.5',level:'Limited User'}; if(c>=10) return {band:'4.0',level:'Limited User'}; return {band:'3.5',level:'Extremely Limited'}; }
+function normalize(s){ return (s||'').toString().trim().toLowerCase().replace(/[()]/g,'').replace(/\s+/g,' ').replace(/\.$/,''); }
+function checkCorrect(id){ var ans=ANSWERS[id]; var user=(userAnswers[id]||'').toString().trim(); if(!user) return null; var nU=normalize(user); if(ALT[id]){ for(var k=0;k<ALT[id].length;k++){ if(nU===normalize(ALT[id][k])) return true; } } return nU===normalize(ans); }
+function correctAnswerLabel(id){ return ANSWERS[id]; }
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function confirmSubmit(){ var count=0; for(var i=1;i<=40;i++){ if(userAnswers['q'+i]&&userAnswers['q'+i].toString().trim()) count++; } document.getElementById('sc-answered').textContent=count; document.getElementById('sc-unanswered').textContent=40-count; document.getElementById('sc-pct').textContent=Math.round(count/40*100)+'%'; document.getElementById('score-grid').style.display='grid'; document.getElementById('submit-modal').classList.remove('hidden'); }
+function closeModal(){ document.getElementById('submit-modal').classList.add('hidden'); }
+
+function submitTest(){
+  submitted=true; if(timerInterval) clearInterval(timerInterval); if(autosaveInterval) clearInterval(autosaveInterval);
+  document.getElementById('submit-modal').classList.add('hidden'); clearSession();
+  var correct=0, wrong=0, unanswered=0;
+  var tbody=document.getElementById('ans-table-body'); tbody.innerHTML='';
+  var pdfRows=[];
+  for(var num=1;num<=40;num++){
+    var id='q'+num; var result=checkCorrect(id); var userRaw=(userAnswers[id]||'').toString().trim(); var correctAns=correctAnswerLabel(id);
+    var yourCell, resultCell, resText;
+    if(result===null){ unanswered++; yourCell='<span class="blank">—</span>'; resultCell='<span class="blank">Unanswered</span>'; resText='Unanswered'; }
+    else if(result){ correct++; yourCell='<span class="ok">'+escapeHtml(userRaw)+'</span>'; resultCell='<span class="ok">✓ Correct</span>'; resText='Correct'; }
+    else { wrong++; yourCell='<span class="bad">'+escapeHtml(userRaw||'-')+'</span>'; resultCell='<span class="bad">✗ Incorrect</span>'; resText='Incorrect'; }
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td style="font-weight:700;color:var(--accent)">'+num+'</td><td>'+yourCell+'</td><td><strong>'+escapeHtml(correctAns)+'</strong></td><td>'+resultCell+'</td>';
+    tbody.appendChild(tr); pdfRows.push([String(num), userRaw||'-', correctAns, resText]);
+  }
+  document.getElementById('r-correct').textContent=correct;
+  document.getElementById('r-wrong').textContent=wrong;
+  document.getElementById('r-unanswered').textContent=unanswered;
+  var bs=getBandScore(correct);
+  document.getElementById('r-band').textContent=bs.band;
+  document.getElementById('r-band-label').textContent=bs.level+' · '+correct+' / 40 correct';
+  document.getElementById('results-cand').textContent='Candidate: '+candidateName+'  ·  Number: '+candidateNumber;
+  document.getElementById('results-modal').classList.remove('hidden');
+  window._lastPdfData={correct:correct,wrong:wrong,unanswered:unanswered,bs:bs,pdfRows:pdfRows};
+  try{ generateResultsPDF(correct,wrong,unanswered,bs,pdfRows); document.getElementById('pdf-status').textContent='Candidate response PDF downloaded.'; }
+  catch(e){ document.getElementById('pdf-status').textContent='PDF download failed. Use the button below.'; document.getElementById('pdf-status').style.color='var(--accent-red)'; }
+}
+function redownloadPDF(){ if(!window._lastPdfData) return; var d=window._lastPdfData; try{ generateResultsPDF(d.correct,d.wrong,d.unanswered,d.bs,d.pdfRows); }catch(e){} }
+
+function generateResultsPDF(correct,wrong,unanswered,bandInfo,rows){
+  var jsPDF=window.jspdf.jsPDF; var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  var pageWidth=doc.internal.pageSize.getWidth();
+  doc.setFillColor(30,58,95); doc.rect(0,0,pageWidth,28,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(16); doc.setFont('helvetica','bold');
+  doc.text('IELTS Academic Reading · Test 318',14,12);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Candidate Response Report',14,20); doc.text(new Date().toLocaleString(),pageWidth-14,20,{align:'right'});
+  doc.setTextColor(26,24,20); doc.setFontSize(11); doc.setFont('helvetica','bold');
+  doc.text('Candidate Name:',14,38); doc.setFont('helvetica','normal'); doc.text(candidateName||'Anonymous',52,38);
+  doc.setFont('helvetica','bold'); doc.text('Candidate Number:',14,45); doc.setFont('helvetica','normal'); doc.text(candidateNumber||'-',58,45);
+  doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.text('Score Summary',14,56);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Correct: '+correct+'    Incorrect: '+wrong+'    Unanswered: '+unanswered,14,64);
+  doc.setFont('helvetica','bold'); doc.setTextColor(30,58,95); doc.setFontSize(14);
+  doc.text('Band Score: '+bandInfo.band+'  ('+bandInfo.level+')',14,72);
+  doc.setTextColor(26,24,20); doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text(correct+' / 40 correct',14,79);
+  doc.autoTable({ startY:86, head:[['Q','Your Answer','Correct Answer','Result']], body:rows, theme:'grid',
+    styles:{fontSize:8,cellPadding:2.2,overflow:'linebreak',valign:'middle'},
+    headStyles:{fillColor:[30,58,95],textColor:255,fontStyle:'bold',fontSize:8},
+    columnStyles:{0:{cellWidth:18,halign:'center'},1:{cellWidth:50},2:{cellWidth:70},3:{cellWidth:35,halign:'center'}},
+    didParseCell:function(data){ if(data.section==='body'&&data.column.index===3){ var t=data.cell.raw||''; if(t.indexOf('Correct')!==-1 && t.indexOf('Incorrect')===-1){data.cell.styles.textColor=[5,150,105];data.cell.styles.fontStyle='bold';} else if(t.indexOf('Incorrect')!==-1){data.cell.styles.textColor=[225,29,72];data.cell.styles.fontStyle='bold';} else {data.cell.styles.textColor=[107,114,128];data.cell.styles.fontStyle='italic';} } },
+    margin:{left:14,right:14} });
+  var finalY=doc.lastAutoTable.finalY+12;
+  doc.setFontSize(8); doc.setTextColor(107,114,128);
+  doc.text('This report shows your answers against the official answer key.',14,finalY);
+  var safeName=(candidateName||'Candidate').replace(/[^a-zA-Z0-9]/g,'_').slice(0,20);
+  var safeNum=(candidateNumber||'NA').replace(/[^a-zA-Z0-9]/g,'_').slice(0,15);
+  doc.save('IELTS_Test318_'+safeName+'_'+safeNum+'_'+new Date().toISOString().slice(0,10)+'.pdf');
+}
+
+var resizer=document.getElementById('resizer');
+var passPanel=document.getElementById('passage-panel');
+var isResizing=false,startX,startW;
+resizer.addEventListener('mousedown',function(e){ isResizing=true; startX=e.clientX; startW=passPanel.offsetWidth; resizer.classList.add('dragging'); document.body.style.userSelect='none'; document.body.style.cursor='col-resize'; });
+document.addEventListener('mousemove',function(e){ if(!isResizing) return; var dx=e.clientX-startX; passPanel.style.width=Math.min(Math.max(startW+dx,280),window.innerWidth-320)+'px'; });
+document.addEventListener('mouseup',function(){ if(isResizing){ isResizing=false; resizer.classList.remove('dragging'); document.body.style.userSelect=''; document.body.style.cursor=''; saveSession(true); } });
+(function(){ var saved=loadSession(); if(saved&&saved.passageWidth) document.getElementById('passage-panel').style.width=saved.passageWidth; })();
+</script>
+</body>
+</html>

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Academic Reading · Test 320</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fff;--border:#e5e7eb;--border-soft:#f3f4f6;--accent:#1e3a5f;--accent-red:#e11d48;--accent-red-hover:#be123c;--text:#1f2937;--muted:#6b7280;--success:#059669;--passage-width:52%;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+  #start-screen{position:fixed;inset:0;background:#f8fafc;display:flex;align-items:center;justify-content:center;z-index:500;}
+  #start-screen.hidden{display:none;}
+  .start-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:40px 44px;max-width:460px;width:92%;box-shadow:0 10px 40px rgba(0,0,0,.08);}
+  .start-card h1{font-size:20px;margin-bottom:4px;font-weight:600;}
+  .start-card .sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .start-card label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;}
+  .start-card input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;margin-bottom:16px;font-family:inherit;}
+  .start-card input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.12);}
+  .start-card button{width:100%;padding:12px;background:var(--accent-red);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;}
+  .start-card button:hover{background:var(--accent-red-hover);}
+  .resume-banner{display:none;background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12.5px;color:#92400e;line-height:1.5;}
+  .resume-banner.show{display:block;}
+  .resume-banner .resume-actions{margin-top:8px;display:flex;gap:8px;}
+  .resume-banner .resume-actions button{width:auto;margin:0;padding:6px 12px;font-size:12px;border-radius:6px;}
+  .resume-banner .resume-actions .btn-ghost{background:#fff;color:#92400e;border:1px solid #fbbf24;}
+  #topbar{background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;flex-shrink:0;z-index:100;}
+  .top-left{display:flex;align-items:center;gap:12px;}
+  .mock-label{font-size:15px;font-weight:500;}
+  #autosave-indicator{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--success);font-weight:500;opacity:0;transition:opacity .4s ease;}
+  #autosave-indicator.show{opacity:1;}
+  #autosave-indicator .dot{width:7px;height:7px;border-radius:50%;background:var(--success);}
+  #autosave-indicator.saving .dot{background:#f59e0b;animation:blink .8s infinite;}
+  #autosave-indicator.saving{color:#f59e0b;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+  #timer-wrap{display:flex;align-items:center;gap:6px;color:var(--accent-red);font-weight:600;}
+  #timer{font-size:18px;font-weight:600;letter-spacing:0.02em;min-width:52px;}
+  #timer.warn{animation:pulse 1s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .top-actions{display:flex;align-items:center;gap:8px;}
+  .icon-btn{width:36px;height:36px;border:none;background:transparent;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;}
+  .icon-btn:hover{background:var(--border-soft);color:var(--text);}
+  .btn-submit{background:#e5e7eb;color:var(--text);border:none;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;}
+  .btn-submit:hover{background:#d1d5db;}
+  .icon-btn.active{background:#fff1f2;color:var(--accent-red);}
+  #notepad-panel{position:fixed;top:56px;right:0;width:320px;height:calc(100vh - 56px - 56px);background:#fff;border-left:1px solid var(--border);box-shadow:-4px 0 24px rgba(0,0,0,.08);z-index:150;display:flex;flex-direction:column;transition:transform .2s ease;}
+  #notepad-panel.hidden{transform:translateX(100%);pointer-events:none;}
+  .notepad-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+  .notepad-title{font-size:15px;font-weight:600;color:var(--accent-red);}
+  #notepad-text{flex:1;border:none;resize:none;padding:14px 16px;font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.55;outline:none;}
+  #main{display:flex;flex:1;overflow:hidden;}
+  #passage-panel{width:var(--passage-width);background:#fff;overflow-y:auto;padding:24px 28px 40px;flex-shrink:0;}
+  .part-header{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:4px;}
+  #passage-panel h2{font-size:22px;font-weight:700;color:var(--accent);margin-bottom:6px;letter-spacing:-0.3px;}
+  .time-note{font-size:12.5px;color:var(--muted);margin-bottom:16px;line-height:1.5;}
+  .passage-title{text-align:center;font-family:'Source Serif 4',Georgia,serif;font-size:18px;font-weight:600;color:var(--accent);margin-bottom:22px;}
+  #passage-panel p{font-family:'Source Serif 4',Georgia,serif;font-size:15px;line-height:1.75;margin-bottom:16px;}
+  #passage-panel strong{font-weight:700;color:var(--accent);}
+  #passage-panel em{font-style:italic;}
+  #resizer{width:5px;background:transparent;cursor:col-resize;flex-shrink:0;position:relative;z-index:10;}
+  #resizer::before{content:'';position:absolute;top:0;bottom:0;left:2px;width:1px;background:var(--accent-red);}
+  #resizer:hover::before,#resizer.dragging::before{width:3px;left:1px;}
+  #resizer .handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:28px;background:#fff;border:1px solid var(--accent-red);border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--accent-red);font-size:10px;}
+  #questions-panel{flex:1;overflow-y:auto;padding:20px 24px 80px;background:#fff;}
+  .q-section{margin-bottom:28px;}
+  .q-section-header{font-size:15px;font-weight:600;margin-bottom:8px;}
+  .q-section-intro{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:16px;}
+  .info-box{padding:12px 16px;font-size:13px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:14px;line-height:1.9;}
+  .info-box.notes{font-size:13.5px;line-height:2.1;}
+  .info-box .box-title{display:block;font-weight:600;color:var(--accent);margin-bottom:2px;}
+  .question{padding:12px 0;border-bottom:1px solid var(--border-soft);display:flex;gap:12px;align-items:flex-start;}
+  .question:last-child{border-bottom:none;}
+  .q-num{min-width:26px;height:26px;color:var(--muted);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px;}
+  .q-body{flex:1;}
+  .q-text{font-size:14px;line-height:1.55;margin-bottom:10px;}
+  .tfn-options,.mcq-options{display:flex;flex-direction:column;gap:6px;}
+  .tfn-options.horizontal{flex-direction:row;flex-wrap:wrap;gap:8px;}
+  .tfn-btn,.mcq-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:13.5px;transition:all .12s;}
+  .tfn-btn:hover,.mcq-opt:hover{border-color:#94a3b8;background:#f8fafc;}
+  .tfn-btn.selected,.mcq-opt.selected{border-color:var(--accent-red);background:#fff1f2;}
+  .tfn-btn .radio-dot,.mcq-opt .radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid #cbd5e1;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .tfn-btn.selected .radio-dot,.mcq-opt.selected .radio-dot{border-color:var(--accent-red);}
+  .tfn-btn.selected .radio-dot::after,.mcq-opt.selected .radio-dot::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--accent-red);}
+  .fill-input{border:1.5px solid var(--border);border-radius:6px;padding:7px 12px;font-size:14px;font-family:inherit;width:100%;max-width:240px;transition:border-color .15s;}
+  .fill-input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .fill-input.answered{border-color:var(--success);background:#f0fdf4;}
+  .fill-input.inline{display:inline-block;vertical-align:middle;margin:0 2px;}
+  .dd-select{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 36px 10px 12px;font-size:13.5px;font-family:inherit;background-color:#fff;cursor:pointer;transition:border-color .15s;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 12px center;}
+  .dd-select:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .dd-select.answered{border-color:var(--success);background-color:#f0fdf4;}
+  #bottombar{border-top:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0;gap:12px;min-height:56px;}
+  .part-tabs{display:flex;gap:8px;flex-shrink:0;}
+  .part-tab{padding:8px 16px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .part-tab:hover{border-color:#94a3b8;color:var(--text);}
+  .part-tab.active{border-color:var(--accent-red);color:var(--accent);box-shadow:0 0 0 1px var(--accent-red);}
+  .part-tab .count{font-weight:400;color:var(--muted);}
+  .q-circles{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;flex:1;padding:0 8px;}
+  .q-circle{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;}
+  .q-circle:hover{border-color:#94a3b8;color:var(--text);}
+  .q-circle.answered{background:var(--success);border-color:var(--success);color:#fff;}
+  .nav-arrows{display:flex;gap:6px;flex-shrink:0;}
+  .nav-arrow{width:36px;height:36px;border:1.5px solid var(--border);border-radius:50%;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:16px;}
+  .nav-arrow:hover{border-color:#94a3b8;color:var(--text);}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;}
+  .modal-overlay.hidden{display:none;}
+  .modal{background:#fff;border-radius:12px;padding:28px 32px;max-width:720px;width:94%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+  .modal h2{font-size:20px;margin-bottom:10px;}
+  .modal p{font-size:14px;line-height:1.6;color:var(--muted);margin-bottom:16px;}
+  .score-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0;}
+  .score-card{background:#f8fafc;border-radius:10px;padding:14px;text-align:center;}
+  .score-card .val{font-size:26px;font-weight:700;color:var(--accent);}
+  .score-card .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+  .modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;}
+  .btn-modal{padding:9px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;}
+  .btn-modal:hover{background:#f8fafc;}
+  .btn-modal.primary{background:var(--accent-red);color:#fff;border-color:var(--accent-red);}
+  .btn-modal.primary:hover{background:var(--accent-red-hover);}
+  .ans-table-wrap{margin:12px 0;max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;}
+  .ans-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .ans-table th{position:sticky;top:0;background:var(--accent);color:#fff;padding:8px 10px;text-align:left;font-weight:600;font-size:11px;}
+  .ans-table td{padding:6px 10px;border-bottom:1px solid var(--border);}
+  .ans-table tr:nth-child(even) td{background:#f8fafc;}
+  .ans-table .ok{color:var(--success);font-weight:600;}
+  .ans-table .bad{color:var(--accent-red);font-weight:600;}
+  .ans-table .blank{color:var(--muted);font-style:italic;}
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px;}
+  .passage-content{display:none;}
+  .passage-content.active{display:block;}
+  mark.hl{background:#fef08a;padding:0 2px;border-radius:2px;}
+  mark.hl-note{background:#bbf7d0;padding:0 2px;border-radius:2px;border-bottom:2px solid #16a34a;}
+  #sel-toolbar{position:fixed;z-index:300;display:none;background:#1e3a5f;color:#fff;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);font-size:13px;font-weight:500;overflow:hidden;white-space:nowrap;}
+  #sel-toolbar button{background:transparent;border:none;color:#fff;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:500;font-family:inherit;}
+  #sel-toolbar button:hover{background:rgba(255,255,255,.15);}
+  #sel-toolbar .sep{display:inline-block;width:1px;height:14px;background:rgba(255,255,255,.35);vertical-align:middle;}
+  @media (max-width:800px){#main{flex-direction:column;}#passage-panel{width:100%!important;height:42vh;border-bottom:1px solid var(--border);}#resizer{display:none;}}
+  .para-label{font-weight:700;color:var(--accent);margin-right:6px;}
+  .table-box{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;font-size:13px;}
+  .table-box table{width:100%;border-collapse:collapse;}
+  .table-box th{background:var(--accent);color:#fff;padding:8px 10px;text-align:left;font-weight:600;}
+  .table-box td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .table-box tr:nth-child(even) td{background:#f8fafc;}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+<div id="start-screen">
+  <div class="start-card">
+    <h1>IELTS Academic Reading</h1>
+    <div class="sub">Computer-Delivered Simulation &middot; Test 320</div>
+    <div class="resume-banner" id="resume-banner">
+      <strong>&#9201; Saved session found</strong>
+      <div id="resume-info"></div>
+      <div class="resume-actions">
+        <button onclick="resumeTest()">Resume Test</button>
+        <button class="btn-ghost" onclick="discardSaved()">Start Fresh</button>
+      </div>
+    </div>
+    <label for="cand-name">Candidate Name</label>
+    <input type="text" id="cand-name" placeholder="Enter your full name" autocomplete="off">
+    <label for="cand-num">Candidate Number</label>
+    <input type="text" id="cand-num" placeholder="e.g. 123456" autocomplete="off">
+    <button onclick="startTest()">Start Test</button>
+  </div>
+</div>
+
+<div id="topbar">
+  <div class="top-left">
+    <span class="mock-label">IELTS Academic Reading &middot; Test 320</span>
+    <span id="autosave-indicator"><span class="dot"></span><span id="autosave-text">Saved</span></span>
+  </div>
+  <div id="timer-wrap">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <div id="timer">60:00</div>
+  </div>
+  <div class="top-actions">
+    <button class="icon-btn" id="notepad-btn" title="Notepad" onclick="toggleNotepad()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></button>
+    <button class="icon-btn" title="Full screen" onclick="toggleFullscreen()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
+    <button class="btn-submit" onclick="confirmSubmit()">Submit</button>
+  </div>
+</div>
+
+<div id="notepad-panel" class="hidden">
+  <div class="notepad-header">
+    <span class="notepad-title">Notepad</span>
+    <button class="icon-btn" title="Close" onclick="toggleNotepad()" style="width:28px;height:28px"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <textarea id="notepad-text" placeholder="Type your notes here&hellip;"></textarea>
+</div>
+
+<div id="sel-toolbar">
+  <button type="button" id="sel-note-btn">Note</button><span class="sep"></span><button type="button" id="sel-hl-btn">Highlight</button>
+</div>
+
+<div id="main">
+  <div id="passage-panel">
+    <div class="passage-content active" id="pc-0">
+      <div class="part-header">PART 1</div>
+      <h2>READING PASSAGE 1</h2>
+      <div class="time-note">You should spend about 20 minutes on Questions 1&ndash;13, which are based on Reading Passage 1 below.</div>
+      <div class="passage-title">Australian Convict History</div>
+      <p><strong class="para-label">A</strong> The 1700s in Britain saw widespread poverty and rising crime, and those convicted of crimes faced harsh penalties, including transportation to one of Britain’s overseas colonies. Since 1615, convicts had been transported to Britain’s American colonies, both as punishment and a source of labour, but this practice was halted by the Revolutionary War in America (1775-1783). The British government decided to establish a new prison colony, and Botany Bay in New South Wales was chosen as the site. (Captain Cook, exploring the southeast coast of Australia in 1770, had named the land New South Wales and claimed it for Britain.) Between 1787 and 1868, almost 160,000 convicts, of whom about 25,000 were women, were sent to Australia to serve sentences ranging from 7 years to life.</p>
+      <p><strong class="para-label">B</strong> Eleven ships set sail from England in 1787 to take the first group of about 750 British convicts to Australia. The fleet reached Botany Bay in January 1788, but nearby Sydney Cove was selected as a more suitable site for the new settlement, which later became the city of Sydney. The first few years were difficult, with severe food shortages; by 1792, however, there were government farms and private gardens. Convicts worked on these farms, or on construction projects such as building roads and bridges. Although the settlement was a prison colony, few convicts served their sentences in jail. They lived in houses they had built themselves, and established families, businesses and farms. A settlement was also established on Norfolk Island, where some convicts were sent for crimes committed after arrival in the colony. Two more settlements were established on Van Diemen’s Land (now Tasmania), in 1803 and 1804.</p>
+      <p><strong class="para-label">C</strong> Convicts not involved in public work were assigned to free settlers, providing labour in exchange for food, clothing and shelter. Some masters treated the convicts cruelly, and the punishment of convicts, particularly in the early days, could be arbitrary and savage. Lachlan Macquarie, governor of New South Wales from 1809 to 1819, adopted a more humane approach. He encouraged convicts to reform by rewarding good behaviour, even granting pardons to convicts before their sentence was completed. These emancipists, as they were called, were given land and government assistance to help them start farming. His policies were unpopular both with British authorities and wealthy free settlers, however, and the next governors were under orders to ensure that life for convicts became much stricter and more controlled. There were harsher punishments for second offenders, such as working in the ‘iron gangs’, where men were chained together to carry out exhausting work on the roads, or being sent to penal settlements where punishment was deliberately brutal so that it would act as a deterrent.</p>
+      <p><strong class="para-label">D</strong> In the early years of settlement, the convicts greatly outnumbered free immigrants and settlers. In 1810, convicts made up almost 60 percent of the population, and over 20,000 new convicts arrived between 1821 and 1830. Even in 1831, convicts still comprised 45 percent of the population, with ex-convicts and emancipists making up another 30 percent. 25 percent of the population now consisted of people born in the colonies, and free people outnumbered convicts.</p>
+      <p><strong class="para-label">E</strong> The first group of free settlers had arrived in Australia in 1793 to seek their fortune in the new land. Their numbers grew, with about 8,000 free settlers arriving in the 1820s to take advantage of free land grants and cheap convict labour. In 1831, the British government offered money to support new settlers, hoping to attract skilled workers and single women as immigrants. Between 1831 and 1840, more than 40,000 immigrants arrived in Australia.</p>
+      <p><strong class="para-label">F</strong> During the 1820s there was a lengthy campaign to win certain rights for emancipists, which was opposed by wealthy free settlers. In the 1830s, free immigrants to New South Wales and Van Diemen’s Land, unhappy about living in a prison colony where civil liberties were restricted and convict labour resulted in low wages, increasingly voiced their opposition to transportation. Again, wealthy landowners disagreed, but a growing number of reformers in England were also opposed to convict transportation. In 1838, a committee set up by the British Parliament recommended that the government end transportation to New South Wales and Van Diemen’s Land and abolish assignment. The British duly abolished assignment, and transportation - at least to New South Wales - was halted in 1840.</p>
+      <p><strong class="para-label">G</strong> Transportation continued, however, to other colonies and settlements. In the 1840s, most British convicts were sent to Van Diemen’s Land, where the British government introduced a convict system based on stages of reform, with the convicts gaining increasing levels of freedom for continued good behaviour. Transportation to the eastern colonies was abolished in 1852. In contrast, the convict system in Western Australia began in 1850, at the request of the Western Australian government, and continued until 1868. Convicts served part of their sentences in Britain before being transported to the colony, where they worked on badly-needed public construction projects under a system similar to that tried in Van Diemen’s Land.</p>
+    </div>
+
+    <div class="passage-content" id="pc-1">
+      <div class="part-header">PART 2</div>
+      <h2>READING PASSAGE 2</h2>
+      <div class="time-note">You should spend about 20 minutes on Questions 14&ndash;26, which are based on Reading Passage 2 below.</div>
+      <div class="passage-title">Power of Light</div>
+      <p><strong class="para-label">A</strong> ‘Incandescent light bulbs lit the 20th century; the 21st will be lit by LED lamps.’ So stated the Nobel Prize Committee on awarding the 2014 prize for physics to the inventors of light-emitting diodes (LEDs).</p>
+      <p>Around the world, LED systems are replacing most kinds of conventional lighting since they use about half the electricity, and the US Department of Energy expects LEDs to account for 74% of US lighting sales by 2030.</p>
+      <p>However, with lower running costs, LEDs may be left on longer, or installed in places that were previously unlit. Historically, when there has been an improvement in lighting technology, far more outdoor illumination has occurred. Furthermore, many LEDs are brighter than other lights, and they produce a blue-wavelength light that animals misinterpret as the dawn.</p>
+      <p>According to the American Medical Association, there has been a noticeable rise in obesity, diabetes, cancer, and cardiovascular disease in people like shift workers exposed to too much artificial light of any kind. It is likely more pervasive LEDs will contribute to a further rise.</p>
+      <p><strong class="para-label">B</strong> In some cities, a brown haze of industrial pollution prevents enjoyment of the night sky; in others, a yellow haze from lighting has the same effect, and it is thought that almost 70% of people can no longer see the Milky Way.</p>
+      <p>When a small earthquake disabled power plants in Los Angeles a few years ago, the director of the Griffith Observatory was bombarded with phone calls by locals who reported an unusual phenomenon they thought was caused by the quake: a brilliantly illuminated night sky, in which around 7,000 stars were visible. In fact, this was just an ordinary starry night, seldom seen in LA due to light pollution!</p>
+      <p>Certainly, light pollution makes professional astronomy difficult, but it also endangers humans’ age-old connection to the stars. It is conceivable that children who do not experience a truly starry night may not speculate about the universe, nor may they learn about nocturnal creatures.</p>
+      <p><strong class="para-label">C</strong> Excessive illumination impacts upon the nocturnal world. Around 30% of vertebrates and over 60% of invertebrates are nocturnal; many of the remainders are crepuscular (most active at dawn and dusk). Night lighting, hundreds of thousands of times greater than its natural level, has drastically reduced insect, bird, bat, lizard, frog, turtle, and fish life, with even dairy cows producing less milk in brightly-lit sheds.</p>
+      <p>Night lighting has a vacuum-cleaner effect on insects, particularly moths, drawing them from as far away as 122 metres. As insects play an important role in pollination, and in providing food for birds, their destruction is a grave concern. Using low-pressure sodium-vapour lamps or UV-filtered bulbs would reduce insect mortality, but an alternative light source does not help amphibians: frogs exposed to any night light experience altered feeding and mating behaviour, making them easy prey.</p>
+      <p>Furthermore, birds and insects use the sun, the moon, and the stars to navigate. It is estimated that around 500 million migratory birds are killed each year by collisions with brightly-lit structures, like skyscrapers or radio towers. In Toronto, Canada, the Fatal Light Awareness Program educates building owners about reducing such deaths by darkening their buildings at the peak of the migratory season. Still, over 1,500 birds may be killed within one night when this does not happen.</p>
+      <p>Non-migratory birds are also adversely affected by light pollution: sleep is difficult, and waking up only occurs when the sun has overpowered artificial lighting, resulting in the birds’ being too late to catch insects.</p>
+      <p>Leatherback turtles, which have lived on Earth for over 150 million years, are now endangered as their hatchlings are meant to follow light reflected from the moon and stars to go from their sandy nests to the sea. Instead, they follow street lamps or hotel lights, resulting in death by dehydration, predation, or accidents, since they wander onto the road in the opposite direction from the sea.</p>
+      <p><strong class="para-label">D</strong> Currently, eight percent of all energy generated in the US is dedicated to public outdoor lighting, and much evidence shows that lighting and energy use are growing at around four percent a year, exceeding population growth. In some newly-industrialised countries, lighting use is rising by 20%. Unfortunately, as the developing world urbanises, it also lights up brightly, rather than opting for sustainability.</p>
+      <p><strong class="para-label">E</strong> There are several organisations devoted to restoring the night sky: one is the International Dark-Sky Association (IDA), based in Arizona, US. The IDA draws attention to the hazards of light pollution and works with manufacturers, planners, legislators, and citizens to encourage lighting only what is necessary when necessary.</p>
+      <p>With 58 chapters in sixteen countries, the IDA has been the driving force behind the establishment of nine world reserves, most recently the 1,720-square-kilometre Rhon Biosphere Reserve in Germany. IDA campaigns have also reduced street lighting in several US states and changed national legislation in Italy.</p>
+      <p><strong class="para-label">F</strong> Except in some parks and observatory zones, the IDA does not defend complete darkness, acknowledging that urban areas operate around the clock. For transport, lighting is particularly important. Nonetheless, there is an appreciable difference between harsh, glaring lights and those that illuminate the ground without streaming into the sky. The US Department of Transportation recently conducted research into highway safety and found that a highway lit well only at interchanges was as safe as one lit along its entire length. In addition, reflective signage and strategic white paint improved safety more than adding lights.</p>
+      <p>Research by the US Department of Justice showed that outdoor lighting may not deter crime. Its only real benefit is in citizens’ perceptions: lighting reduces the fear of crime, not crime itself. Indeed, bright lights may compromise the safety, as they make victims and property more visible.</p>
+      <p>The IDA recommends that where streetlights stay on all night, they have a lower lumen rating, or are controlled with dimmers; and, that they point downwards, or are fitted with directional metal shields. For private dwellings, low-lumen nightlights should be activated only when motion is detected.</p>
+      <p><strong class="para-label">G</strong> It is not merely the firefly, the fruit bat, or the frog that suffers from light pollution: many human beings no longer experience star-filled skies or any but the brightest stars, nor consequently ponder their own place in the universe. Hopefully, prize-winning LED lights will be modified and used circumspectly to return to us all the splendour of the night sky.</p>
+    </div>
+
+    <div class="passage-content" id="pc-2">
+      <div class="part-header">PART 3</div>
+      <h2>READING PASSAGE 3</h2>
+      <div class="time-note">You should spend about 20 minutes on Questions 27&ndash;40, which are based on Reading Passage 3 below.</div>
+      <div class="passage-title">Novices and Experts</div>
+      <p style="margin:22px 0 8px"><strong>Becoming an Expert</strong></p>
+      <p>Expertise is commitment coupled with creativity. Specifically, it is the commitment of time, energy, and resources to a relatively narrow field of study and the creative energy necessary to generate new knowledge in that field. It takes a considerable amount of time and regular exposure to a large number of cases to become an expert.</p>
+      <p><strong class="para-label">A</strong> An individual enters a field of study as a novice. The novice needs to learn the guiding principles and rules of a given task in order to perform that task. Concurrently, the novice needs to be exposed to specific cases, or instances, that test the boundaries of such heuristics. Generally, a novice will find a mentor to guide her through the process. A fairly simple example would be someone learning to play chess. The novice chess player seeks a mentor to teach her the object of the game, the number of spaces, the names of the pieces, the function of each piece, how each piece is moved, and the necessary conditions for winning or losing the game.</p>
+      <p><strong class="para-label">B</strong> In time, and with much practice, the novice begins to recognize patterns of behavior within cases and, thus, becomes a journeyman. With more practice and exposure to increasingly complex cases, the journeyman finds patterns not only with cases but also between cases. More importantly, the journeyman learns that these patterns often repeat themselves over time. The journeyman still maintains regular contact with a mentor to solve specific problems and learn more complex strategies. Returning to the example of the chess player, the individual begins to learn patterns of opening moves, offensive and defensive game-playing strategies, and patterns of victory and defeat.</p>
+      <p><strong class="para-label">C</strong> When a journeyman starts to make and test hypotheses about future behavior based on past experiences, she begins the next transition. Once she creatively generates knowledge, rather than simply matching superficial patterns, she becomes an expert. At this point, she is confident in her knowledge and no longer needs a mentor as a guide: she becomes responsible for her own knowledge. In the chess example, once a journeyman begins competing against experts, makes predictions based on patterns, and tests those predictions against actual behavior, she is generating new knowledge and a deeper understanding of the game. She is creating her own cases rather than relying on the cases of others.</p>
+      <p style="margin:22px 0 8px"><strong>The Power of Expertise</strong></p>
+      <p><strong class="para-label">D</strong> An expert perceives meaningful patterns in her domain better than non-experts. Where a novice perceives random or disconnected data points, an expert connects regular patterns within and between cases. This ability to identify patterns is not an innate perceptual skill; rather it reflects the organization of knowledge after exposure to and experience with thousands of cases. Experts have a deeper understanding of their domains than novices do, and utilize higher-order principles to solve problems. A novice, for example, might group objects together by color or size, whereas an expert would group the same objects according to their function or utility. Experts comprehend the meaning of data and weigh variables with different criteria within their domains better than novices. Experts recognize variables that have the largest influence on a particular problem and focus their attention on those variables.</p>
+      <p><strong class="para-label">E</strong> Experts have better domain-specific short-term and long-term memory than novices do. Moreover, experts perform tasks in their domains faster than novices and commit fewer errors while problem solving. Interestingly, experts go about solving problems differently than novices. Experts spend more time thinking about a problem to fully understand it at the beginning of a task than do novices, who immediately seek to find a solution. Experts use their knowledge of previous cases as a context for creating mental models to solve given problems.</p>
+      <p><strong class="para-label">F</strong> Better at self-monitoring than novices, experts are more aware of instances where they have committed errors or failed to understand a problem. Experts check their solutions more often than novices and recognize when they are missing information necessary for solving a problem. Experts are aware of the limits of their domain knowledge and apply their domain’s heuristics to solve problems that fall outside of their experience base.</p>
+      <p style="margin:22px 0 8px"><strong>The Paradox of Expertise</strong></p>
+      <p><strong class="para-label">G</strong> The strengths of expertise can also be weakness. Although one would expect experts to be good forecasters, they are not particularly good at making predictions about the future. Since the 1930s, researchers have been testing the ability of experts to make forecasts. The performance of experts has been tested against actuarial tables to determine if they are better at making predictions than simple statistical models. Seventy years later, with more than two hundred experiments in different domains, it is clear that the answer is no. If supplied with an equal amount of data about a particular case, an actuarial table is as good, or better, than an expert at making calls about the future. Even if an expert is given more specific case information than is available to the statistical model, the expert does not tend to outperform the actuarial table.</p>
+      <p><strong class="para-label">H</strong> Theorists and researchers differ when trying to explain why experts are less accurate forecasters than statistical models. Some have argued that experts, like all humans, are inconsistent when using mental models to make predictions. A number of researchers point to human biases to explain unreliable expert predictions. During the last 30 years, researchers have categorized, experimented, and theorized about the cognitive aspects of forecasting. Despite such efforts, the literature shows little consensus regarding the causes or manifestation of human bias.</p>
+    </div>
+
+  </div>
+
+  <div id="resizer"><div class="handle">&#8942;&#8942;</div></div>
+
+  <div id="questions-panel">
+<div id="qs-0">
+<div class="q-section">
+<div class="q-section-header">Questions 1&ndash;3</div>
+<div class="q-section-intro">Which <strong>THREE</strong> of the following statements are true of free settlers in the Australian prison colonies, according to the text? Choose <strong>THREE</strong> letters, <strong>A&ndash;H</strong>.</div>
+<div class="info-box"><strong>A</strong> They were mainly skilled workers and single women.<br><strong>B</strong> They all welcomed Governor Macquarie’s policies.<br><strong>C</strong> 25 percent of them were born in the colonies.<br><strong>D</strong> 160,000 of them went to Australia between 1787 and 1868.<br><strong>E</strong> 8,000 of them arrived in Australia in the 1820s.<br><strong>F</strong> They established families, businesses and farms.<br><strong>G</strong> Convicts who were assigned to them provided them with labour.<br><strong>H</strong> They campaigned in favour of emancipist rights.</div>
+<div class="question" id="q1"><div class="q-num">1</div><div class="q-body"><div class="q-text">First answer:</div><select class="dd-select" id="dd-q1" data-opts="A,B,C,D,E,F,G,H" data-ph="Select a letter&hellip;" onchange="selectDropdown(this,'q1')"></select></div></div>
+<div class="question" id="q2"><div class="q-num">2</div><div class="q-body"><div class="q-text">Second answer:</div><select class="dd-select" id="dd-q2" data-opts="A,B,C,D,E,F,G,H" data-ph="Select a letter&hellip;" onchange="selectDropdown(this,'q2')"></select></div></div>
+<div class="question" id="q3"><div class="q-num">3</div><div class="q-body"><div class="q-text">Third answer:</div><select class="dd-select" id="dd-q3" data-opts="A,B,C,D,E,F,G,H" data-ph="Select a letter&hellip;" onchange="selectDropdown(this,'q3')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 4&ndash;9</div>
+<div class="q-section-intro">The reading passage has seven paragraphs, <strong>A&ndash;G</strong>. Choose the correct heading for paragraphs <strong>B&ndash;G</strong> from the list of headings below.</div>
+<div class="info-box"><span class="box-title">List of Headings</span><strong>i</strong> Free settlers<br><strong>ii</strong> Transportation of convicts<br><strong>iii</strong> The end of transportation<br><strong>iv</strong> Convict life<br><strong>v</strong> The colonial population<br><strong>vi</strong> The treatment of convicts<br><strong>vii</strong> Opponents of transportation<br><strong>viii</strong> The first settlements</div>
+<div class="question" id="q4"><div class="q-num">4</div><div class="q-body"><div class="q-text">Paragraph B</div><select class="dd-select" id="dd-q4" data-opts="i,ii,iii,iv,v,vi,vii,viii" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q4')"></select></div></div>
+<div class="question" id="q5"><div class="q-num">5</div><div class="q-body"><div class="q-text">Paragraph C</div><select class="dd-select" id="dd-q5" data-opts="i,ii,iii,iv,v,vi,vii,viii" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q5')"></select></div></div>
+<div class="question" id="q6"><div class="q-num">6</div><div class="q-body"><div class="q-text">Paragraph D</div><select class="dd-select" id="dd-q6" data-opts="i,ii,iii,iv,v,vi,vii,viii" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q6')"></select></div></div>
+<div class="question" id="q7"><div class="q-num">7</div><div class="q-body"><div class="q-text">Paragraph E</div><select class="dd-select" id="dd-q7" data-opts="i,ii,iii,iv,v,vi,vii,viii" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q7')"></select></div></div>
+<div class="question" id="q8"><div class="q-num">8</div><div class="q-body"><div class="q-text">Paragraph F</div><select class="dd-select" id="dd-q8" data-opts="i,ii,iii,iv,v,vi,vii,viii" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q8')"></select></div></div>
+<div class="question" id="q9"><div class="q-num">9</div><div class="q-body"><div class="q-text">Paragraph G</div><select class="dd-select" id="dd-q9" data-opts="i,ii,iii,iv,v,vi,vii,viii" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q9')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 10&ndash;13</div>
+<div class="q-section-intro">Complete the notes below. Choose <strong>NO MORE THAN THREE WORDS</strong> from the passage for each answer.</div>
+<div class="info-box notes"><span class="box-title">Australia's Convict Colonies</span><strong>Events preceding first settlement</strong><br>&bull; 1615 &ndash; convicts first transported to <strong>10</strong> <input class="fill-input inline" id="q10" oninput="markFill('q10')" style="width:160px" placeholder="&hellip;"> controlled by Britain<br>&bull; 1770 &ndash; Cook claims SE Australian coast for Britain, calling it <strong>11</strong> <input class="fill-input inline" id="q11" oninput="markFill('q11')" style="width:150px" placeholder="&hellip;"><br>&bull; 1775 &ndash; 1783 &ndash; Revolutionary War in America halts transportation there<br>&bull; 1787 &ndash; Botany Bay chosen as site for new <strong>12</strong> <input class="fill-input inline" id="q12" oninput="markFill('q12')" style="width:140px" placeholder="&hellip;">; first convict fleet sets sail<br>&bull; 1788 &ndash; fleet reaches Botany Bay but <strong>13</strong> <input class="fill-input inline" id="q13" oninput="markFill('q13')" style="width:140px" placeholder="&hellip;"> chosen instead</div>
+</div>
+</div>
+<div id="qs-1" style="display:none">
+<div class="q-section">
+<div class="q-section-header">Questions 14&ndash;18</div>
+<div class="q-section-intro">The reading passage has seven sections, <strong>A&ndash;G</strong>. Which section contains the following information? Choose the correct letter, <strong>A&ndash;G</strong>.</div>
+<div class="question" id="q14"><div class="q-num">14</div><div class="q-body"><div class="q-text">A light-hearted example of ignorance about the night sky</div><select class="dd-select" id="dd-q14" data-opts="A,B,C,D,E,F,G" data-ph="Select a section&hellip;" onchange="selectDropdown(this,'q14')"></select></div></div>
+<div class="question" id="q15"><div class="q-num">15</div><div class="q-body"><div class="q-text">An explanation of how lighting may not equate with safety</div><select class="dd-select" id="dd-q15" data-opts="A,B,C,D,E,F,G" data-ph="Select a section&hellip;" onchange="selectDropdown(this,'q15')"></select></div></div>
+<div class="question" id="q16"><div class="q-num">16</div><div class="q-body"><div class="q-text">A description of the activities of the International Dark-sky Association</div><select class="dd-select" id="dd-q16" data-opts="A,B,C,D,E,F,G" data-ph="Select a section&hellip;" onchange="selectDropdown(this,'q16')"></select></div></div>
+<div class="question" id="q17"><div class="q-num">17</div><div class="q-body"><div class="q-text">An example of baby animals affected by too much night light</div><select class="dd-select" id="dd-q17" data-opts="A,B,C,D,E,F,G" data-ph="Select a section&hellip;" onchange="selectDropdown(this,'q17')"></select></div></div>
+<div class="question" id="q18"><div class="q-num">18</div><div class="q-body"><div class="q-text">A list of the possible drawbacks of new lighting technology</div><select class="dd-select" id="dd-q18" data-opts="A,B,C,D,E,F,G" data-ph="Select a section&hellip;" onchange="selectDropdown(this,'q18')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 19&ndash;21</div>
+<div class="q-section-intro">Complete the sentences below. Choose <strong>NO MORE THAN ONE WORD AND/OR A NUMBER</strong> from the passage for each answer.</div>
+<div class="question"><div class="q-num">19</div><div class="q-body"><div class="q-text">Too much <input class="fill-input inline" id="q19" oninput="markFill('q19')" style="width:130px" placeholder="&hellip;"> light has led to a rise in serious illness.</div></div></div>
+<div class="question"><div class="q-num">20</div><div class="q-body"><div class="q-text">Approximately <input class="fill-input inline" id="q20" oninput="markFill('q20')" style="width:80px" placeholder="&hellip;"> % of humans are unable to see the Milky Way.</div></div></div>
+<div class="question"><div class="q-num">21</div><div class="q-body"><div class="q-text">About <input class="fill-input inline" id="q21" oninput="markFill('q21')" style="width:80px" placeholder="&hellip;"> million migratory birds die crashing into lit-up tall buildings each year.</div></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 22&ndash;25</div>
+<div class="q-section-intro">Do the following statements agree with the claims of the writer in the passage? Write <strong>YES</strong> if the statement agrees with the claims of the writer, <strong>NO</strong> if the statement contradicts the claims of the writer, or <strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this.</div>
+<div class="question" id="q22"><div class="q-num">22</div><div class="q-body"><div class="q-text">It is alarming that so many animals are killed by night lighting.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q22','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q22','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q22','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q23"><div class="q-num">23</div><div class="q-body"><div class="q-text">It is good that developing countries now have brighter lighting.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q23','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q23','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q23','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q24"><div class="q-num">24</div><div class="q-body"><div class="q-text">Italians need not worry about reduced street lighting.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q24','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q24','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q24','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q25"><div class="q-num">25</div><div class="q-body"><div class="q-text">Bright lights along the road are necessary for safe driving.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q25','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q25','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q25','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Question 26</div>
+<div class="q-section-intro">Choose the correct letter, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>.</div>
+<div class="question" id="q26"><div class="q-num">26</div><div class="q-body"><div class="q-text">According to the writer, how much night lighting should there be in relation to what there is?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q26','A')"><span class="radio-dot"></span>A Much more</label><label class="mcq-opt" onclick="selectMCQ(this,'q26','B')"><span class="radio-dot"></span>B A little more</label><label class="mcq-opt" onclick="selectMCQ(this,'q26','C')"><span class="radio-dot"></span>C A little less</label><label class="mcq-opt" onclick="selectMCQ(this,'q26','D')"><span class="radio-dot"></span>D Much less</label></div></div></div>
+</div>
+</div>
+<div id="qs-2" style="display:none">
+<div class="q-section">
+<div class="q-section-header">Questions 27&ndash;32</div>
+<div class="q-section-intro">Complete the flow chart. Choose <strong>NO MORE THAN THREE WORDS</strong> from the passage for each answer.</div>
+<div class="info-box notes"><span class="box-title">From a novice to an expert</span><strong>Novice</strong><br>needs <strong>27</strong> <input class="fill-input inline" id="q27" oninput="markFill('q27')" style="width:150px" placeholder="&hellip;"> and <strong>28</strong> <input class="fill-input inline" id="q28" oninput="markFill('q28')" style="width:100px" placeholder="&hellip;"> to perform a given task;<br>exposed to specific cases;<br>guided by a <strong>29</strong> <input class="fill-input inline" id="q29" oninput="markFill('q29')" style="width:110px" placeholder="&hellip;">.<br><span style="color:var(--accent-red);font-weight:700">&darr;</span> <em>Through learning</em><br><strong>Journeyman</strong><br>starts to identify <strong>30</strong> <input class="fill-input inline" id="q30" oninput="markFill('q30')" style="width:150px" placeholder="&hellip;"> within and between cases;<br>often exposed to <strong>31</strong> <input class="fill-input inline" id="q31" oninput="markFill('q31')" style="width:110px" placeholder="&hellip;"> cases;<br>contacts a mentor when facing difficult problems<br><span style="color:var(--accent-red);font-weight:700">&darr;</span> <em>Through learning</em><br><strong>Expert</strong><br>creates predictions and new <strong>32</strong> <input class="fill-input inline" id="q32" oninput="markFill('q32')" style="width:120px" placeholder="&hellip;">;<br>performs task independently without the help of a mentor</div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 33&ndash;37</div>
+<div class="q-section-intro">Do the following statements agree with the information given in the Reading Passage? Write <strong>TRUE</strong> if the statement is true, <strong>FALSE</strong> if the statement is false, or <strong>NOT GIVEN</strong> if the information is not given in the passage.</div>
+<div class="question" id="q33"><div class="q-num">33</div><div class="q-body"><div class="q-text">Novices and experts use the same system to classify objects.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q33','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q33','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q33','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q34"><div class="q-num">34</div><div class="q-body"><div class="q-text">A novice’s training is focused on memory skills.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q34','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q34','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q34','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q35"><div class="q-num">35</div><div class="q-body"><div class="q-text">Experts have higher efficiency than novices when solving problems in their own field.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q35','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q35','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q35','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q36"><div class="q-num">36</div><div class="q-body"><div class="q-text">When facing a problem, a novice always tries to solve it straight away.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q36','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q36','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q36','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q37"><div class="q-num">37</div><div class="q-body"><div class="q-text">Experts are better at recognizing their own mistakes and limits.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q37','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q37','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q37','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 38&ndash;40</div>
+<div class="q-section-intro">Complete the following summary of the paragraphs of the reading passage, using <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</div>
+<div class="info-box notes">Though experts are quite effective at solving problems in their own domains, their strengths can also be turned against them. Studies have shown that experts are less <strong>38</strong> <input class="fill-input inline" id="q38" oninput="markFill('q38')" style="width:120px" placeholder="&hellip;"> at making predictions than statistical models. Some researchers theorise it is because experts can also be inconsistent like all others. Yet some believe it is due to <strong>39</strong> <input class="fill-input inline" id="q39" oninput="markFill('q39')" style="width:130px" placeholder="&hellip;"> but there isn’t a great deal of <strong>40</strong> <input class="fill-input inline" id="q40" oninput="markFill('q40')" style="width:120px" placeholder="&hellip;"> as to its cause and manifestation.</div>
+</div>
+</div>
+  </div>
+</div>
+
+<div id="bottombar">
+  <div class="part-tabs">
+    <div class="part-tab active" id="ptab-0" onclick="switchPassage(0)">Part 1: <span class="count" id="pcount-0">0 of 13</span></div>
+    <div class="part-tab" id="ptab-1" onclick="switchPassage(1)">Part 2: <span class="count" id="pcount-1">0 of 13</span></div>
+    <div class="part-tab" id="ptab-2" onclick="switchPassage(2)">Part 3: <span class="count" id="pcount-2">0 of 14</span></div>
+  </div>
+  <div class="q-circles" id="q-circles"></div>
+  <div class="nav-arrows">
+    <button class="nav-arrow" onclick="prevQ()">&lsaquo;</button>
+    <button class="nav-arrow" onclick="nextQ()">&rsaquo;</button>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="submit-modal">
+  <div class="modal">
+    <h2>Submit Your Test?</h2>
+    <p>You are about to submit your test. This action cannot be undone.</p>
+    <div class="score-grid" id="score-grid" style="display:none">
+      <div class="score-card"><div class="val" id="sc-answered">0</div><div class="lbl">Answered</div></div>
+      <div class="score-card"><div class="val" id="sc-unanswered">40</div><div class="lbl">Unanswered</div></div>
+      <div class="score-card"><div class="val" id="sc-pct">0%</div><div class="lbl">Completion</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="closeModal()">Cancel</button>
+      <button class="btn-modal primary" onclick="submitTest()">Submit Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="results-modal">
+  <div class="modal">
+    <h2>Test Complete</h2>
+    <p id="results-cand"></p>
+    <div class="score-grid">
+      <div class="score-card"><div class="val" id="r-correct" style="color:var(--success)">&mdash;</div><div class="lbl">Correct</div></div>
+      <div class="score-card"><div class="val" id="r-wrong" style="color:var(--accent-red)">&mdash;</div><div class="lbl">Incorrect</div></div>
+      <div class="score-card"><div class="val" id="r-unanswered">&mdash;</div><div class="lbl">Unanswered</div></div>
+    </div>
+    <div style="margin:14px 0 12px;background:var(--accent);border-radius:12px;padding:18px 22px;text-align:center;color:#fff">
+      <div style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-bottom:4px">IELTS Band Score</div>
+      <div id="r-band" style="font-size:48px;font-weight:700;line-height:1">&mdash;</div>
+      <div id="r-band-label" style="font-size:13px;margin-top:6px;opacity:.85">&mdash;</div>
+    </div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:6px">Your Answers vs Correct Answers</div>
+    <div class="ans-table-wrap"><table class="ans-table"><thead><tr><th>Q</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr></thead><tbody id="ans-table-body"></tbody></table></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:10px">Green = correct &middot; Red = incorrect &middot; Band scores are approximate for Academic Reading.</p>
+    <p id="pdf-status" style="font-size:13px;color:var(--success);margin-top:8px;font-weight:500"></p>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="redownloadPDF()">Download PDF again</button>
+      <button class="btn-modal primary" onclick="document.getElementById('results-modal').classList.add('hidden')">Close &amp; Review</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var ANSWERS = {
+  q1:'A', q2:'E', q3:'G', q4:'viii', q5:'vi', q6:'v', q7:'i', q8:'vii', q9:'iii',
+  q10:'American colonies', q11:'New South Wales', q12:'prison colony', q13:'Sydney Cove',
+  q14:'B', q15:'F', q16:'E', q17:'C', q18:'A',
+  q19:'artificial', q20:'70', q21:'500',
+  q22:'YES', q23:'NO', q24:'NOT GIVEN', q25:'NO', q26:'D',
+  q27:'guiding principles', q28:'rules', q29:'mentor', q30:'patterns of behavior', q31:'complex', q32:'knowledge',
+  q33:'FALSE', q34:'NOT GIVEN', q35:'TRUE', q36:'TRUE', q37:'TRUE',
+  q38:'accurate', q39:'human bias', q40:'consensus'
+};
+
+var ALT = {
+  q10:['american colonies','the american colonies',"britain's american colonies"],
+  q11:['new south wales'],
+  q12:['prison colony','penal colony'],
+  q13:['sydney cove'],
+  q19:['artificial','night'],
+  q20:['70','70%'],
+  q27:['guiding principles','principles','rules'],
+  q28:['rules','guiding principles'],
+  q30:['patterns of behavior','patterns of behaviour','patterns'],
+  q39:['human bias','human biases','bias']
+};
+
+var PART_RANGES = [[1,13],[14,26],[27,40]];
+var userAnswers = {}, currentPassage = 0, submitted = false;
+var candidateName='', candidateNumber='';
+var seconds = 60*60;
+var timerEl = document.getElementById('timer');
+var timerInterval = null;
+
+(function initSelects(){
+  document.querySelectorAll('select[data-opts]').forEach(function(s){
+    var ph = document.createElement('option');
+    ph.value = ''; ph.disabled = true; ph.selected = true;
+    ph.innerHTML = s.getAttribute('data-ph') || 'Select\u2026';
+    s.appendChild(ph);
+    s.getAttribute('data-opts').split(',').forEach(function(v){
+      var o = document.createElement('option');
+      o.value = v; o.textContent = v;
+      s.appendChild(o);
+    });
+  });
+})();
+
+var STORAGE_KEY = 'ielts_reading_320_session';
+var autosaveInterval = null;
+var autosaveListenersAdded = false;
+var autosaveIndicator = document.getElementById('autosave-indicator');
+var autosaveText = document.getElementById('autosave-text');
+
+function showAutosaveSaving(){ autosaveIndicator.classList.add('show','saving'); autosaveText.textContent = 'Saving\u2026'; }
+function showAutosaveSaved(){
+  autosaveIndicator.classList.add('show'); autosaveIndicator.classList.remove('saving');
+  var t = new Date(); autosaveText.textContent = 'Saved ' + t.toTimeString().slice(0,8);
+  setTimeout(function(){ autosaveIndicator.classList.remove('show'); }, 2500);
+}
+function getPassageWidth(){ var pw = document.getElementById('passage-panel'); return pw ? (pw.style.width || pw.offsetWidth + 'px') : ''; }
+function saveSession(silent){
+  if(submitted) return;
+  if(!silent) showAutosaveSaving();
+  try{
+    var data = { version:3, timestamp:Date.now(), candidateName:candidateName, candidateNumber:candidateNumber,
+      seconds:seconds, currentPassage:currentPassage, userAnswers:userAnswers,
+      notepad:document.getElementById('notepad-text').value, passageWidth:getPassageWidth(), started:true };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    if(!silent) showAutosaveSaved();
+  }catch(e){}
+}
+function loadSession(){ try{ var raw=localStorage.getItem(STORAGE_KEY); if(!raw) return null; var d=JSON.parse(raw); return (d&&d.started)?d:null; }catch(e){ return null; } }
+function clearSession(){ try{ localStorage.removeItem(STORAGE_KEY); }catch(e){} }
+function formatTime(sec){ var m=Math.floor(sec/60),s=sec%60; return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'); }
+
+(function checkSavedSession(){
+  var saved = loadSession(); if(!saved) return;
+  var banner = document.getElementById('resume-banner');
+  var info = document.getElementById('resume-info');
+  var answered = 0;
+  for(var i=1;i<=40;i++){ if(saved.userAnswers && saved.userAnswers['q'+i]) answered++; }
+  var when = new Date(saved.timestamp).toLocaleString();
+  info.innerHTML = '<strong>' + escapeHtml(saved.candidateName || 'Anonymous') + '</strong> &middot; ' + answered + '/40 answered &middot; ' + formatTime(saved.seconds) + ' remaining<br><span style="opacity:.75">Saved ' + when + '</span>';
+  banner.classList.add('show');
+  document.getElementById('cand-name').value = saved.candidateName || '';
+  document.getElementById('cand-num').value = saved.candidateNumber || '';
+})();
+
+function resumeTest(){
+  var saved = loadSession(); if(!saved){ startTest(); return; }
+  candidateName = saved.candidateName || 'Anonymous';
+  candidateNumber = saved.candidateNumber || 'N/A';
+  seconds = saved.seconds || 60*60;
+  userAnswers = saved.userAnswers || {};
+  currentPassage = saved.currentPassage || 0;
+  if(saved.notepad) document.getElementById('notepad-text').value = saved.notepad;
+  if(saved.passageWidth) document.getElementById('passage-panel').style.width = saved.passageWidth;
+  document.getElementById('start-screen').classList.add('hidden');
+  restoreAnswersUI(); buildCircles(); updatePartCounts();
+  if(currentPassage !== 0) switchPassage(currentPassage);
+  updateTimerDisplay(); startTimer(); startAutosave(); showAutosaveSaved();
+}
+function discardSaved(){ clearSession(); document.getElementById('resume-banner').classList.remove('show'); document.getElementById('cand-name').value=''; document.getElementById('cand-num').value=''; }
+
+function restoreAnswersUI(){
+  for(var id in userAnswers){
+    var val = userAnswers[id]; if(!val) continue;
+    var dd = document.getElementById('dd-'+id);
+    if(dd){ dd.value=val; dd.classList.add('answered'); continue; }
+    var fi = document.getElementById(id);
+    if(fi && fi.tagName==='INPUT'){ fi.value=val; fi.classList.add('answered'); continue; }
+    var tfnWrap = document.querySelector('#'+id+' .tfn-options');
+    if(tfnWrap){ tfnWrap.querySelectorAll('.tfn-btn').forEach(function(b){ if(b.textContent.trim()===val) b.classList.add('selected'); }); continue; }
+    var mcqWrap = document.querySelector('#'+id+' .mcq-options');
+    if(mcqWrap){ mcqWrap.querySelectorAll('.mcq-opt').forEach(function(l){ if(l.textContent.trim().charAt(0)===val) l.classList.add('selected'); }); }
+  }
+}
+
+function startAutosave(){
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  autosaveInterval = setInterval(function(){ saveSession(false); }, 5000);
+  if(autosaveListenersAdded) return;
+  autosaveListenersAdded = true;
+  document.addEventListener('visibilitychange', function(){ if(document.hidden) saveSession(true); });
+  window.addEventListener('beforeunload', function(){ saveSession(true); });
+}
+
+function startTest(){
+  candidateName = document.getElementById('cand-name').value.trim() || 'Anonymous';
+  candidateNumber = document.getElementById('cand-num').value.trim() || 'N/A';
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('resume-banner').classList.remove('show');
+  clearSession(); buildCircles(); updatePartCounts(); startTimer(); startAutosave(); saveSession(true);
+}
+function startTimer(){
+  if(timerInterval) clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(function(){ if(submitted) return; seconds--; if(seconds<=0){ clearInterval(timerInterval); submitTest(); return; } updateTimerDisplay(); }, 1000);
+}
+function updateTimerDisplay(){ timerEl.textContent = formatTime(Math.max(0,seconds)); timerEl.classList.toggle('warn', seconds < 300); }
+
+function switchPassage(idx){
+  currentPassage = idx;
+  document.querySelectorAll('.part-tab').forEach(function(t,i){ t.classList.toggle('active', i===idx); });
+  document.querySelectorAll('.passage-content').forEach(function(p,i){ p.classList.toggle('active', i===idx); });
+  document.querySelectorAll('#qs-0,#qs-1,#qs-2').forEach(function(q,i){ q.style.display = i===idx ? '' : 'none'; });
+  buildCircles();
+  document.getElementById('questions-panel').scrollTop = 0;
+  document.getElementById('passage-panel').scrollTop = 0;
+  saveSession(true);
+}
+function buildCircles(){
+  var wrap = document.getElementById('q-circles'); wrap.innerHTML = '';
+  var range = PART_RANGES[currentPassage];
+  for(var i=range[0];i<=range[1];i++){
+    var d = document.createElement('div'); d.className = 'q-circle'; d.textContent = i;
+    if(userAnswers['q'+i] && userAnswers['q'+i].toString().trim()) d.classList.add('answered');
+    d.onclick = (function(n){ return function(){ scrollToQ(n); }; })(i);
+    wrap.appendChild(d);
+  }
+}
+function updatePartCounts(){
+  PART_RANGES.forEach(function(r, idx){
+    var a=0; for(var i=r[0];i<=r[1];i++){ if(userAnswers['q'+i] && userAnswers['q'+i].toString().trim()) a++; }
+    document.getElementById('pcount-'+idx).textContent = a + ' of ' + (r[1]-r[0]+1);
+  });
+}
+function scrollToQ(num){
+  var p = num<=13?0:num<=26?1:2;
+  if(p !== currentPassage) switchPassage(p);
+  setTimeout(function(){ var el=document.getElementById('q'+num); if(el) el.scrollIntoView({behavior:'smooth',block:'center'}); },50);
+}
+function prevQ(){ document.getElementById('questions-panel').scrollBy({top:-240,behavior:'smooth'}); }
+function nextQ(){ document.getElementById('questions-panel').scrollBy({top:240,behavior:'smooth'}); }
+
+function selectTFN(btn, qId, val){ btn.closest('.tfn-options').querySelectorAll('.tfn-btn').forEach(function(b){ b.classList.remove('selected'); }); btn.classList.add('selected'); userAnswers[qId]=val; updatePartCounts(); buildCircles(); saveSession(true); }
+function selectMCQ(label, qId, val){ label.closest('.mcq-options').querySelectorAll('.mcq-opt').forEach(function(l){ l.classList.remove('selected'); }); label.classList.add('selected'); userAnswers[qId]=val; updatePartCounts(); buildCircles(); saveSession(true); }
+function selectDropdown(sel, qId){ var val=sel.value; sel.classList.toggle('answered',!!val); userAnswers[qId]=val; updatePartCounts(); buildCircles(); saveSession(true); }
+function markFill(id){ var el=document.getElementById(id); var val=el.value.trim(); el.classList.toggle('answered',val.length>0); userAnswers[id]=val; updatePartCounts(); buildCircles(); saveSession(true); }
+
+var _savedRange = null;
+function hideSelToolbar(){ var tb=document.getElementById('sel-toolbar'); if(tb) tb.style.display='none'; _savedRange=null; }
+function showSelToolbar(x,y){ var tb=document.getElementById('sel-toolbar'); if(!tb) return; tb.style.display='block'; var tw=tb.offsetWidth||140, th=tb.offsetHeight||36; var left=x-tw/2, top=y-th-10; if(left+tw>window.innerWidth-8) left=window.innerWidth-tw-8; if(left<8) left=8; if(top<60) top=y+12; tb.style.left=left+'px'; tb.style.top=top+'px'; }
+function getPassageSelection(){ var sel=window.getSelection(); if(!sel||sel.isCollapsed||sel.rangeCount===0) return null; var range=sel.getRangeAt(0); var p1=document.getElementById('passage-panel'); var p2=document.getElementById('questions-panel'); var node=range.commonAncestorContainer; if(!((p1&&p1.contains(node))||(p2&&p2.contains(node)))) return null; if(!sel.toString().trim()) return null; var frag=range.cloneContents(); if(frag.querySelector && frag.querySelector('input,select,textarea,button,label')) return null; return {sel:sel,range:range}; }
+function onPassageMouseUp(e){ setTimeout(function(){ var data=getPassageSelection(); if(!data){ var tb=document.getElementById('sel-toolbar'); if(e&&e.target&&tb&&tb.contains(e.target)) return; hideSelToolbar(); return; } _savedRange=data.range.cloneRange(); var rect=data.range.getBoundingClientRect(); showSelToolbar(rect.left+rect.width/2, rect.top); },10); }
+function applyMark(cls){ if(!_savedRange) return; try{ var m=document.createElement('mark'); m.className=cls; _savedRange.surroundContents(m); }catch(e){ try{ var f=_savedRange.extractContents(); var m2=document.createElement('mark'); m2.className=cls; m2.appendChild(f); _savedRange.insertNode(m2); }catch(e2){} } var s=window.getSelection(); if(s) s.removeAllRanges(); hideSelToolbar(); }
+(function(){ var hl=document.getElementById('sel-hl-btn'); if(hl) hl.addEventListener('mousedown',function(e){e.preventDefault();applyMark('hl');}); var nb=document.getElementById('sel-note-btn'); if(nb) nb.addEventListener('mousedown',function(e){ e.preventDefault(); var text=_savedRange?_savedRange.toString().trim():''; applyMark('hl-note'); if(text){ var ta=document.getElementById('notepad-text'); if(ta){ ta.value+=(ta.value&&!ta.value.endsWith('\n')?'\n':'')+'\u2022 '+text; saveSession(true); var p=document.getElementById('notepad-panel'); if(p&&p.classList.contains('hidden')) toggleNotepad(); } } }); var pp=document.getElementById('passage-panel'); if(pp) pp.addEventListener('mouseup',onPassageMouseUp); var qp=document.getElementById('questions-panel'); if(qp) qp.addEventListener('mouseup',onPassageMouseUp); document.addEventListener('mousedown',function(e){ var tb=document.getElementById('sel-toolbar'); if(!tb||tb.style.display==='none') return; if(tb.contains(e.target)) return; setTimeout(function(){ var s=window.getSelection(); if(!s||s.isCollapsed) hideSelToolbar(); },150); }); document.addEventListener('keydown',function(e){ if(e.key==='Escape') hideSelToolbar(); }); if(pp) pp.addEventListener('scroll',hideSelToolbar); if(qp) qp.addEventListener('scroll',hideSelToolbar); })();
+
+function toggleNotepad(){ var panel=document.getElementById('notepad-panel'); var btn=document.getElementById('notepad-btn'); panel.classList.toggle('hidden'); btn.classList.toggle('active', !panel.classList.contains('hidden')); if(!panel.classList.contains('hidden')) document.getElementById('notepad-text').focus(); saveSession(true); }
+function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function(){}); else document.exitFullscreen().catch(function(){}); }
+document.getElementById('notepad-text').addEventListener('input', function(){ saveSession(true); });
+
+function getBandScore(c){ if(c>=39) return {band:'9.0',level:'Expert User'}; if(c>=37) return {band:'8.5',level:'Very Good User'}; if(c>=35) return {band:'8.0',level:'Very Good User'}; if(c>=33) return {band:'7.5',level:'Good User'}; if(c>=30) return {band:'7.0',level:'Good User'}; if(c>=27) return {band:'6.5',level:'Competent User'}; if(c>=23) return {band:'6.0',level:'Competent User'}; if(c>=19) return {band:'5.5',level:'Modest User'}; if(c>=15) return {band:'5.0',level:'Modest User'}; if(c>=13) return {band:'4.5',level:'Limited User'}; if(c>=10) return {band:'4.0',level:'Limited User'}; return {band:'3.5',level:'Extremely Limited'}; }
+function normalize(s){ return (s||'').toString().trim().toLowerCase().replace(/[()]/g,'').replace(/\s+/g,' ').replace(/\.$/,''); }
+function checkCorrect(id){
+  // Special handling for Q1-3 (choose THREE)
+  if(id==='q1'||id==='q2'||id==='q3'){
+    var correctSet = ['A','E','G'];
+    var mine = (userAnswers[id]||'').toString().trim().toUpperCase();
+    if(!mine) return null;
+    // Check uniqueness among the three
+    var others = [];
+    if(id!=='q1') others.push((userAnswers['q1']||'').toString().trim().toUpperCase());
+    if(id!=='q2') others.push((userAnswers['q2']||'').toString().trim().toUpperCase());
+    if(id!=='q3') others.push((userAnswers['q3']||'').toString().trim().toUpperCase());
+    if(others.indexOf(mine)!==-1) return false; // duplicate
+    return correctSet.indexOf(mine)!==-1;
+  }
+  var ans=ANSWERS[id]; var user=(userAnswers[id]||'').toString().trim(); if(!user) return null;
+  var nU=normalize(user); if(ALT[id]){ for(var k=0;k<ALT[id].length;k++){ if(nU===normalize(ALT[id][k])) return true; } }
+  return nU===normalize(ans);
+}
+function correctAnswerLabel(id){
+  if(id==='q1'||id==='q2'||id==='q3') return 'A / E / G (any order)';
+  return ANSWERS[id];
+}
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function confirmSubmit(){ var count=0; for(var i=1;i<=40;i++){ if(userAnswers['q'+i]&&userAnswers['q'+i].toString().trim()) count++; } document.getElementById('sc-answered').textContent=count; document.getElementById('sc-unanswered').textContent=40-count; document.getElementById('sc-pct').textContent=Math.round(count/40*100)+'%'; document.getElementById('score-grid').style.display='grid'; document.getElementById('submit-modal').classList.remove('hidden'); }
+function closeModal(){ document.getElementById('submit-modal').classList.add('hidden'); }
+
+function submitTest(){
+  submitted=true; if(timerInterval) clearInterval(timerInterval); if(autosaveInterval) clearInterval(autosaveInterval);
+  document.getElementById('submit-modal').classList.add('hidden'); clearSession();
+  var correct=0, wrong=0, unanswered=0;
+  var tbody=document.getElementById('ans-table-body'); tbody.innerHTML='';
+  var pdfRows=[];
+  for(var num=1;num<=40;num++){
+    var id='q'+num; var result=checkCorrect(id); var userRaw=(userAnswers[id]||'').toString().trim(); var correctAns=correctAnswerLabel(id);
+    var yourCell, resultCell, resText;
+    if(result===null){ unanswered++; yourCell='<span class="blank">&mdash;</span>'; resultCell='<span class="blank">Unanswered</span>'; resText='Unanswered'; }
+    else if(result){ correct++; yourCell='<span class="ok">'+escapeHtml(userRaw)+'</span>'; resultCell='<span class="ok">&#10003; Correct</span>'; resText='Correct'; }
+    else { wrong++; yourCell='<span class="bad">'+escapeHtml(userRaw||'-')+'</span>'; resultCell='<span class="bad">&#10007; Incorrect</span>'; resText='Incorrect'; }
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td style="font-weight:700;color:var(--accent)">'+num+'</td><td>'+yourCell+'</td><td><strong>'+escapeHtml(correctAns)+'</strong></td><td>'+resultCell+'</td>';
+    tbody.appendChild(tr); pdfRows.push([String(num), userRaw||'-', correctAns, resText]);
+  }
+  document.getElementById('r-correct').textContent=correct;
+  document.getElementById('r-wrong').textContent=wrong;
+  document.getElementById('r-unanswered').textContent=unanswered;
+  var bs=getBandScore(correct);
+  document.getElementById('r-band').textContent=bs.band;
+  document.getElementById('r-band-label').textContent=bs.level+' \u00B7 '+correct+' / 40 correct';
+  document.getElementById('results-cand').textContent='Candidate: '+candidateName+'  \u00B7  Number: '+candidateNumber;
+  document.getElementById('results-modal').classList.remove('hidden');
+  window._lastPdfData={correct:correct,wrong:wrong,unanswered:unanswered,bs:bs,pdfRows:pdfRows};
+  try{ generateResultsPDF(correct,wrong,unanswered,bs,pdfRows); document.getElementById('pdf-status').textContent='Candidate response PDF downloaded.'; }
+  catch(e){ document.getElementById('pdf-status').textContent='PDF download failed. Use the button below.'; document.getElementById('pdf-status').style.color='var(--accent-red)'; }
+}
+function redownloadPDF(){ if(!window._lastPdfData) return; var d=window._lastPdfData; try{ generateResultsPDF(d.correct,d.wrong,d.unanswered,d.bs,d.pdfRows); }catch(e){} }
+
+function generateResultsPDF(correct,wrong,unanswered,bandInfo,rows){
+  var jsPDF=window.jspdf.jsPDF; var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  var pageWidth=doc.internal.pageSize.getWidth();
+  doc.setFillColor(30,58,95); doc.rect(0,0,pageWidth,28,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(16); doc.setFont('helvetica','bold');
+  doc.text('IELTS Academic Reading \u00B7 Test 320',14,12);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Candidate Response Report',14,20); doc.text(new Date().toLocaleString(),pageWidth-14,20,{align:'right'});
+  doc.setTextColor(26,24,20); doc.setFontSize(11); doc.setFont('helvetica','bold');
+  doc.text('Candidate Name:',14,38); doc.setFont('helvetica','normal'); doc.text(candidateName||'Anonymous',52,38);
+  doc.setFont('helvetica','bold'); doc.text('Candidate Number:',14,45); doc.setFont('helvetica','normal'); doc.text(candidateNumber||'-',58,45);
+  doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.text('Score Summary',14,56);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Correct: '+correct+'    Incorrect: '+wrong+'    Unanswered: '+unanswered,14,64);
+  doc.setFont('helvetica','bold'); doc.setTextColor(30,58,95); doc.setFontSize(14);
+  doc.text('Band Score: '+bandInfo.band+'  ('+bandInfo.level+')',14,72);
+  doc.setTextColor(26,24,20); doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text(correct+' / 40 correct',14,79);
+  doc.autoTable({ startY:86, head:[['Q','Your Answer','Correct Answer','Result']], body:rows, theme:'grid',
+    styles:{fontSize:8,cellPadding:2.2,overflow:'linebreak',valign:'middle'},
+    headStyles:{fillColor:[30,58,95],textColor:255,fontStyle:'bold',fontSize:8},
+    columnStyles:{0:{cellWidth:18,halign:'center'},1:{cellWidth:50},2:{cellWidth:70},3:{cellWidth:35,halign:'center'}},
+    didParseCell:function(data){ if(data.section==='body'&&data.column.index===3){ var t=data.cell.raw||''; if(t.indexOf('Correct')!==-1 && t.indexOf('Incorrect')===-1){data.cell.styles.textColor=[5,150,105];data.cell.styles.fontStyle='bold';} else if(t.indexOf('Incorrect')!==-1){data.cell.styles.textColor=[225,29,72];data.cell.styles.fontStyle='bold';} else {data.cell.styles.textColor=[107,114,128];data.cell.styles.fontStyle='italic';} } },
+    margin:{left:14,right:14} });
+  var finalY=doc.lastAutoTable.finalY+12;
+  doc.setFontSize(8); doc.setTextColor(107,114,128);
+  doc.text('This report shows your answers against the official answer key.',14,finalY);
+  var safeName=(candidateName||'Candidate').replace(/[^a-zA-Z0-9]/g,'_').slice(0,20);
+  var safeNum=(candidateNumber||'NA').replace(/[^a-zA-Z0-9]/g,'_').slice(0,15);
+  doc.save('IELTS_Test320_'+safeName+'_'+safeNum+'_'+new Date().toISOString().slice(0,10)+'.pdf');
+}
+
+var resizer=document.getElementById('resizer');
+var passPanel=document.getElementById('passage-panel');
+var isResizing=false,startX,startW;
+resizer.addEventListener('mousedown',function(e){ isResizing=true; startX=e.clientX; startW=passPanel.offsetWidth; resizer.classList.add('dragging'); document.body.style.userSelect='none'; document.body.style.cursor='col-resize'; });
+document.addEventListener('mousemove',function(e){ if(!isResizing) return; var dx=e.clientX-startX; passPanel.style.width=Math.min(Math.max(startW+dx,280),window.innerWidth-320)+'px'; });
+document.addEventListener('mouseup',function(){ if(isResizing){ isResizing=false; resizer.classList.remove('dragging'); document.body.style.userSelect=''; document.body.style.cursor=''; saveSession(true); } });
+(function(){ var saved=loadSession(); if(saved&&saved.passageWidth) document.getElementById('passage-panel').style.width=saved.passageWidth; })();
+</script>
+</body>
+</html>

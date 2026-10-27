@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Academic Reading · Practice Test</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fff;--border:#e5e7eb;--border-soft:#f3f4f6;--accent:#1e3a5f;--accent-red:#e11d48;--accent-red-hover:#be123c;--text:#1f2937;--muted:#6b7280;--success:#059669;--passage-width:52%;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+  #start-screen{position:fixed;inset:0;background:#f8fafc;display:flex;align-items:center;justify-content:center;z-index:500;}
+  #start-screen.hidden{display:none;}
+  .start-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:40px 44px;max-width:460px;width:92%;box-shadow:0 10px 40px rgba(0,0,0,.08);}
+  .start-card h1{font-size:20px;margin-bottom:4px;font-weight:600;}
+  .start-card .sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .start-card label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;}
+  .start-card input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;margin-bottom:16px;font-family:inherit;}
+  .start-card input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.12);}
+  .start-card button{width:100%;padding:12px;background:var(--accent-red);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;}
+  .start-card button:hover{background:var(--accent-red-hover);}
+  .resume-banner{display:none;background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12.5px;color:#92400e;line-height:1.5;}
+  .resume-banner.show{display:block;}
+  .resume-banner .resume-actions{margin-top:8px;display:flex;gap:8px;}
+  .resume-banner .resume-actions button{width:auto;margin:0;padding:6px 12px;font-size:12px;border-radius:6px;}
+  .resume-banner .resume-actions .btn-ghost{background:#fff;color:#92400e;border:1px solid #fbbf24;}
+  #topbar{background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;flex-shrink:0;z-index:100;}
+  .top-left{display:flex;align-items:center;gap:12px;}
+  .mock-label{font-size:15px;font-weight:500;}
+  #autosave-indicator{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--success);font-weight:500;opacity:0;transition:opacity .4s ease;}
+  #autosave-indicator.show{opacity:1;}
+  #autosave-indicator .dot{width:7px;height:7px;border-radius:50%;background:var(--success);}
+  #autosave-indicator.saving .dot{background:#f59e0b;animation:blink .8s infinite;}
+  #autosave-indicator.saving{color:#f59e0b;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+  #timer-wrap{display:flex;align-items:center;gap:6px;color:var(--accent-red);font-weight:600;}
+  #timer{font-size:18px;font-weight:600;letter-spacing:0.02em;min-width:52px;}
+  #timer.warn{animation:pulse 1s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .top-actions{display:flex;align-items:center;gap:8px;}
+  .icon-btn{width:36px;height:36px;border:none;background:transparent;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;}
+  .icon-btn:hover{background:var(--border-soft);color:var(--text);}
+  .btn-submit{background:#e5e7eb;color:var(--text);border:none;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;}
+  .btn-submit:hover{background:#d1d5db;}
+  .icon-btn.active{background:#fff1f2;color:var(--accent-red);}
+  #notepad-panel{position:fixed;top:56px;right:0;width:320px;height:calc(100vh - 56px - 56px);background:#fff;border-left:1px solid var(--border);box-shadow:-4px 0 24px rgba(0,0,0,.08);z-index:150;display:flex;flex-direction:column;transition:transform .2s ease;}
+  #notepad-panel.hidden{transform:translateX(100%);pointer-events:none;}
+  .notepad-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+  .notepad-title{font-size:15px;font-weight:600;color:var(--accent-red);}
+  #notepad-text{flex:1;border:none;resize:none;padding:14px 16px;font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.55;outline:none;}
+  #main{display:flex;flex:1;overflow:hidden;}
+  #passage-panel{width:var(--passage-width);background:#fff;overflow-y:auto;padding:24px 28px 40px;flex-shrink:0;}
+  .part-header{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:4px;}
+  #passage-panel h2{font-size:22px;font-weight:700;color:var(--accent);margin-bottom:18px;letter-spacing:-0.3px;}
+  .passage-title{text-align:center;font-family:'Source Serif 4',Georgia,serif;font-size:18px;font-weight:600;color:var(--accent);margin-bottom:22px;}
+  #passage-panel p{font-family:'Source Serif 4',Georgia,serif;font-size:15px;line-height:1.75;margin-bottom:16px;}
+  #passage-panel strong{font-weight:700;color:var(--accent);}
+  #passage-panel em{font-style:italic;}
+  #resizer{width:5px;background:transparent;cursor:col-resize;flex-shrink:0;position:relative;z-index:10;}
+  #resizer::before{content:'';position:absolute;top:0;bottom:0;left:2px;width:1px;background:var(--accent-red);}
+  #resizer:hover::before,#resizer.dragging::before{width:3px;left:1px;}
+  #resizer .handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:28px;background:#fff;border:1px solid var(--accent-red);border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--accent-red);font-size:10px;}
+  #questions-panel{flex:1;overflow-y:auto;padding:20px 24px 80px;background:#fff;}
+  .q-section{margin-bottom:28px;}
+  .q-section-header{font-size:15px;font-weight:600;margin-bottom:8px;}
+  .q-section-intro{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:16px;}
+  .question{padding:12px 0;border-bottom:1px solid var(--border-soft);display:flex;gap:12px;align-items:flex-start;}
+  .question:last-child{border-bottom:none;}
+  .q-num{min-width:26px;height:26px;color:var(--muted);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px;}
+  .q-body{flex:1;}
+  .q-text{font-size:14px;line-height:1.55;margin-bottom:10px;}
+  .tfn-options,.mcq-options{display:flex;flex-direction:column;gap:6px;}
+  .tfn-options.horizontal{flex-direction:row;flex-wrap:wrap;gap:8px;}
+  .tfn-btn,.mcq-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:13.5px;transition:all .12s;}
+  .tfn-btn:hover,.mcq-opt:hover{border-color:#94a3b8;background:#f8fafc;}
+  .tfn-btn.selected,.mcq-opt.selected{border-color:var(--accent-red);background:#fff1f2;}
+  .tfn-btn .radio-dot,.mcq-opt .radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid #cbd5e1;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .tfn-btn.selected .radio-dot,.mcq-opt.selected .radio-dot{border-color:var(--accent-red);}
+  .tfn-btn.selected .radio-dot::after,.mcq-opt.selected .radio-dot::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--accent-red);}
+  .fill-input{border:1.5px solid var(--border);border-radius:6px;padding:7px 12px;font-size:14px;font-family:inherit;width:100%;max-width:220px;transition:border-color .15s;}
+  .fill-input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .fill-input.answered{border-color:var(--success);background:#f0fdf4;}
+  .dd-select{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 36px 10px 12px;font-size:13.5px;font-family:inherit;background-color:#fff;cursor:pointer;transition:border-color .15s;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 12px center;}
+  .dd-select:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .dd-select.answered{border-color:var(--success);background-color:#f0fdf4;}
+  .pair-hint{font-size:12.5px;color:#b45309;background:#fffbeb;border:1px solid #fcd34d;border-radius:6px;padding:6px 10px;margin-bottom:10px;}
+  #bottombar{border-top:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0;gap:12px;min-height:56px;}
+  .part-tabs{display:flex;gap:8px;flex-shrink:0;}
+  .part-tab{padding:8px 16px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .part-tab:hover{border-color:#94a3b8;color:var(--text);}
+  .part-tab.active{border-color:var(--accent-red);color:var(--accent);box-shadow:0 0 0 1px var(--accent-red);}
+  .part-tab .count{font-weight:400;color:var(--muted);}
+  .q-circles{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;flex:1;padding:0 8px;}
+  .q-circle{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;}
+  .q-circle:hover{border-color:#94a3b8;color:var(--text);}
+  .q-circle.answered{background:var(--success);border-color:var(--success);color:#fff;}
+  .nav-arrows{display:flex;gap:6px;flex-shrink:0;}
+  .nav-arrow{width:36px;height:36px;border:1.5px solid var(--border);border-radius:50%;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:16px;}
+  .nav-arrow:hover{border-color:#94a3b8;color:var(--text);}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;}
+  .modal-overlay.hidden{display:none;}
+  .modal{background:#fff;border-radius:12px;padding:28px 32px;max-width:720px;width:94%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+  .modal h2{font-size:20px;margin-bottom:10px;}
+  .modal p{font-size:14px;line-height:1.6;color:var(--muted);margin-bottom:16px;}
+  .score-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0;}
+  .score-card{background:#f8fafc;border-radius:10px;padding:14px;text-align:center;}
+  .score-card .val{font-size:26px;font-weight:700;color:var(--accent);}
+  .score-card .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+  .modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;}
+  .btn-modal{padding:9px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;}
+  .btn-modal:hover{background:#f8fafc;}
+  .btn-modal.primary{background:var(--accent-red);color:#fff;border-color:var(--accent-red);}
+  .btn-modal.primary:hover{background:var(--accent-red-hover);}
+  .ans-table-wrap{margin:12px 0;max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;}
+  .ans-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .ans-table th{position:sticky;top:0;background:var(--accent);color:#fff;padding:8px 10px;text-align:left;font-weight:600;font-size:11px;}
+  .ans-table td{padding:6px 10px;border-bottom:1px solid var(--border);}
+  .ans-table tr:nth-child(even) td{background:#f8fafc;}
+  .ans-table .ok{color:var(--success);font-weight:600;}
+  .ans-table .bad{color:var(--accent-red);font-weight:600;}
+  .ans-table .blank{color:var(--muted);font-style:italic;}
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px;}
+  .passage-content{display:none;}
+  .passage-content.active{display:block;}
+  mark.hl{background:#fef08a;padding:0 2px;border-radius:2px;}
+  mark.hl-note{background:#bbf7d0;padding:0 2px;border-radius:2px;border-bottom:2px solid #16a34a;}
+  #sel-toolbar{position:fixed;z-index:300;display:none;background:#1e3a5f;color:#fff;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);font-size:13px;font-weight:500;overflow:hidden;white-space:nowrap;}
+  #sel-toolbar button{background:transparent;border:none;color:#fff;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:500;font-family:inherit;}
+  #sel-toolbar button:hover{background:rgba(255,255,255,.15);}
+  #sel-toolbar .sep{display:inline-block;width:1px;height:14px;background:rgba(255,255,255,.35);vertical-align:middle;}
+  @media (max-width:800px){#main{flex-direction:column;}#passage-panel{width:100%!important;height:42vh;border-bottom:1px solid var(--border);}#resizer{display:none;}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+<div id="start-screen">
+  <div class="start-card">
+    <h1>IELTS Academic Reading</h1>
+    <div class="sub">Computer-Delivered Simulation &middot; Practice Test</div>
+    <div class="resume-banner" id="resume-banner">
+      <strong>&#9201; Saved session found</strong>
+      <div id="resume-info"></div>
+      <div class="resume-actions">
+        <button onclick="resumeTest()">Resume Test</button>
+        <button class="btn-ghost" onclick="discardSaved()">Start Fresh</button>
+      </div>
+    </div>
+    <label for="cand-name">Candidate Name</label>
+    <input type="text" id="cand-name" placeholder="Enter your full name" autocomplete="off">
+    <label for="cand-num">Candidate Number</label>
+    <input type="text" id="cand-num" placeholder="e.g. 123456" autocomplete="off">
+    <button onclick="startTest()">Start Test</button>
+  </div>
+</div>
+
+<div id="topbar">
+  <div class="top-left">
+    <span class="mock-label">IELTS Academic Reading &middot; Practice Test</span>
+    <span id="autosave-indicator"><span class="dot"></span><span id="autosave-text">Saved</span></span>
+  </div>
+  <div id="timer-wrap">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <div id="timer">60:00</div>
+  </div>
+  <div class="top-actions">
+    <button class="icon-btn" id="notepad-btn" title="Notepad" onclick="toggleNotepad()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></button>
+    <button class="icon-btn" title="Full screen" onclick="toggleFullscreen()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
+    <button class="btn-submit" onclick="confirmSubmit()">Submit</button>
+  </div>
+</div>
+
+<div id="notepad-panel" class="hidden">
+  <div class="notepad-header">
+    <span class="notepad-title">Notepad</span>
+    <button class="icon-btn" title="Close" onclick="toggleNotepad()" style="width:28px;height:28px"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <textarea id="notepad-text" placeholder="Type your notes here&hellip;"></textarea>
+</div>
+
+<div id="sel-toolbar">
+  <button type="button" id="sel-note-btn">Note</button><span class="sep"></span><button type="button" id="sel-hl-btn">Highlight</button>
+</div>
+
+<div id="main">
+  <div id="passage-panel">
+<div class="passage-content active" id="pc-0">
+<div class="part-header">PART 1</div>
+<h2>READING PASSAGE 1</h2>
+<p><em>You should spend about 20 minutes on Questions 1&ndash;13, which are based on Reading Passage 1 below.</em></p>
+<div class="passage-title">How to Draw a Geological Map</div>
+<p>For keen amateur geologists, there's no better, practical way of increasing your knowledge, understanding and enjoyment of the subject, than to draw a geological map of an area that interests you. You will need a base map, a compass/clinometer<sup>1</sup>, a magnifying lens, a bottle of diluted acid, a geological hammer for splitting rocks, and bags to collect samples. Before starting your mapping, it is worth researching the local geology, so you know what to expect.</p>
+<p>The first thing to record is the rock type, or lithology. There are three main types of rock occurring on the Earth's surface: first, <strong>igneous</strong> rocks which formed from molten rock, either deep underground ('magma') or on the surface as 'lava' from volcanoes (on land or under the sea); second, <strong>sedimentary</strong> rocks, which are formed by the action of water or wind, such as rivers, glacier ice, desert wind, or the sea, and lastly <strong>metamorphic</strong> rocks, which can be either igneous or sedimentary rocks which have been altered by heat and pressure deep within the Earth's crust.</p>
+<p>Sedimentary rocks are often found in bands, or 'bedding' and can be classified by the size of their particles. The finest particles form clay or shale (clay hardened by pressure). Silty clays or siltstones have a certain amount of fine, harder particles which can be felt between the fingers, while rocks with visible sand particles are examples of sandstone. When the particles are between 2mm across to pebble-sized or larger, the rocks are known as conglomerates or breccias. Conglomerates are rounded and formed in rivers or the sea, while breccias have sharp sides and are often of volcanic origin.</p>
+<p>Another common type of sedimentary rock does not appear to be made of particles but appears crystalline. This is limestone and is formed of the mineral calcite (calcium carbonate) produced by the shells of sea creatures. It is soluble in acid, so observing bubbles of carbon dioxide while applying a little dilute acid on a freshly broken surface will help with identification. You can also observe the very distinctive deep holes or fissures found on many limestone surfaces which are known as 'limestone pavement'. These fissures are the result of the slightly acidic nature of rainwater.</p>
+<p>Most crystalline rocks, however, are igneous. When clear, or nearly clear crystals of quartz are present, the rock is referred to as 'acidic'. The best-known example of this is granite, a coarsely crystalline rock which forms from molten material deep in the Earth's crust, while quartz-free varieties are known as gabbro. When molten rock reaches the surface, especially in or near oceans, the rocks it forms are generally much darker, quartz-free rocks such as basalt.</p>
+<p>Metamorphic rocks are also often crystalline, such as the pure white marble used for sculptures, and show the effect of temperature and pressure. One example of this is slate, which can be split into thin, even sheets and has been used for centuries on the roofs of buildings.</p>
+<p>The structure of the rocks also needs to be recorded to complete your map.</p>
+<p>Sedimentary rocks are usually formed horizontally, so if their beds are sloped or inclined, it can give us a good indication of the underlying structure and how geological forces have affected the area in the past. Recording this allows you to predict both the pattern of rocks deeper underground and when the same rock may be seen again on the surface. Two measurements need to be recorded and the data put on your base map. The first is the 'strike' of the bed, how it is orientated in space; this is the line of no inclination and can be found using a clinometer, with the orientation measured with a compass. The second, incline of the bed (or 'dip') is measured at 90&deg; to the strike line.</p>
+<p>Both measurements can be placed on your map with a symbol: a longer line indicating the 'strike' and a shorter line at right angles to it indicating the 'dip', with its value added. In this example the compass has recorded a strike direction of 008&deg; (just east of magnetic north), with the clinometer measuring a dip of 12&deg;.</p>
+<p>Once you have recorded the boundaries of the different lithologies you have observed onto your base map, you can use your strike and dip data to work out the distribution of each rock type in areas where it is not exposed at the surface. If you find any fossils in your sedimentary rocks, these can give an indication of the age of the rocks using one of a wide range of available reference works.</p>
+<p style="font-size:12.5px;color:var(--muted)"><sup>1</sup> A clinometer measures the angle of a rock surface in degrees from the horizontal.</p>
+</div>
+<div class="passage-content" id="pc-1">
+<div class="part-header">PART 2</div>
+<h2>READING PASSAGE 2</h2>
+<p><em>You should spend about 20 minutes on Questions 14&ndash;26, which are based on Reading Passage 2.</em></p>
+<div class="passage-title">Food and Economics<sup>1</sup></div>
+<p><strong>A</strong>&nbsp; Where there is money, there are counterfeiters. Pre-contact Aztecs<sup>2</sup> had to keep an eye out for fake cacao beans as they accepted their wages and made their market purchases. A porter whose daily wage of one hundred beans turned out to include fakes made from wax, dough or avocado pits, might have trouble buying those two small rabbits, costing thirty beans each.</p>
+<p><strong>B</strong>&nbsp; Among the Aztecs and other ancient American people, food was quite literally currency. The same is true for historic Koreans, who paid their taxes in rice, while medieval Europeans gave pepper in payment. But food is part of economics in many different ways. If you want to know whether prehistoric people had a concept of private property, look for where they hid their food supplies. If you are curious about the origins of urban commercialism, think about when people began to trade extensively in staple foods &ndash; the most basic of market commodities &ndash; as opposed to prestigious delicacies. Reconstructing past foodways<sup>3</sup> allows us to explore topics including labour costs and supplies, the extent of professional specialisation, resource distribution, and more.</p>
+<p><strong>C</strong>&nbsp; Food production and procurement are huge topics. 'Production' refers to the raising of domesticated plants and animals. By 'procurement' people generally mean either the collection of wild resources or the acquisition of foods from other groups of people, via trade or exchange. Important questions include how food was produced or procured, the foods people produced/procured, and the quantity of the foods generated.</p>
+<p><strong>D</strong>&nbsp; Different food production regimes require different amounts and types of labour, have different ecological impacts, and tend to lead to and be caused by different social outcomes. Consider, for example, the contrasting implications and opportunities afforded by small-scale household mixed farming (individual families tending their own fields and livestock) as opposed to large-scale, specialised crop farming and pastoralism (where planters and herders are spatially and socially distinct). People may produce the exact same foods using either strategy. They may not, however, lead broadly similar lives.</p>
+<p><strong>E</strong>&nbsp; In small-scale household farming, livestock often graze on cropland that is not currently in use. The animals stay relatively close to home, walking 'banks' of meat, milk, blood, fat, manure, and other products. They convert unneeded or spoiled crops into edible food, and their dung fertilises the fields. Households are largely self-sufficient, although they rely closely on each other for social reasons, for periodic help with large projects, and as backups in case of emergency. Villages thus consist of multiple groups of people with roughly similar economic interests and identities.</p>
+<p><strong>F</strong>&nbsp; In contrast, specialised pastoralists move large herds long distances to pasture, potentially spending weeks or even months away from farmsteads and fields before returning to exchange their animal products for farmers' grain. Cultivation and herding are thus separate pursuits, potentially conducted by different households or kin groups. Specialised herder/cultivator economies are associated with distinct social identities and potential social conflict, despite mutual dependence on exchange. Such herder-farmer conflicts may have large-scale political and social implications. It has been suggested, for example, that these conflicts underpin the origins of empire in Asia. Conflicts between nomadic herders and farmers with permanent settlements led both groups to grow larger. The nomads needed greater numbers to continue raiding the farmers' crops, while the farmers needed more people to defend themselves and their food. Over time, both groups expanded their territories, eventually resulting in nomadic steppe<sup>4</sup> confederations confronting settled agrarian<sup>5</sup> empires.</p>
+<p><strong>G</strong>&nbsp; How intensively people cultivate their land also has profound social implications. When a significant amount of labour was used to improve farmland, farmers were essentially investing in the land by adding value to it, which further enhanced their claims to ownership. This may help answer serious questions about when people first began to believe that land was something that could be owned, or to which access could be limited or denied.</p>
+<p><strong>H</strong>&nbsp; One reason why it was seen as important for people to own the land where they produced or acquired their food is because some patches of land are more fertile than others. As a result, different plots provided different amounts of food, allowing some families to become considerably richer than others. Moreover, food surpluses produced by relatively successful households could be shared out to less productive ones, incurring debts or obligations that the less productive families carried into the future. A system of food production can, in this way, set the stage for lasting social inequalities.</p>
+<p style="font-size:12.5px;color:var(--muted);line-height:1.6"><sup>1</sup> Modified from: Twiss KC 2019 <em>The Archaeology of Food</em>. Cambridge University Press.<br><sup>2</sup> The term 'pre-contact Aztecs' refers to a group of people living in Central America before contact with Europeans in the early sixteenth century.<br><sup>3</sup> Foodways &ndash; the eating habits and culinary practices of a people, region, or historical period.<br><sup>4</sup> Steppe &ndash; a huge grassy plain with very few trees.<br><sup>5</sup> Agrarian &ndash; relating to farming or agriculture.</p>
+</div>
+<div class="passage-content" id="pc-2">
+<div class="part-header">PART 3</div>
+<h2>READING PASSAGE 3</h2>
+<p><em>You should spend about 20 minutes on Questions 27&ndash;40, which are based on Reading Passage 3 below.</em></p>
+<div class="passage-title">Colour Blindness</div>
+<p>Colour blindness is a condition where sufferers cannot recognise different colours or distinguish different colour shades or brightness. Not sensing the difference between red and green is the most common, though some cannot distinguish blue and yellow, while in complete colour blindness, which is rare, colours can't be distinguished at all. It is estimated that there are over 300 million colour blind people in the world, though it is more common in areas with a higher proportion of white, European populations, while it is relatively rare in sub-Saharan Africa. On average, one in twelve men have the condition, while it affects just one in two hundred women.</p>
+<p>Red-green colour blindness is a genetic disorder and is generally passed from mothers to sons. The gene responsible is carried on one of the X sex chromosomes. Since men have only one X chromosome, if a man's X chromosome carries the condition, he will be colour blind. A woman can have one of two types of X chromosomes: either two normal X chromosomes or one normal and one carrier X chromosome. If a woman has two normal X chromosomes, she will not be colour blind or a carrier. On the other hand, if she has one normal and one carrier X chromosome, she can pass on the condition to her children. There is a 50% chance that her sons will be colour blind, and a 50% chance that her daughters will be carriers. Rarely, a woman may inherit carrier genes from both her mother and her father, which means she will be colour blind herself and will pass it on to her sons, while her daughters will also be carriers. Blue/yellow and complete colour blindness are carried on non-sex chromosomes and affect both men and women equally. Some may become colour blind later in life as a result of diseases, such as diabetes, or as a side effect of medication.</p>
+<p>The back of the eye, or 'retina', has two sorts of light-sensitive nerve cells: rods and cones. Rods work in low-light conditions and help with night vision, while cones work in daylight and are responsible for colour discrimination. There are three types of cone cells, one of which sees red light, another green, while the third detects blue light. When combined, the brain can perceive the colour of an object: this is referred to as 'Trichromacy'. Colour blindness occurs when one or more of the signals from the cones is 'faulty' (known as 'Anomalous Trichromacy'), while in severe cases, one or more cones do not work at all. Reduced sensitivity to red light is known as 'Protanopia', to green light is 'Deuteranopia' and to blue light, which is extremely rare, 'Tritanopia'. When no colour can be perceived, it is known as 'Monochromacy' or 'Achromatopsia'.</p>
+<p>Colour blindness can have an impact on many aspects of daily life, including education and business where colour is used extensively in documents and visual materials. In addition, colour blindness can restrict career choice. For example, in some roles in the transport sector or armed forces, colour blindness could create safety risks. Colour blindness can also impact day-to-day activities such as choosing clothes and applying make-up. It may also make it difficult to determine whether fruit is ripe enough to eat or if meat is properly cooked. Many people with impaired colour vision develop alternative coping strategies such as touching or smelling items or using a cooking thermometer to see if meat is cooked through.</p>
+<p>Several potential treatments for colour blindness have been suggested such as EnChroma glasses, which have been widely advertised as a way to 'ease' red-green colour blindness. However, the company admits that the glasses are not a complete cure and may not be effective in severe cases. Studies have shown that while the glasses may improve the ability to distinguish some colours, they can also make it more challenging to identify other colours, causing 'new' difficulties in colour perception.</p>
+<p>In recent years, researchers have begun looking at the potential of gene therapy to provide a cure, although this has not yet gone beyond experiments with animals. In the meantime, there are a number of strategies that can be helpful for those with colour blindness. Among the most useful are a set of smartphone apps which can help users to identify colours, and the World Wide Web Consortium has published a set of guides on colour use to make web pages clearer to those suffering from colour blindness.</p>
+<p>It may be years before an effective treatment for colour blindness is developed. Yet, a lot can be done to lessen its impact. For example, schools can ensure that classrooms contain lots of natural light as this affects the way colours are perceived, and employers can review processes and systems to ensure that they are 'colour blind-friendly'. There are many colour-blind artists and illustrators, some of whom have computer programmes that help them to identify different hues. The 'Colour Vision Defective Pilots' Association' believes that colour blindness does not affect a person's ability to pilot a plane and has been successful in legally challenging a number of employers in the air industry. Colour blindness may be common, but it is not necessarily a handicap.</p>
+</div>
+</div>
+
+  <div id="resizer"><div class="handle">&#8942;&#8942;</div></div>
+
+  <div id="questions-panel">
+<div id="qs-0"><div class="q-section"><div class="q-section-header">Questions 1&ndash;7</div><div class="q-section-intro">Complete the table below. Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</div><div style="font-weight:600;color:var(--accent);margin-bottom:8px;font-size:13.5px">Rock types and the environments in which they are formed</div><div class="ans-table-wrap" style="max-height:none;margin-bottom:16px"><table class="ans-table" style="font-size:13px"><thead><tr><th>Rock type</th><th>Particle / crystal size</th><th>Formed</th></tr></thead><tbody>
+<tr><td colspan="3" style="font-weight:700;color:var(--accent)">Sedimentary rocks (made of particles)</td></tr>
+<tr><td>clay <strong>1</strong> <input class="fill-input" id="q1" oninput="markFill('q1')" style="width:100px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> or shale</td><td>fine</td><td>&mdash;</td></tr>
+<tr><td>sandstone</td><td>medium</td><td>&mdash;</td></tr>
+<tr><td><strong>2</strong> <input class="fill-input" id="q2" oninput="markFill('q2')" style="width:110px;display:inline-block;vertical-align:middle" placeholder="&hellip;"> or breccia</td><td>coarse</td><td>formed mainly in rivers or the sea</td></tr>
+<tr><td><strong>3</strong> <input class="fill-input" id="q3" oninput="markFill('q3')" style="width:110px;display:inline-block;vertical-align:middle" placeholder="&hellip;"></td><td>(crystalline)</td><td>formed mainly in <strong>5</strong> <input class="fill-input" id="q5" oninput="markFill('q5')" style="width:100px;display:inline-block;vertical-align:middle" placeholder="&hellip;"></td></tr>
+<tr><td colspan="3" style="font-weight:700;color:var(--accent)">Igneous rocks (made of crystals)</td></tr>
+<tr><td>basalt</td><td>fine</td><td>formed mainly in <strong>6</strong> <input class="fill-input" id="q6" oninput="markFill('q6')" style="width:110px;display:inline-block;vertical-align:middle" placeholder="&hellip;"></td></tr>
+<tr><td>granite or <strong>4</strong> <input class="fill-input" id="q4" oninput="markFill('q4')" style="width:100px;display:inline-block;vertical-align:middle" placeholder="&hellip;"></td><td>coarse</td><td>formed mainly in the <strong>7</strong> <input class="fill-input" id="q7" oninput="markFill('q7')" style="width:100px;display:inline-block;vertical-align:middle" placeholder="&hellip;"></td></tr></tbody></table></div></div>
+<div class="q-section"><div class="q-section-header">Questions 8&ndash;13</div><div class="q-section-intro">Do the following statements agree with the information given in Reading Passage 1? Write <strong>TRUE</strong>, <strong>FALSE</strong> or <strong>NOT GIVEN</strong>.</div><div class="question" id="q8"><div class="q-num">8</div><div class="q-body"><div class="q-text">Igneous rocks are only formed deep in the earth's crust.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q8','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q8','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q8','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q9"><div class="q-num">9</div><div class="q-body"><div class="q-text">The presence or absence of certain minerals helps identify some rock types.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q9','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q9','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q9','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q10"><div class="q-num">10</div><div class="q-body"><div class="q-text">Igneous rocks make good building materials.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q10','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q10','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q10','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q11"><div class="q-num">11</div><div class="q-body"><div class="q-text">The oldest sedimentary rocks are found below more recent beds.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q11','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q11','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q11','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q12"><div class="q-num">12</div><div class="q-body"><div class="q-text">Rock strike is always perfectly horizontal.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q12','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q12','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q12','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q13"><div class="q-num">13</div><div class="q-body"><div class="q-text">Not all rocks contain fossils.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q13','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q13','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q13','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+</div>
+</div>
+<div id="qs-1" style="display:none"><div class="q-section"><div class="q-section-header">Questions 14&ndash;20</div><div class="q-section-intro">Reading Passage 2 has eight paragraphs, <strong>A&ndash;H</strong>. Choose the correct heading for each paragraph from the list of headings below.</div><div style="padding:12px 16px;font-size:13.5px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:16px;line-height:2;line-height:1.8"><strong style="color:var(--accent)">List of Headings</strong><br><strong>i</strong>&nbsp; Types of food acquisition<br><strong>ii</strong>&nbsp; Stable farming communities<br><strong>iii</strong>&nbsp; Food is money<br><strong>iv</strong>&nbsp; The origin of private ownership<br><strong>v</strong>&nbsp; Food and income distribution<br><strong>vi</strong>&nbsp; Conflicting interests<br><strong>vii</strong>&nbsp; Natural hazards<br><strong>viii</strong>&nbsp; Food and economic indicators<br><strong>ix</strong>&nbsp; Staple foods<br><strong>x</strong>&nbsp; Types of food production<br><strong>xi</strong>&nbsp; Questions about ownership<br><em>Example: Paragraph A &mdash; iii</em></div><div class="question" id="q14"><div class="q-num">14</div><div class="q-body"><div class="q-text">Paragraph B</div><select class="dd-select" id="dd-q14" onchange="selectDropdown(this,'q14')"><option value="" disabled selected>Select a heading&hellip;</option><option value="i">i &ndash; Types of food acquisition</option><option value="ii">ii &ndash; Stable farming communities</option><option value="iii">iii &ndash; Food is money</option><option value="iv">iv &ndash; The origin of private ownership</option><option value="v">v &ndash; Food and income distribution</option><option value="vi">vi &ndash; Conflicting interests</option><option value="vii">vii &ndash; Natural hazards</option><option value="viii">viii &ndash; Food and economic indicators</option><option value="ix">ix &ndash; Staple foods</option><option value="x">x &ndash; Types of food production</option><option value="xi">xi &ndash; Questions about ownership</option></select></div></div>
+<div class="question" id="q15"><div class="q-num">15</div><div class="q-body"><div class="q-text">Paragraph C</div><select class="dd-select" id="dd-q15" onchange="selectDropdown(this,'q15')"><option value="" disabled selected>Select a heading&hellip;</option><option value="i">i &ndash; Types of food acquisition</option><option value="ii">ii &ndash; Stable farming communities</option><option value="iii">iii &ndash; Food is money</option><option value="iv">iv &ndash; The origin of private ownership</option><option value="v">v &ndash; Food and income distribution</option><option value="vi">vi &ndash; Conflicting interests</option><option value="vii">vii &ndash; Natural hazards</option><option value="viii">viii &ndash; Food and economic indicators</option><option value="ix">ix &ndash; Staple foods</option><option value="x">x &ndash; Types of food production</option><option value="xi">xi &ndash; Questions about ownership</option></select></div></div>
+<div class="question" id="q16"><div class="q-num">16</div><div class="q-body"><div class="q-text">Paragraph D</div><select class="dd-select" id="dd-q16" onchange="selectDropdown(this,'q16')"><option value="" disabled selected>Select a heading&hellip;</option><option value="i">i &ndash; Types of food acquisition</option><option value="ii">ii &ndash; Stable farming communities</option><option value="iii">iii &ndash; Food is money</option><option value="iv">iv &ndash; The origin of private ownership</option><option value="v">v &ndash; Food and income distribution</option><option value="vi">vi &ndash; Conflicting interests</option><option value="vii">vii &ndash; Natural hazards</option><option value="viii">viii &ndash; Food and economic indicators</option><option value="ix">ix &ndash; Staple foods</option><option value="x">x &ndash; Types of food production</option><option value="xi">xi &ndash; Questions about ownership</option></select></div></div>
+<div class="question" id="q17"><div class="q-num">17</div><div class="q-body"><div class="q-text">Paragraph E</div><select class="dd-select" id="dd-q17" onchange="selectDropdown(this,'q17')"><option value="" disabled selected>Select a heading&hellip;</option><option value="i">i &ndash; Types of food acquisition</option><option value="ii">ii &ndash; Stable farming communities</option><option value="iii">iii &ndash; Food is money</option><option value="iv">iv &ndash; The origin of private ownership</option><option value="v">v &ndash; Food and income distribution</option><option value="vi">vi &ndash; Conflicting interests</option><option value="vii">vii &ndash; Natural hazards</option><option value="viii">viii &ndash; Food and economic indicators</option><option value="ix">ix &ndash; Staple foods</option><option value="x">x &ndash; Types of food production</option><option value="xi">xi &ndash; Questions about ownership</option></select></div></div>
+<div class="question" id="q18"><div class="q-num">18</div><div class="q-body"><div class="q-text">Paragraph F</div><select class="dd-select" id="dd-q18" onchange="selectDropdown(this,'q18')"><option value="" disabled selected>Select a heading&hellip;</option><option value="i">i &ndash; Types of food acquisition</option><option value="ii">ii &ndash; Stable farming communities</option><option value="iii">iii &ndash; Food is money</option><option value="iv">iv &ndash; The origin of private ownership</option><option value="v">v &ndash; Food and income distribution</option><option value="vi">vi &ndash; Conflicting interests</option><option value="vii">vii &ndash; Natural hazards</option><option value="viii">viii &ndash; Food and economic indicators</option><option value="ix">ix &ndash; Staple foods</option><option value="x">x &ndash; Types of food production</option><option value="xi">xi &ndash; Questions about ownership</option></select></div></div>
+<div class="question" id="q19"><div class="q-num">19</div><div class="q-body"><div class="q-text">Paragraph G</div><select class="dd-select" id="dd-q19" onchange="selectDropdown(this,'q19')"><option value="" disabled selected>Select a heading&hellip;</option><option value="i">i &ndash; Types of food acquisition</option><option value="ii">ii &ndash; Stable farming communities</option><option value="iii">iii &ndash; Food is money</option><option value="iv">iv &ndash; The origin of private ownership</option><option value="v">v &ndash; Food and income distribution</option><option value="vi">vi &ndash; Conflicting interests</option><option value="vii">vii &ndash; Natural hazards</option><option value="viii">viii &ndash; Food and economic indicators</option><option value="ix">ix &ndash; Staple foods</option><option value="x">x &ndash; Types of food production</option><option value="xi">xi &ndash; Questions about ownership</option></select></div></div>
+<div class="question" id="q20"><div class="q-num">20</div><div class="q-body"><div class="q-text">Paragraph H</div><select class="dd-select" id="dd-q20" onchange="selectDropdown(this,'q20')"><option value="" disabled selected>Select a heading&hellip;</option><option value="i">i &ndash; Types of food acquisition</option><option value="ii">ii &ndash; Stable farming communities</option><option value="iii">iii &ndash; Food is money</option><option value="iv">iv &ndash; The origin of private ownership</option><option value="v">v &ndash; Food and income distribution</option><option value="vi">vi &ndash; Conflicting interests</option><option value="vii">vii &ndash; Natural hazards</option><option value="viii">viii &ndash; Food and economic indicators</option><option value="ix">ix &ndash; Staple foods</option><option value="x">x &ndash; Types of food production</option><option value="xi">xi &ndash; Questions about ownership</option></select></div></div>
+</div>
+<div class="q-section"><div class="q-section-header">Questions 21&ndash;26</div><div class="q-section-intro">Do the following statements agree with the claims of the writer in Reading Passage 2? Write <strong>YES</strong> if the statement agrees with the claims of the writer, <strong>NO</strong> if the statement contradicts the claims of the writer, or <strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this.</div><div class="question" id="q21"><div class="q-num">21</div><div class="q-body"><div class="q-text">Different ways of producing food led to different political and social structures.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q21','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q21','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q21','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q22"><div class="q-num">22</div><div class="q-body"><div class="q-text">Farmers increasingly resented the demands of the pastoralists.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q22','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q22','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q22','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q23"><div class="q-num">23</div><div class="q-body"><div class="q-text">Both farmers and pastoralists are mainly involved in food 'production'.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q23','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q23','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q23','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q24"><div class="q-num">24</div><div class="q-body"><div class="q-text">Increased population sizes led to conflict.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q24','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q24','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q24','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q25"><div class="q-num">25</div><div class="q-body"><div class="q-text">Food stuffs are still used instead of money today.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q25','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q25','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q25','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q26"><div class="q-num">26</div><div class="q-body"><div class="q-text">Different qualities of land led to income inequalities.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q26','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q26','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q26','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+</div>
+</div>
+<div id="qs-2" style="display:none"><div class="q-section"><div class="q-section-header">Questions 27&ndash;30</div><div class="q-section-intro">Choose the correct letter, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>.</div><div class="question" id="q27"><div class="q-num">27</div><div class="q-body"><div class="q-text">Colour blindness is likely to be least common in:</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q27','A')"><span class="radio-dot"></span>A men of European ethnicity.</label><label class="mcq-opt" onclick="selectMCQ(this,'q27','B')"><span class="radio-dot"></span>B black men.</label><label class="mcq-opt" onclick="selectMCQ(this,'q27','C')"><span class="radio-dot"></span>C women of European ethnicity.</label><label class="mcq-opt" onclick="selectMCQ(this,'q27','D')"><span class="radio-dot"></span>D black women.</label></div></div></div>
+<div class="question" id="q28"><div class="q-num">28</div><div class="q-body"><div class="q-text">A colour-blind mother will have:</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q28','A')"><span class="radio-dot"></span>A colour-blind sons.</label><label class="mcq-opt" onclick="selectMCQ(this,'q28','B')"><span class="radio-dot"></span>B colour-blind daughters.</label><label class="mcq-opt" onclick="selectMCQ(this,'q28','C')"><span class="radio-dot"></span>C both colour-blind sons and colour-blind daughters.</label><label class="mcq-opt" onclick="selectMCQ(this,'q28','D')"><span class="radio-dot"></span>D neither colour-blind sons nor colour-blind daughters.</label></div></div></div>
+<div class="question" id="q29"><div class="q-num">29</div><div class="q-body"><div class="q-text">Full colour perception is known as:</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q29','A')"><span class="radio-dot"></span>A achromatopsia</label><label class="mcq-opt" onclick="selectMCQ(this,'q29','B')"><span class="radio-dot"></span>B deuteranopia</label><label class="mcq-opt" onclick="selectMCQ(this,'q29','C')"><span class="radio-dot"></span>C trichromacy</label><label class="mcq-opt" onclick="selectMCQ(this,'q29','D')"><span class="radio-dot"></span>D tritanopia</label></div></div></div>
+<div class="question" id="q30"><div class="q-num">30</div><div class="q-body"><div class="q-text">Problems associated with colour blindness can best be alleviated using:</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q30','A')"><span class="radio-dot"></span>A EnChroma glasses.</label><label class="mcq-opt" onclick="selectMCQ(this,'q30','B')"><span class="radio-dot"></span>B gene therapy.</label><label class="mcq-opt" onclick="selectMCQ(this,'q30','C')"><span class="radio-dot"></span>C phone apps.</label><label class="mcq-opt" onclick="selectMCQ(this,'q30','D')"><span class="radio-dot"></span>D websites.</label></div></div></div>
+</div>
+<div class="q-section"><div class="q-section-header">Questions 31&ndash;40</div><div class="q-section-intro">Complete the summary using the list of words, <strong>A&ndash;P</strong>, below. Write the correct letter, A&ndash;P.</div><div style="padding:12px 16px;font-size:13.5px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:16px;line-height:2;line-height:1.9;columns:2"><strong style="color:var(--accent)">List of words</strong><br><strong>A</strong>&nbsp; rare<br><strong>B</strong>&nbsp; red-green<br><strong>C</strong>&nbsp; experimental<br><strong>D</strong>&nbsp; anomalous<br><strong>E</strong>&nbsp; diabetes<br><strong>F</strong>&nbsp; commonly<br><strong>G</strong>&nbsp; retina<br><strong>H</strong>&nbsp; cornea<br><strong>I</strong>&nbsp; mutant<br><strong>J</strong>&nbsp; adaptations<br><strong>K</strong>&nbsp; safety<br><strong>L</strong>&nbsp; trichromacy<br><strong>M</strong>&nbsp; gene<br><strong>N</strong>&nbsp; coping<br><strong>O</strong>&nbsp; blue-yellow<br><strong>P</strong>&nbsp; blue-yellow</div><div style="padding:12px 16px;font-size:13.5px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:16px;line-height:2;line-height:2.3"><strong style="color:var(--accent)">Colour blindness: a condition the world is blind to</strong><br><span id="q31"><strong>31</strong> <select class="dd-select" id="dd-q31" onchange="selectDropdown(this,'q31')" style="width:auto;min-width:120px;display:inline-block;padding:6px 32px 6px 10px;vertical-align:middle"><option value="" disabled selected>Select&hellip;</option><option value="A">A rare</option><option value="B">B red-green</option><option value="C">C experimental</option><option value="D">D anomalous</option><option value="E">E diabetes</option><option value="F">F commonly</option><option value="G">G retina</option><option value="H">H cornea</option><option value="I">I mutant</option><option value="J">J adaptations</option><option value="K">K safety</option><option value="L">L trichromacy</option><option value="M">M gene</option><option value="N">N coping</option><option value="O">O blue-yellow</option><option value="P">P blue-yellow</option></select></span> colour blindness is a genetic condition carried by a <span id="q32"><strong>32</strong> <select class="dd-select" id="dd-q32" onchange="selectDropdown(this,'q32')" style="width:auto;min-width:120px;display:inline-block;padding:6px 32px 6px 10px;vertical-align:middle"><option value="" disabled selected>Select&hellip;</option><option value="A">A rare</option><option value="B">B red-green</option><option value="C">C experimental</option><option value="D">D anomalous</option><option value="E">E diabetes</option><option value="F">F commonly</option><option value="G">G retina</option><option value="H">H cornea</option><option value="I">I mutant</option><option value="J">J adaptations</option><option value="K">K safety</option><option value="L">L trichromacy</option><option value="M">M gene</option><option value="N">N coping</option><option value="O">O blue-yellow</option><option value="P">P blue-yellow</option></select></span> X chromosome, and consequently is most <span id="q33"><strong>33</strong> <select class="dd-select" id="dd-q33" onchange="selectDropdown(this,'q33')" style="width:auto;min-width:120px;display:inline-block;padding:6px 32px 6px 10px;vertical-align:middle"><option value="" disabled selected>Select&hellip;</option><option value="A">A rare</option><option value="B">B red-green</option><option value="C">C experimental</option><option value="D">D anomalous</option><option value="E">E diabetes</option><option value="F">F commonly</option><option value="G">G retina</option><option value="H">H cornea</option><option value="I">I mutant</option><option value="J">J adaptations</option><option value="K">K safety</option><option value="L">L trichromacy</option><option value="M">M gene</option><option value="N">N coping</option><option value="O">O blue-yellow</option><option value="P">P blue-yellow</option></select></span> developed in males. However, <span id="q34"><strong>34</strong> <select class="dd-select" id="dd-q34" onchange="selectDropdown(this,'q34')" style="width:auto;min-width:120px;display:inline-block;padding:6px 32px 6px 10px;vertical-align:middle"><option value="" disabled selected>Select&hellip;</option><option value="A">A rare</option><option value="B">B red-green</option><option value="C">C experimental</option><option value="D">D anomalous</option><option value="E">E diabetes</option><option value="F">F commonly</option><option value="G">G retina</option><option value="H">H cornea</option><option value="I">I mutant</option><option value="J">J adaptations</option><option value="K">K safety</option><option value="L">L trichromacy</option><option value="M">M gene</option><option value="N">N coping</option><option value="O">O blue-yellow</option><option value="P">P blue-yellow</option></select></span> blindness, which is less common, can be developed in both males and females. Such <span id="q35"><strong>35</strong> <select class="dd-select" id="dd-q35" onchange="selectDropdown(this,'q35')" style="width:auto;min-width:120px;display:inline-block;padding:6px 32px 6px 10px;vertical-align:middle"><option value="" disabled selected>Select&hellip;</option><option value="A">A rare</option><option value="B">B red-green</option><option value="C">C experimental</option><option value="D">D anomalous</option><option value="E">E diabetes</option><option value="F">F commonly</option><option value="G">G retina</option><option value="H">H cornea</option><option value="I">I mutant</option><option value="J">J adaptations</option><option value="K">K safety</option><option value="L">L trichromacy</option><option value="M">M gene</option><option value="N">N coping</option><option value="O">O blue-yellow</option><option value="P">P blue-yellow</option></select></span> trichromacy results from parts of the eye's <span id="q36"><strong>36</strong> <select class="dd-select" id="dd-q36" onchange="selectDropdown(this,'q36')" style="width:auto;min-width:120px;display:inline-block;padding:6px 32px 6px 10px;vertical-align:middle"><option value="" disabled selected>Select&hellip;</option><option value="A">A rare</option><option value="B">B red-green</option><option value="C">C experimental</option><option value="D">D anomalous</option><option value="E">E diabetes</option><option value="F">F commonly</option><option value="G">G retina</option><option value="H">H cornea</option><option value="I">I mutant</option><option value="J">J adaptations</option><option value="K">K safety</option><option value="L">L trichromacy</option><option value="M">M gene</option><option value="N">N coping</option><option value="O">O blue-yellow</option><option value="P">P blue-yellow</option></select></span> &ndash; referred to as 'cones' &ndash; not working correctly. The condition can impact daily life, such as when choosing clothes or make-up, or judging whether food is ready to eat. However, colour-blind people have developed a number of <span id="q37"><strong>37</strong> <select class="dd-select" id="dd-q37" onchange="selectDropdown(this,'q37')" style="width:auto;min-width:120px;display:inline-block;padding:6px 32px 6px 10px;vertical-align:middle"><option value="" disabled selected>Select&hellip;</option><option value="A">A rare</option><option value="B">B red-green</option><option value="C">C experimental</option><option value="D">D anomalous</option><option value="E">E diabetes</option><option value="F">F commonly</option><option value="G">G retina</option><option value="H">H cornea</option><option value="I">I mutant</option><option value="J">J adaptations</option><option value="K">K safety</option><option value="L">L trichromacy</option><option value="M">M gene</option><option value="N">N coping</option><option value="O">O blue-yellow</option><option value="P">P blue-yellow</option></select></span> strategies, such as using phone apps to detect colour. More seriously, colour blindness is a condition that can prevent progress in employment, either when sufferers feel there are restrictions in career choice, or when employers impose them. However, pressure groups believe simple <span id="q38"><strong>38</strong> <select class="dd-select" id="dd-q38" onchange="selectDropdown(this,'q38')" style="width:auto;min-width:120px;display:inline-block;padding:6px 32px 6px 10px;vertical-align:middle"><option value="" disabled selected>Select&hellip;</option><option value="A">A rare</option><option value="B">B red-green</option><option value="C">C experimental</option><option value="D">D anomalous</option><option value="E">E diabetes</option><option value="F">F commonly</option><option value="G">G retina</option><option value="H">H cornea</option><option value="I">I mutant</option><option value="J">J adaptations</option><option value="K">K safety</option><option value="L">L trichromacy</option><option value="M">M gene</option><option value="N">N coping</option><option value="O">O blue-yellow</option><option value="P">P blue-yellow</option></select></span> to current practice is all that is needed to cater for colour-blind workers. Meanwhile, research on finding a cure for colour blindness continues, including <span id="q39"><strong>39</strong> <select class="dd-select" id="dd-q39" onchange="selectDropdown(this,'q39')" style="width:auto;min-width:120px;display:inline-block;padding:6px 32px 6px 10px;vertical-align:middle"><option value="" disabled selected>Select&hellip;</option><option value="A">A rare</option><option value="B">B red-green</option><option value="C">C experimental</option><option value="D">D anomalous</option><option value="E">E diabetes</option><option value="F">F commonly</option><option value="G">G retina</option><option value="H">H cornea</option><option value="I">I mutant</option><option value="J">J adaptations</option><option value="K">K safety</option><option value="L">L trichromacy</option><option value="M">M gene</option><option value="N">N coping</option><option value="O">O blue-yellow</option><option value="P">P blue-yellow</option></select></span> therapy, though this is still in its <span id="q40"><strong>40</strong> <select class="dd-select" id="dd-q40" onchange="selectDropdown(this,'q40')" style="width:auto;min-width:120px;display:inline-block;padding:6px 32px 6px 10px;vertical-align:middle"><option value="" disabled selected>Select&hellip;</option><option value="A">A rare</option><option value="B">B red-green</option><option value="C">C experimental</option><option value="D">D anomalous</option><option value="E">E diabetes</option><option value="F">F commonly</option><option value="G">G retina</option><option value="H">H cornea</option><option value="I">I mutant</option><option value="J">J adaptations</option><option value="K">K safety</option><option value="L">L trichromacy</option><option value="M">M gene</option><option value="N">N coping</option><option value="O">O blue-yellow</option><option value="P">P blue-yellow</option></select></span> stages.</div></div>
+</div>
+</div>
+</div>
+
+<div id="bottombar">
+  <div class="part-tabs">
+    <div class="part-tab active" id="ptab-0" onclick="switchPassage(0)">Part 1: <span class="count" id="pcount-0">0 of 13</span></div>
+    <div class="part-tab" id="ptab-1" onclick="switchPassage(1)">Part 2: <span class="count" id="pcount-1">0 of 13</span></div>
+    <div class="part-tab" id="ptab-2" onclick="switchPassage(2)">Part 3: <span class="count" id="pcount-2">0 of 14</span></div>
+  </div>
+  <div class="q-circles" id="q-circles"></div>
+  <div class="nav-arrows">
+    <button class="nav-arrow" onclick="prevQ()">&lsaquo;</button>
+    <button class="nav-arrow" onclick="nextQ()">&rsaquo;</button>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="submit-modal">
+  <div class="modal">
+    <h2>Submit Your Test?</h2>
+    <p>You are about to submit your test. This action cannot be undone.</p>
+    <div class="score-grid" id="score-grid" style="display:none">
+      <div class="score-card"><div class="val" id="sc-answered">0</div><div class="lbl">Answered</div></div>
+      <div class="score-card"><div class="val" id="sc-unanswered">40</div><div class="lbl">Unanswered</div></div>
+      <div class="score-card"><div class="val" id="sc-pct">0%</div><div class="lbl">Completion</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="closeModal()">Cancel</button>
+      <button class="btn-modal primary" onclick="submitTest()">Submit Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="results-modal">
+  <div class="modal">
+    <h2>Test Complete</h2>
+    <p id="results-cand"></p>
+    <div class="score-grid">
+      <div class="score-card"><div class="val" id="r-correct" style="color:var(--success)">&mdash;</div><div class="lbl">Correct</div></div>
+      <div class="score-card"><div class="val" id="r-wrong" style="color:var(--accent-red)">&mdash;</div><div class="lbl">Incorrect</div></div>
+      <div class="score-card"><div class="val" id="r-unanswered">&mdash;</div><div class="lbl">Unanswered</div></div>
+    </div>
+    <div style="margin:14px 0 12px;background:var(--accent);border-radius:12px;padding:18px 22px;text-align:center;color:#fff">
+      <div style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-bottom:4px">IELTS Band Score</div>
+      <div id="r-band" style="font-size:48px;font-weight:700;line-height:1">&mdash;</div>
+      <div id="r-band-label" style="font-size:13px;margin-top:6px;opacity:.85">&mdash;</div>
+    </div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:6px">Your Answers vs Correct Answers</div>
+    <div class="ans-table-wrap"><table class="ans-table"><thead><tr><th>Q</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr></thead><tbody id="ans-table-body"></tbody></table></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:10px">Green = correct &middot; Red = incorrect &middot; Band scores are approximate for Academic Reading.</p>
+    <p id="pdf-status" style="font-size:13px;color:var(--success);margin-top:8px;font-weight:500"></p>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="redownloadPDF()">Download PDF again</button>
+      <button class="btn-modal primary" onclick="document.getElementById('results-modal').classList.add('hidden')">Close &amp; Review</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   ANSWER KEY
+   ============================================================ */
+var ANSWERS = {
+  q1:'silt', q2:'conglomerate', q3:'limestone', q4:'gabbro', q5:'sea', q6:'volcanoes', q7:'crust',
+  q8:'FALSE', q9:'TRUE', q10:'NOT GIVEN', q11:'NOT GIVEN', q12:'TRUE', q13:'TRUE',
+  q14:'viii', q15:'i', q16:'x', q17:'ii', q18:'vi', q19:'xi', q20:'v',
+  q21:'YES', q22:'NOT GIVEN', q23:'NO', q24:'NO', q25:'YES', q26:'YES',
+  q27:'D', q28:'A', q29:'C', q30:'C',
+  q31:'B', q32:'I', q33:'F', q34:'O', q35:'D', q36:'G', q37:'N', q38:'J', q39:'M', q40:'C'
+};
+
+var ALT = {
+  q1:['silt','silts','siltstone','siltstones','silt stone','silt stones'],
+  q2:['conglomerate','conglomerates'], q3:['limestone','limestones'], q4:['gabbro','gabbros'],
+  q5:['sea','the sea'], q6:['volcanoes','volcanos','volcano'],
+  q7:['crust','the crust',"earth's crust","the earth's crust"], q34:['O','P']
+};
+
+var KEY_LABELS = {
+  q1:'silt / siltstone(s)', q2:'conglomerate(s)', q3:'limestone(s)', q4:'gabbro(s)',
+  q5:'(the) sea', q6:'volcanoes', q7:'(the) crust'
+};
+
+var PAIR_GROUPS = {};
+
+var PART_RANGES = [[1,13],[14,26],[27,40]];
+var userAnswers = {}, currentPassage = 0, submitted = false;
+var candidateName='', candidateNumber='';
+var seconds = 60*60;
+var timerEl = document.getElementById('timer');
+var timerInterval = null;
+
+/* ============================================================
+   AUTO-SAVE
+   ============================================================ */
+var STORAGE_KEY = 'ielts_reading_practice_session';
+var autosaveInterval = null;
+var autosaveListenersAdded = false;
+var autosaveIndicator = document.getElementById('autosave-indicator');
+var autosaveText = document.getElementById('autosave-text');
+
+function showAutosaveSaving(){
+  autosaveIndicator.classList.add('show','saving');
+  autosaveText.textContent = 'Saving\u2026';
+}
+function showAutosaveSaved(){
+  autosaveIndicator.classList.add('show');
+  autosaveIndicator.classList.remove('saving');
+  var t = new Date();
+  autosaveText.textContent = 'Saved ' + t.toTimeString().slice(0,8);
+  setTimeout(function(){ autosaveIndicator.classList.remove('show'); }, 2500);
+}
+function getPassageWidth(){
+  var pw = document.getElementById('passage-panel');
+  return pw ? (pw.style.width || pw.offsetWidth + 'px') : '';
+}
+function saveSession(silent){
+  if(submitted) return;
+  if(!silent) showAutosaveSaving();
+  try{
+    var data = {
+      version: 3,
+      timestamp: Date.now(),
+      candidateName: candidateName,
+      candidateNumber: candidateNumber,
+      seconds: seconds,
+      currentPassage: currentPassage,
+      userAnswers: userAnswers,
+      notepad: document.getElementById('notepad-text').value,
+      passageWidth: getPassageWidth(),
+      started: true
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    if(!silent) showAutosaveSaved();
+  }catch(e){ console.warn('Autosave failed:', e); }
+}
+function loadSession(){
+  try{
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return null;
+    var d = JSON.parse(raw);
+    if(!d || !d.started) return null;
+    return d;
+  }catch(e){ return null; }
+}
+function clearSession(){ try{ localStorage.removeItem(STORAGE_KEY); }catch(e){} }
+function formatTime(sec){
+  var m = Math.floor(sec/60), s = sec%60;
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+
+(function checkSavedSession(){
+  var saved = loadSession();
+  if(!saved) return;
+  var banner = document.getElementById('resume-banner');
+  var info = document.getElementById('resume-info');
+  var answered = 0;
+  for(var i=1;i<=40;i++){ if(saved.userAnswers && saved.userAnswers['q'+i]) answered++; }
+  var when = new Date(saved.timestamp).toLocaleString();
+  info.innerHTML = '<strong>' + escapeHtml(saved.candidateName || 'Anonymous') + '</strong> &middot; ' + answered + '/40 answered &middot; ' + formatTime(saved.seconds) + ' remaining<br><span style="opacity:.75">Saved ' + when + '</span>';
+  banner.classList.add('show');
+  document.getElementById('cand-name').value = saved.candidateName || '';
+  document.getElementById('cand-num').value = saved.candidateNumber || '';
+})();
+
+function resumeTest(){
+  var saved = loadSession();
+  if(!saved){ startTest(); return; }
+  candidateName = saved.candidateName || 'Anonymous';
+  candidateNumber = saved.candidateNumber || 'N/A';
+  seconds = saved.seconds || 60*60;
+  userAnswers = saved.userAnswers || {};
+  currentPassage = saved.currentPassage || 0;
+  if(saved.notepad) document.getElementById('notepad-text').value = saved.notepad;
+  if(saved.passageWidth){ document.getElementById('passage-panel').style.width = saved.passageWidth; }
+
+  document.getElementById('start-screen').classList.add('hidden');
+  restoreAnswersUI();
+  buildCircles();
+  updatePartCounts();
+  if(currentPassage !== 0) switchPassage(currentPassage);
+  updateTimerDisplay();
+  startTimer();
+  startAutosave();
+  showAutosaveSaved();
+}
+function discardSaved(){
+  clearSession();
+  document.getElementById('resume-banner').classList.remove('show');
+  document.getElementById('cand-name').value = '';
+  document.getElementById('cand-num').value = '';
+}
+
+function restoreAnswersUI(){
+  for(var id in userAnswers){
+    var val = userAnswers[id];
+    if(!val) continue;
+    var dd = document.getElementById('dd-'+id);
+    if(dd){ dd.value = val; dd.classList.add('answered'); continue; }
+    var fi = document.getElementById(id);
+    if(fi && fi.tagName === 'INPUT'){ fi.value = val; fi.classList.add('answered'); continue; }
+    var tfnWrap = document.querySelector('#'+id+' .tfn-options');
+    if(tfnWrap){
+      tfnWrap.querySelectorAll('.tfn-btn').forEach(function(b){
+        if(b.textContent.trim() === val) b.classList.add('selected');
+      });
+      continue;
+    }
+    var mcqWrap = document.querySelector('#'+id+' .mcq-options');
+    if(mcqWrap){
+      mcqWrap.querySelectorAll('.mcq-opt').forEach(function(l){
+        if(l.textContent.trim().charAt(0) === val) l.classList.add('selected');
+      });
+    }
+  }
+}
+
+function startAutosave(){
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  autosaveInterval = setInterval(function(){ saveSession(false); }, 5000);
+  if(autosaveListenersAdded) return;
+  autosaveListenersAdded = true;
+  document.addEventListener('visibilitychange', function(){ if(document.hidden) saveSession(true); });
+  window.addEventListener('beforeunload', function(){ saveSession(true); });
+}
+
+function startTest(){
+  candidateName = document.getElementById('cand-name').value.trim() || 'Anonymous';
+  candidateNumber = document.getElementById('cand-num').value.trim() || 'N/A';
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('resume-banner').classList.remove('show');
+  clearSession();
+  buildCircles();
+  updatePartCounts();
+  startTimer();
+  startAutosave();
+  saveSession(true);
+}
+function startTimer(){
+  if(timerInterval) clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(function(){
+    if(submitted) return;
+    seconds--;
+    if(seconds <= 0){ clearInterval(timerInterval); submitTest(); return; }
+    updateTimerDisplay();
+  }, 1000);
+}
+function updateTimerDisplay(){
+  timerEl.textContent = formatTime(Math.max(0,seconds));
+  timerEl.classList.toggle('warn', seconds < 300);
+}
+
+function switchPassage(idx){
+  currentPassage = idx;
+  document.querySelectorAll('.part-tab').forEach(function(t,i){ t.classList.toggle('active', i===idx); });
+  document.querySelectorAll('.passage-content').forEach(function(p,i){ p.classList.toggle('active', i===idx); });
+  document.querySelectorAll('#qs-0,#qs-1,#qs-2').forEach(function(q,i){ q.style.display = i===idx ? '' : 'none'; });
+  buildCircles();
+  document.getElementById('questions-panel').scrollTop = 0;
+  saveSession(true);
+}
+function buildCircles(){
+  var wrap = document.getElementById('q-circles');
+  wrap.innerHTML = '';
+  var range = PART_RANGES[currentPassage];
+  var start = range[0], end = range[1];
+  for(var i=start;i<=end;i++){
+    var d = document.createElement('div');
+    d.className = 'q-circle';
+    d.textContent = i;
+    var a = userAnswers['q'+i];
+    if(a && a.toString().trim()) d.classList.add('answered');
+    d.onclick = (function(n){ return function(){ scrollToQ(n); }; })(i);
+    wrap.appendChild(d);
+  }
+}
+function updatePartCounts(){
+  PART_RANGES.forEach(function(r, idx){
+    var s = r[0], e = r[1], a = 0;
+    for(var i=s;i<=e;i++){ if(userAnswers['q'+i] && userAnswers['q'+i].toString().trim()) a++; }
+    document.getElementById('pcount-'+idx).textContent = a + ' of ' + (e-s+1);
+  });
+}
+function scrollToQ(num){
+  var p = num<=13?0:num<=26?1:2;
+  if(p !== currentPassage) switchPassage(p);
+  setTimeout(function(){
+    var el = document.getElementById('q'+num);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+  },50);
+}
+function prevQ(){ document.getElementById('questions-panel').scrollBy({top:-240,behavior:'smooth'}); }
+function nextQ(){ document.getElementById('questions-panel').scrollBy({top:240,behavior:'smooth'}); }
+
+function selectTFN(btn, qId, val){
+  btn.closest('.tfn-options').querySelectorAll('.tfn-btn').forEach(function(b){ b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectMCQ(label, qId, val){
+  label.closest('.mcq-options').querySelectorAll('.mcq-opt').forEach(function(l){ l.classList.remove('selected'); });
+  label.classList.add('selected');
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectDropdown(sel, qId){
+  var val = sel.value;
+  sel.classList.toggle('answered', !!val);
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function markFill(id){
+  var el = document.getElementById(id);
+  var val = el.value.trim();
+  el.classList.toggle('answered', val.length > 0);
+  userAnswers[id] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectPair(sel, qId, partnerId){
+  var val = sel.value;
+  var partner = document.getElementById('dd-'+partnerId);
+  var partnerVal = partner ? partner.value : '';
+  if(val && partnerVal && val === partnerVal){
+    partner.value = '';
+    partner.classList.remove('answered');
+    userAnswers[partnerId] = '';
+  }
+  sel.classList.toggle('answered', !!val);
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+
+/* ============================================================
+   HIGHLIGHT / NOTE TOOLBAR
+   ============================================================ */
+var _savedRange = null;
+function hideSelToolbar(){ var tb=document.getElementById('sel-toolbar'); if(tb) tb.style.display='none'; _savedRange=null; }
+function showSelToolbar(x,y){
+  var tb=document.getElementById('sel-toolbar'); if(!tb) return;
+  tb.style.display='block';
+  var tw=tb.offsetWidth||140, th=tb.offsetHeight||36;
+  var left=x-tw/2, top=y-th-10;
+  if(left+tw>window.innerWidth-8) left=window.innerWidth-tw-8;
+  if(left<8) left=8;
+  if(top<60) top=y+12;
+  tb.style.left=left+'px'; tb.style.top=top+'px';
+}
+function getPassageSelection(){
+  var sel=window.getSelection();
+  if(!sel||sel.isCollapsed||sel.rangeCount===0) return null;
+  var range=sel.getRangeAt(0);
+  var p1=document.getElementById('passage-panel');
+  var p2=document.getElementById('questions-panel');
+  var node=range.commonAncestorContainer;
+  if(!((p1&&p1.contains(node))||(p2&&p2.contains(node)))) return null;
+  if(!sel.toString().trim()) return null;
+  /* never wrap form controls in a <mark> - it breaks the answer inputs */
+  var frag=range.cloneContents();
+  if(frag.querySelector && frag.querySelector('input,select,textarea,button,label')) return null;
+  return {sel:sel,range:range};
+}
+function onPassageMouseUp(e){
+  setTimeout(function(){
+    var data=getPassageSelection();
+    if(!data){ var tb=document.getElementById('sel-toolbar'); if(e&&e.target&&tb&&tb.contains(e.target)) return; hideSelToolbar(); return; }
+    _savedRange=data.range.cloneRange();
+    var rect=data.range.getBoundingClientRect();
+    showSelToolbar(rect.left+rect.width/2, rect.top);
+  },10);
+}
+function applyMark(cls){
+  if(!_savedRange) return;
+  try{ var m=document.createElement('mark'); m.className=cls; _savedRange.surroundContents(m); }
+  catch(e){ try{ var f=_savedRange.extractContents(); var m2=document.createElement('mark'); m2.className=cls; m2.appendChild(f); _savedRange.insertNode(m2); }catch(e2){} }
+  var s=window.getSelection(); if(s) s.removeAllRanges();
+  hideSelToolbar();
+}
+(function(){
+  var hl=document.getElementById('sel-hl-btn');
+  if(hl) hl.addEventListener('mousedown',function(e){e.preventDefault();applyMark('hl');});
+  var nb=document.getElementById('sel-note-btn');
+  if(nb) nb.addEventListener('mousedown',function(e){
+    e.preventDefault();
+    var text=_savedRange?_savedRange.toString().trim():'';
+    applyMark('hl-note');
+    if(text){ var ta=document.getElementById('notepad-text'); if(ta){ ta.value+=(ta.value&&!ta.value.endsWith('\n')?'\n':'')+'\u2022 '+text; saveSession(true); var p=document.getElementById('notepad-panel'); if(p&&p.classList.contains('hidden')) toggleNotepad(); } }
+  });
+  var pp=document.getElementById('passage-panel');
+  if(pp) pp.addEventListener('mouseup',onPassageMouseUp);
+  var qp=document.getElementById('questions-panel');
+  if(qp) qp.addEventListener('mouseup',onPassageMouseUp);
+  document.addEventListener('mousedown',function(e){ var tb=document.getElementById('sel-toolbar'); if(!tb||tb.style.display==='none') return; if(tb.contains(e.target)) return; setTimeout(function(){ var s=window.getSelection(); if(!s||s.isCollapsed) hideSelToolbar(); },150); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') hideSelToolbar(); });
+  /* hide the toolbar when either panel scrolls, since it is fixed-position */
+  if(pp) pp.addEventListener('scroll',hideSelToolbar);
+  if(qp) qp.addEventListener('scroll',hideSelToolbar);
+})();
+
+function toggleNotepad(){
+  var panel=document.getElementById('notepad-panel');
+  var btn=document.getElementById('notepad-btn');
+  panel.classList.toggle('hidden');
+  btn.classList.toggle('active', !panel.classList.contains('hidden'));
+  if(!panel.classList.contains('hidden')) document.getElementById('notepad-text').focus();
+  saveSession(true);
+}
+function toggleFullscreen(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function(){});
+  else document.exitFullscreen().catch(function(){});
+}
+document.getElementById('notepad-text').addEventListener('input', function(){ saveSession(true); });
+
+/* ============================================================
+   SCORING
+   ============================================================ */
+function getBandScore(c){
+  if(c>=39) return {band:'9.0',level:'Expert User'};
+  if(c>=37) return {band:'8.5',level:'Very Good User'};
+  if(c>=35) return {band:'8.0',level:'Very Good User'};
+  if(c>=33) return {band:'7.5',level:'Good User'};
+  if(c>=30) return {band:'7.0',level:'Good User'};
+  if(c>=27) return {band:'6.5',level:'Competent User'};
+  if(c>=23) return {band:'6.0',level:'Competent User'};
+  if(c>=19) return {band:'5.5',level:'Modest User'};
+  if(c>=15) return {band:'5.0',level:'Modest User'};
+  if(c>=13) return {band:'4.5',level:'Limited User'};
+  if(c>=10) return {band:'4.0',level:'Limited User'};
+  return {band:'3.5',level:'Extremely Limited'};
+}
+function normalize(s){
+  return (s||'').toString().trim().toLowerCase().replace(/[()]/g,'').replace(/\s+/g,' ').replace(/\.$/,'');
+}
+/* Each letter in a "choose TWO" pair is marked on its own, in either order. */
+function pairResult(qId){
+  var g = PAIR_GROUPS[qId];
+  if(!g) return null;
+  var mine = (userAnswers[qId]||'').toString().trim().toUpperCase();
+  if(!mine) return null;
+  var theirs = (userAnswers[g.partner]||'').toString().trim().toUpperCase();
+  if(mine === theirs) return false;          // duplicate letters can't both score
+  return g.correct.indexOf(mine) !== -1;     // each letter judged on its own
+}
+function checkCorrect(id){
+  if(PAIR_GROUPS[id]) return pairResult(id);
+  var ans = ANSWERS[id];
+  var user = (userAnswers[id]||'').toString().trim();
+  if(!user) return null;
+  var nU = normalize(user);
+  if(ALT[id]){ for(var k=0;k<ALT[id].length;k++){ if(nU === normalize(ALT[id][k])) return true; } }
+  return nU === normalize(ans);
+}
+function correctAnswerLabel(id){
+  if(PAIR_GROUPS[id]){
+    var other = (id === 'q23' || id === 'q24') ? 'Q23/Q24' : 'Q25/Q26';
+    var letters = PAIR_GROUPS[id].correct.join(' or ');
+    return letters + ' (any order, ' + other + ')';
+  }
+  return KEY_LABELS[id] || ANSWERS[id];
+}
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function confirmSubmit(){
+  var count=0;
+  for(var i=1;i<=40;i++){ if(userAnswers['q'+i]&&userAnswers['q'+i].toString().trim()) count++; }
+  document.getElementById('sc-answered').textContent=count;
+  document.getElementById('sc-unanswered').textContent=40-count;
+  document.getElementById('sc-pct').textContent=Math.round(count/40*100)+'%';
+  document.getElementById('score-grid').style.display='grid';
+  document.getElementById('submit-modal').classList.remove('hidden');
+}
+function closeModal(){ document.getElementById('submit-modal').classList.add('hidden'); }
+
+function submitTest(){
+  submitted=true;
+  if(timerInterval) clearInterval(timerInterval);
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  document.getElementById('submit-modal').classList.add('hidden');
+  clearSession();
+
+  var correct=0, wrong=0, unanswered=0;
+  var tbody=document.getElementById('ans-table-body');
+  tbody.innerHTML='';
+  var pdfRows=[];
+
+  for(var num=1;num<=40;num++){
+    var id='q'+num;
+    var result=checkCorrect(id);
+    var userRaw=(userAnswers[id]||'').toString().trim();
+    var correctAns=correctAnswerLabel(id);
+
+    var yourCell, resultCell, resText;
+    if(result===null){
+      unanswered++;
+      yourCell='<span class="blank">&mdash;</span>';
+      resultCell='<span class="blank">Unanswered</span>';
+      resText='Unanswered';
+    } else if(result){
+      correct++;
+      yourCell='<span class="ok">'+escapeHtml(userRaw)+'</span>';
+      resultCell='<span class="ok">&#10003; Correct</span>';
+      resText='Correct';
+    } else {
+      wrong++;
+      yourCell='<span class="bad">'+escapeHtml(userRaw||'-')+'</span>';
+      resultCell='<span class="bad">&#10007; Incorrect</span>';
+      resText='Incorrect';
+    }
+
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td style="font-weight:700;color:var(--accent)">'+num+'</td><td>'+yourCell+'</td><td><strong>'+escapeHtml(correctAns)+'</strong></td><td>'+resultCell+'</td>';
+    tbody.appendChild(tr);
+    pdfRows.push([String(num), userRaw||'-', correctAns, resText]);
+  }
+
+  document.getElementById('r-correct').textContent=correct;
+  document.getElementById('r-wrong').textContent=wrong;
+  document.getElementById('r-unanswered').textContent=unanswered;
+  var bs=getBandScore(correct);
+  document.getElementById('r-band').textContent=bs.band;
+  document.getElementById('r-band-label').textContent=bs.level+' \u00B7 '+correct+' / 40 correct';
+  document.getElementById('results-cand').textContent='Candidate: '+candidateName+'  \u00B7  Number: '+candidateNumber;
+  document.getElementById('results-modal').classList.remove('hidden');
+  window._lastPdfData={correct:correct,wrong:wrong,unanswered:unanswered,bs:bs,pdfRows:pdfRows};
+  try{
+    generateResultsPDF(correct,wrong,unanswered,bs,pdfRows);
+    document.getElementById('pdf-status').textContent='Candidate response PDF downloaded.';
+  }catch(e){
+    document.getElementById('pdf-status').textContent='PDF download failed. Use the button below.';
+    document.getElementById('pdf-status').style.color='var(--accent-red)';
+  }
+}
+function redownloadPDF(){
+  if(!window._lastPdfData) return;
+  var d=window._lastPdfData;
+  try{ generateResultsPDF(d.correct,d.wrong,d.unanswered,d.bs,d.pdfRows); }catch(e){}
+}
+
+function generateResultsPDF(correct,wrong,unanswered,bandInfo,rows){
+  var jsPDF=window.jspdf.jsPDF;
+  var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  var pageWidth=doc.internal.pageSize.getWidth();
+  doc.setFillColor(30,58,95); doc.rect(0,0,pageWidth,28,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(16); doc.setFont('helvetica','bold');
+  doc.text('IELTS Academic Reading \u00B7 Practice Test',14,12);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Candidate Response Report',14,20);
+  doc.text(new Date().toLocaleString(),pageWidth-14,20,{align:'right'});
+  doc.setTextColor(26,24,20); doc.setFontSize(11); doc.setFont('helvetica','bold');
+  doc.text('Candidate Name:',14,38); doc.setFont('helvetica','normal'); doc.text(candidateName||'Anonymous',52,38);
+  doc.setFont('helvetica','bold'); doc.text('Candidate Number:',14,45); doc.setFont('helvetica','normal'); doc.text(candidateNumber||'-',58,45);
+  doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.text('Score Summary',14,56);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Correct: '+correct+'    Incorrect: '+wrong+'    Unanswered: '+unanswered,14,64);
+  doc.setFont('helvetica','bold'); doc.setTextColor(30,58,95); doc.setFontSize(14);
+  doc.text('Band Score: '+bandInfo.band+'  ('+bandInfo.level+')',14,72);
+  doc.setTextColor(26,24,20); doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text(correct+' / 40 correct',14,79);
+  doc.autoTable({
+    startY:86, head:[['Q','Your Answer','Correct Answer','Result']], body:rows, theme:'grid',
+    styles:{fontSize:8,cellPadding:2.2,overflow:'linebreak',valign:'middle'},
+    headStyles:{fillColor:[30,58,95],textColor:255,fontStyle:'bold',fontSize:8},
+    columnStyles:{0:{cellWidth:18,halign:'center'},1:{cellWidth:50},2:{cellWidth:70},3:{cellWidth:35,halign:'center'}},
+    didParseCell:function(data){
+      if(data.section==='body'&&data.column.index===3){
+        var t=data.cell.raw||'';
+        if(t.indexOf('Correct')!==-1 && t.indexOf('Incorrect')===-1){data.cell.styles.textColor=[5,150,105];data.cell.styles.fontStyle='bold';}
+        else if(t.indexOf('Incorrect')!==-1){data.cell.styles.textColor=[225,29,72];data.cell.styles.fontStyle='bold';}
+        else {data.cell.styles.textColor=[107,114,128];data.cell.styles.fontStyle='italic';}
+      }
+    },
+    margin:{left:14,right:14}
+  });
+  var finalY=doc.lastAutoTable.finalY+12;
+  doc.setFontSize(8); doc.setTextColor(107,114,128);
+  doc.text('This report shows your answers against the official answer key.',14,finalY);
+  var safeName=(candidateName||'Candidate').replace(/[^a-zA-Z0-9]/g,'_').slice(0,20);
+  var safeNum=(candidateNumber||'NA').replace(/[^a-zA-Z0-9]/g,'_').slice(0,15);
+  doc.save('IELTS_Reading_'+safeName+'_'+safeNum+'_'+new Date().toISOString().slice(0,10)+'.pdf');
+}
+
+/* ============================================================
+   RESIZER
+   ============================================================ */
+var resizer=document.getElementById('resizer');
+var passPanel=document.getElementById('passage-panel');
+var isResizing=false,startX,startW;
+resizer.addEventListener('mousedown',function(e){ isResizing=true; startX=e.clientX; startW=passPanel.offsetWidth; resizer.classList.add('dragging'); document.body.style.userSelect='none'; document.body.style.cursor='col-resize'; });
+document.addEventListener('mousemove',function(e){ if(!isResizing) return; var dx=e.clientX-startX; passPanel.style.width=Math.min(Math.max(startW+dx,280),window.innerWidth-320)+'px'; });
+document.addEventListener('mouseup',function(){ if(isResizing){ isResizing=false; resizer.classList.remove('dragging'); document.body.style.userSelect=''; document.body.style.cursor=''; saveSession(true); } });
+
+(function(){
+  var saved = loadSession();
+  if(saved && saved.passageWidth){ document.getElementById('passage-panel').style.width = saved.passageWidth; }
+})();
+</script>
+</body>
+</html>

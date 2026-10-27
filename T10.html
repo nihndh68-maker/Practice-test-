@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Academic Reading · Test 315</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fff;--border:#e5e7eb;--border-soft:#f3f4f6;--accent:#1e3a5f;--accent-red:#e11d48;--accent-red-hover:#be123c;--text:#1f2937;--muted:#6b7280;--success:#059669;--passage-width:52%;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+  #start-screen{position:fixed;inset:0;background:#f8fafc;display:flex;align-items:center;justify-content:center;z-index:500;}
+  #start-screen.hidden{display:none;}
+  .start-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:40px 44px;max-width:460px;width:92%;box-shadow:0 10px 40px rgba(0,0,0,.08);}
+  .start-card h1{font-size:20px;margin-bottom:4px;font-weight:600;}
+  .start-card .sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .start-card label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;}
+  .start-card input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;margin-bottom:16px;font-family:inherit;}
+  .start-card input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.12);}
+  .start-card button{width:100%;padding:12px;background:var(--accent-red);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;}
+  .start-card button:hover{background:var(--accent-red-hover);}
+  .resume-banner{display:none;background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12.5px;color:#92400e;line-height:1.5;}
+  .resume-banner.show{display:block;}
+  .resume-banner .resume-actions{margin-top:8px;display:flex;gap:8px;}
+  .resume-banner .resume-actions button{width:auto;margin:0;padding:6px 12px;font-size:12px;border-radius:6px;}
+  .resume-banner .resume-actions .btn-ghost{background:#fff;color:#92400e;border:1px solid #fbbf24;}
+  #topbar{background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;flex-shrink:0;z-index:100;}
+  .top-left{display:flex;align-items:center;gap:12px;}
+  .mock-label{font-size:15px;font-weight:500;}
+  #autosave-indicator{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--success);font-weight:500;opacity:0;transition:opacity .4s ease;}
+  #autosave-indicator.show{opacity:1;}
+  #autosave-indicator .dot{width:7px;height:7px;border-radius:50%;background:var(--success);}
+  #autosave-indicator.saving .dot{background:#f59e0b;animation:blink .8s infinite;}
+  #autosave-indicator.saving{color:#f59e0b;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+  #timer-wrap{display:flex;align-items:center;gap:6px;color:var(--accent-red);font-weight:600;}
+  #timer{font-size:18px;font-weight:600;letter-spacing:0.02em;min-width:52px;}
+  #timer.warn{animation:pulse 1s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .top-actions{display:flex;align-items:center;gap:8px;}
+  .icon-btn{width:36px;height:36px;border:none;background:transparent;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;}
+  .icon-btn:hover{background:var(--border-soft);color:var(--text);}
+  .btn-submit{background:#e5e7eb;color:var(--text);border:none;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;}
+  .btn-submit:hover{background:#d1d5db;}
+  .icon-btn.active{background:#fff1f2;color:var(--accent-red);}
+  #notepad-panel{position:fixed;top:56px;right:0;width:320px;height:calc(100vh - 56px - 56px);background:#fff;border-left:1px solid var(--border);box-shadow:-4px 0 24px rgba(0,0,0,.08);z-index:150;display:flex;flex-direction:column;transition:transform .2s ease;}
+  #notepad-panel.hidden{transform:translateX(100%);pointer-events:none;}
+  .notepad-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+  .notepad-title{font-size:15px;font-weight:600;color:var(--accent-red);}
+  #notepad-text{flex:1;border:none;resize:none;padding:14px 16px;font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.55;outline:none;}
+  #main{display:flex;flex:1;overflow:hidden;}
+  #passage-panel{width:var(--passage-width);background:#fff;overflow-y:auto;padding:24px 28px 40px;flex-shrink:0;}
+  .part-header{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:4px;}
+  #passage-panel h2{font-size:22px;font-weight:700;color:var(--accent);margin-bottom:6px;letter-spacing:-0.3px;}
+  .time-note{font-size:12.5px;color:var(--muted);margin-bottom:16px;line-height:1.5;}
+  .passage-title{text-align:center;font-family:'Source Serif 4',Georgia,serif;font-size:18px;font-weight:600;color:var(--accent);margin-bottom:22px;}
+  #passage-panel p{font-family:'Source Serif 4',Georgia,serif;font-size:15px;line-height:1.75;margin-bottom:16px;}
+  #passage-panel p.glossary{font-size:13px;line-height:1.6;color:var(--muted);border-top:1px solid var(--border);padding-top:12px;margin-top:8px;}
+  #passage-panel strong{font-weight:700;color:var(--accent);}
+  #passage-panel em{font-style:italic;}
+  #resizer{width:5px;background:transparent;cursor:col-resize;flex-shrink:0;position:relative;z-index:10;}
+  #resizer::before{content:'';position:absolute;top:0;bottom:0;left:2px;width:1px;background:var(--accent-red);}
+  #resizer:hover::before,#resizer.dragging::before{width:3px;left:1px;}
+  #resizer .handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:28px;background:#fff;border:1px solid var(--accent-red);border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--accent-red);font-size:10px;}
+  #questions-panel{flex:1;overflow-y:auto;padding:20px 24px 80px;background:#fff;}
+  .q-section{margin-bottom:28px;}
+  .q-section-header{font-size:15px;font-weight:600;margin-bottom:8px;}
+  .q-section-intro{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:16px;}
+  .info-box{padding:12px 16px;font-size:13px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:14px;line-height:1.9;}
+  .info-box.notes{font-size:13.5px;line-height:2.1;}
+  .info-box .box-title{display:block;font-weight:600;color:var(--accent);margin-bottom:2px;}
+  .question{padding:12px 0;border-bottom:1px solid var(--border-soft);display:flex;gap:12px;align-items:flex-start;}
+  .question:last-child{border-bottom:none;}
+  .q-num{min-width:26px;height:26px;color:var(--muted);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px;}
+  .q-body{flex:1;}
+  .q-text{font-size:14px;line-height:1.55;margin-bottom:10px;}
+  .tfn-options,.mcq-options{display:flex;flex-direction:column;gap:6px;}
+  .tfn-options.horizontal{flex-direction:row;flex-wrap:wrap;gap:8px;}
+  .tfn-btn,.mcq-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:13.5px;transition:all .12s;}
+  .tfn-btn:hover,.mcq-opt:hover{border-color:#94a3b8;background:#f8fafc;}
+  .tfn-btn.selected,.mcq-opt.selected{border-color:var(--accent-red);background:#fff1f2;}
+  .tfn-btn .radio-dot,.mcq-opt .radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid #cbd5e1;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .tfn-btn.selected .radio-dot,.mcq-opt.selected .radio-dot{border-color:var(--accent-red);}
+  .tfn-btn.selected .radio-dot::after,.mcq-opt.selected .radio-dot::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--accent-red);}
+  .fill-input{border:1.5px solid var(--border);border-radius:6px;padding:7px 12px;font-size:14px;font-family:inherit;width:100%;max-width:220px;transition:border-color .15s;}
+  .fill-input:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .fill-input.answered{border-color:var(--success);background:#f0fdf4;}
+  .fill-input.inline{display:inline-block;vertical-align:middle;margin:0 2px;}
+  .dd-select{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 36px 10px 12px;font-size:13.5px;font-family:inherit;background-color:#fff;cursor:pointer;transition:border-color .15s;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 12px center;}
+  .dd-select:focus{outline:none;border-color:var(--accent-red);box-shadow:0 0 0 3px rgba(225,29,72,.1);}
+  .dd-select.answered{border-color:var(--success);background-color:#f0fdf4;}
+  .pair-hint{font-size:12.5px;color:#b45314;background:#fffbeb;border:1px solid #fcd34d;border-radius:6px;padding:6px 10px;margin-bottom:10px;}
+  #bottombar{border-top:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0;gap:12px;min-height:56px;}
+  .part-tabs{display:flex;gap:8px;flex-shrink:0;}
+  .part-tab{padding:8px 16px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .part-tab:hover{border-color:#94a3b8;color:var(--text);}
+  .part-tab.active{border-color:var(--accent-red);color:var(--accent);box-shadow:0 0 0 1px var(--accent-red);}
+  .part-tab .count{font-weight:400;color:var(--muted);}
+  .q-circles{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;flex:1;padding:0 8px;}
+  .q-circle{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;}
+  .q-circle:hover{border-color:#94a3b8;color:var(--text);}
+  .q-circle.answered{background:var(--success);border-color:var(--success);color:#fff;}
+  .nav-arrows{display:flex;gap:6px;flex-shrink:0;}
+  .nav-arrow{width:36px;height:36px;border:1.5px solid var(--border);border-radius:50%;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:16px;}
+  .nav-arrow:hover{border-color:#94a3b8;color:var(--text);}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;}
+  .modal-overlay.hidden{display:none;}
+  .modal{background:#fff;border-radius:12px;padding:28px 32px;max-width:720px;width:94%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+  .modal h2{font-size:20px;margin-bottom:10px;}
+  .modal p{font-size:14px;line-height:1.6;color:var(--muted);margin-bottom:16px;}
+  .score-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0;}
+  .score-card{background:#f8fafc;border-radius:10px;padding:14px;text-align:center;}
+  .score-card .val{font-size:26px;font-weight:700;color:var(--accent);}
+  .score-card .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+  .modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;}
+  .btn-modal{padding:9px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;}
+  .btn-modal:hover{background:#f8fafc;}
+  .btn-modal.primary{background:var(--accent-red);color:#fff;border-color:var(--accent-red);}
+  .btn-modal.primary:hover{background:var(--accent-red-hover);}
+  .ans-table-wrap{margin:12px 0;max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;}
+  .ans-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .ans-table th{position:sticky;top:0;background:var(--accent);color:#fff;padding:8px 10px;text-align:left;font-weight:600;font-size:11px;}
+  .ans-table td{padding:6px 10px;border-bottom:1px solid var(--border);}
+  .ans-table tr:nth-child(even) td{background:#f8fafc;}
+  .ans-table .ok{color:var(--success);font-weight:600;}
+  .ans-table .bad{color:var(--accent-red);font-weight:600;}
+  .ans-table .blank{color:var(--muted);font-style:italic;}
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px;}
+  .passage-content{display:none;}
+  .passage-content.active{display:block;}
+  mark.hl{background:#fef08a;padding:0 2px;border-radius:2px;}
+  mark.hl-note{background:#bbf7d0;padding:0 2px;border-radius:2px;border-bottom:2px solid #16a34a;}
+  #sel-toolbar{position:fixed;z-index:300;display:none;background:#1e3a5f;color:#fff;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);font-size:13px;font-weight:500;overflow:hidden;white-space:nowrap;}
+  #sel-toolbar button{background:transparent;border:none;color:#fff;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:500;font-family:inherit;}
+  #sel-toolbar button:hover{background:rgba(255,255,255,.15);}
+  #sel-toolbar .sep{display:inline-block;width:1px;height:14px;background:rgba(255,255,255,.35);vertical-align:middle;}
+  @media (max-width:800px){#main{flex-direction:column;}#passage-panel{width:100%!important;height:42vh;border-bottom:1px solid var(--border);}#resizer{display:none;}}
+  #passage-panel p.source-note{font-family:'Inter',system-ui,sans-serif;font-size:12px;font-style:normal;color:var(--muted);text-align:center;margin:-12px 0 20px;line-height:1.5;}
+  .figure{margin:4px 0 20px;}
+  .figure img{width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:6px;}
+  .figure figcaption{font-family:'Inter',system-ui,sans-serif;font-size:12.5px;color:var(--muted);line-height:1.55;margin-top:8px;}
+  .figure .fig-src{font-size:11.5px;opacity:.85;}
+  .dd-select.inline{display:inline-block;width:auto;min-width:130px;padding:6px 32px 6px 10px;vertical-align:middle;margin:0 2px;}
+  .info-box .box-title + .box-title{margin-top:8px;}
+  .q-section .figure{margin:0 0 14px;}
+  .para-label{font-weight:700;color:var(--accent);margin-right:6px;}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+<div id="start-screen">
+  <div class="start-card">
+    <h1>IELTS Academic Reading</h1>
+    <div class="sub">Computer-Delivered Simulation &middot; Test 315</div>
+    <div class="resume-banner" id="resume-banner">
+      <strong>&#9201; Saved session found</strong>
+      <div id="resume-info"></div>
+      <div class="resume-actions">
+        <button onclick="resumeTest()">Resume Test</button>
+        <button class="btn-ghost" onclick="discardSaved()">Start Fresh</button>
+      </div>
+    </div>
+    <label for="cand-name">Candidate Name</label>
+    <input type="text" id="cand-name" placeholder="Enter your full name" autocomplete="off">
+    <label for="cand-num">Candidate Number</label>
+    <input type="text" id="cand-num" placeholder="e.g. 123456" autocomplete="off">
+    <button onclick="startTest()">Start Test</button>
+  </div>
+</div>
+
+<div id="topbar">
+  <div class="top-left">
+    <span class="mock-label">IELTS Academic Reading &middot; Test 315</span>
+    <span id="autosave-indicator"><span class="dot"></span><span id="autosave-text">Saved</span></span>
+  </div>
+  <div id="timer-wrap">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <div id="timer">60:00</div>
+  </div>
+  <div class="top-actions">
+    <button class="icon-btn" id="notepad-btn" title="Notepad" onclick="toggleNotepad()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></button>
+    <button class="icon-btn" title="Full screen" onclick="toggleFullscreen()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
+    <button class="btn-submit" onclick="confirmSubmit()">Submit</button>
+  </div>
+</div>
+
+<div id="notepad-panel" class="hidden">
+  <div class="notepad-header">
+    <span class="notepad-title">Notepad</span>
+    <button class="icon-btn" title="Close" onclick="toggleNotepad()" style="width:28px;height:28px"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <textarea id="notepad-text" placeholder="Type your notes here&hellip;"></textarea>
+</div>
+
+<div id="sel-toolbar">
+  <button type="button" id="sel-note-btn">Note</button><span class="sep"></span><button type="button" id="sel-hl-btn">Highlight</button>
+</div>
+
+<div id="main">
+  <div id="passage-panel">
+
+    <div class="passage-content active" id="pc-0">
+      <div class="part-header">PART 1</div>
+      <h2>READING PASSAGE 1</h2>
+      <div class="time-note">You should spend about 20 minutes on Questions 1&ndash;13, which are based on Reading Passage 1 below.</div>
+      <div class="passage-title">How packaging design reduces food waste</div>
+      <p>Food waste is often thought of as a problem of consumer behaviour. People buy too much, forget what is in the refrigerator or throw food away because they are uncertain whether it is still safe to eat. These habits certainly matter, but they do not tell the whole story. Long before food reaches the kitchen, decisions have been made about how it will be protected, transported, displayed, opened, resealed and finally used. Packaging design plays a central role in this.</p>
+      <p>Although packaging is sometimes criticised for creating unnecessary waste of its own, well-designed packaging can prevent a much larger environmental loss by helping food survive longer and reach consumers in better condition.</p>
+      <p>The environmental case for food-protective packaging depends on a simple but sometimes forgotten point: in many cases, the food inside the package has a far greater impact on the environment than the package itself. Producing food requires land, water, energy, labour and transport. If the food is thrown away, all these resources are wasted as well. For this reason, removing packaging is not automatically the most sustainable option. A cucumber wrapped in plastic film, for example, may appear to have too much packaging, but if the film prevents dehydration and extends shelf life, the overall environmental impact may be lower than that of an unpackaged cucumber that spoils before it is eaten. The aim, therefore, is not simply to minimise packaging, but to make the combination of food plus packaging as sustainable as possible.</p>
+      <p>One important role of packaging is physical protection. Food can be damaged at many points in the supply chain: during harvesting, packing, loading, transport, retail display and handling by shoppers. Bruised fruit, crushed bakery items and broken containers are less likely to be sold and more likely to be thrown away. Packaging can reduce this damage by cushioning products, preventing movement inside boxes, and allowing items to be stacked safely. This is particularly important for fresh produce, eggs and prepared foods. The package must be strong enough to protect the contents but not so heavy or complex that it creates avoidable material waste.</p>
+      <p>A second role is to control the conditions around the food. Some products go off quickly when exposed to oxygen, moisture, light or changes in temperature. Packaging materials can act as barriers, slowing down chemical and biological processes. In modified-atmosphere packaging, the gases inside the pack are adjusted to keep the food fresh. This technique is widely used for products such as meat, cheese, fresh pasta and salad leaves. Other packages control the level of moisture through breathable films or absorbent pads, each designed to maintain quality for a longer period. These technologies do not make food last forever, but they may add several days of usable life, which can be important for retailers and households.</p>
+      <p>Packaging can also influence how much food consumers use at one time. Large packs may seem economical, but they can encourage waste if a household cannot finish the contents before they go off. Smaller portions, as well as divided compartments, can reduce this risk, especially for products that have a short life once opened. However, this creates a design challenge because smaller packs use packaging less efficiently. Designers must therefore judge when dividing into smaller portions genuinely prevents waste and when it just increases packaging use without a clear benefit.</p>
+      <p>Features that make packaging more convenient are another major area of design. Resealable packets, easy-pour spouts, peel-back lids and packs that stand upright in the refrigerator can all make it easier for consumers to store and use food properly. A bag of grated cheese that can be sealed again is less likely to dry out than one that must be folded over or clipped shut. Similarly, a sauce bottle designed so that most of the contents can be used reduces the amount that is discarded. These details may appear minor, but they address common household behaviours: people often waste food not because they intend to, but because a package is difficult to close or it is hard to get the last bit of product out.</p>
+      <p>Clear communication is equally important. Date labels are a common source of confusion, particularly when consumers misunderstand the difference between safety-related and quality-related information. A &ldquo;use by&rdquo; date usually tells you when a product may no longer be safe, while a &ldquo;best before&rdquo; date generally refers to quality. Packaging should present this information clearly and add storage guidance, such as &ldquo;refrigerate after opening&rdquo; or &ldquo;use within three days of opening&rdquo;. Some packs also include visual freshness indicators, such as colour-changing labels, although these are not yet common in all markets. Good design, therefore, involves not only materials and structure, but also language, layout and consumer education.</p>
+    </div>
+
+    <div class="passage-content" id="pc-1">
+      <div class="part-header">PART 2</div>
+      <h2>READING PASSAGE 2</h2>
+      <div class="time-note">You should spend about 20 minutes on Questions 14&ndash;27, which are based on Reading Passage 2 below.</div>
+      <div class="passage-title">How deserts expand and contract</div>
+      <p>Deserts are often pictured as huge areas of sand that slowly spread across the land. In time-lapse footage, they may look like moving walls that cover fields and villages. This image is dramatic, but it is not very accurate. A desert is not defined by sand. It is defined by lack of water. Some deserts are hot and sandy, but others are cold, rocky, icy, or covered with stones and dry soil. What they have in common is very little rain or snow.</p>
+      <p>Deserts do not usually grow in a simple, steady way. Their edges often move backwards and forwards. In a dry year, plants may die, soil may become bare, and dust may blow across nearby land. This can make it look as if the desert is spreading. But if rain returns, grass and shrubs may grow again. Desert expansion is not always permanent.</p>
+      <p>This is different from desertification, which happens when land in dry areas becomes damaged and less useful. Farming and grazing can cause desertification if they are not managed carefully. Salt may build up in the soil after poor irrigation, and fresh water may be used up. However, it is too simple to blame local people alone. Rainfall, temperature, wind, soil type, and long droughts all affect what happens in drylands.</p>
+      <p>The Sahara is a good example of a desert whose edge can change, although not always in one direction. South of the Sahara is the Sahel, a wide belt of dry grassland. In years with little rain, the Sahel can look much more desert-like: grass fails to grow, bare ground is easily moved by the wind, and dust may travel long distances. During wetter years, however, vegetation can return quickly in some places. Satellite images have sometimes shown parts of the Sahel becoming greener after good rains, although this does not mean the land has fully recovered. The important point is that the border between desert and grassland is not a fixed line.</p>
+      <p>The Atacama Desert in South America shows a different pattern of change. It lies along the Pacific coast and is one of the driest places on Earth, with some areas receiving almost no rain for years. Even so, water can still arrive in other forms. Near the coast, mist from the ocean may be carried inland, and when this damp air is caught by hills, special plants can survive in green patches known as lomas. Like vegetation in the Sahel, these plant communities may expand after wetter conditions and shrink again when moisture decreases. However, the change is usually local, depending on where mist, hills and occasional rainfall come together.</p>
+      <p>The Gobi Desert, in northern China and southern Mongolia, also has a changing boundary with grassland, but the pressures are not only natural. The region commonly has very hot summers and extremely cold winters, and drought can reduce plant cover just as it does in other drylands. When this happens, wind can remove exposed soil and make the land appear more desert-like. Farming can be pushed into places that are too dry, adding to the problem. In China, planting projects have tried to reduce dust storms and hold soil in place, although such efforts depend on choosing plants that can survive with limited water.</p>
+      <p>Antarctica reminds us that deserts are not always hot or sandy. It is the largest desert in the world because it receives so little precipitation, most of which falls as snow. In the McMurdo Dry Valleys, strong winds help keep some valley floors free of ice and snow, creating one of the driest landscapes on Earth. Yet even here, desert conditions can vary for short periods. In summer, small streams of meltwater may appear, and tiny forms of life may become active where liquid water is briefly available. As in hotter deserts, this does not mean that the desert has disappeared. It only shows that even extremely dry environments can respond to small changes in moisture.</p>
+      <p>Scientists use several methods to study desert change. They collect information on the ground, record rainfall and temperature, and use satellite images for a general overview of areas. Satellites can show where plants are growing, where lakes have appeared or disappeared, and where dust is being produced. However, this information must be treated with care. A rainy season can make an area look healthy, even if the soil is still poor. In the same way, one drought can make land look permanently damaged, even though seeds and roots may still recover.</p>
+      <p>The key question is whether the land can recover after a difficult period. If plants return when rain increases, the desert edge has probably only shifted for a time. If the topsoil has gone, groundwater has been overused, or salt has built up in the soil, recovery is much harder. For this reason, good land management matters. Keeping soil covered, using water carefully, helping native plants thrive, and avoiding farming in unsuitable places can all help drylands remain productive.</p>
+    </div>
+
+    <div class="passage-content" id="pc-2">
+      <div class="part-header">PART 3</div>
+      <h2>READING PASSAGE 3</h2>
+      <div class="time-note">You should spend about 20 minutes on Questions 28&ndash;40, which are based on Reading Passage 3 below.</div>
+      <div class="passage-title">Multitasking and the limits of attention</div>
+      <p><strong class="para-label">A</strong> For many people, multitasking has become a badge of competence. A student listens to a lecture while replying to messages, an office worker keeps several tabs open during a video call, and a parent cooks dinner while checking work emails. These activities feel efficient because several demands are being handled within the same period of time. Yet this impression is misleading. In most situations, what we call multitasking is not the mind doing two demanding things at once. It is the mind moving rapidly from one target to another, paying a small price each time it changes direction. The problem lies in attention itself. Simple actions can run almost automatically, especially if practised many times. However, when two tasks both require conscious judgement, language processing, planning or memory, they compete for limited mental resources.</p>
+      <p><strong class="para-label">B</strong> This competition explains why doing certain activities at the same time is harder than combining others. Reading an article while composing a message, for example, is not comparable to listening to music while folding clothes. The first pair of tasks draws on overlapping mental systems; the second may not. Researchers often describe the cost of multitasking as a switching cost. When people leave one task and begin another, they must suppress the rules and information related to the first task and activate those required for the second. Each individual shift may take only a fraction of a second, so the process can feel smooth. But the total cost becomes substantial when switching happens repeatedly. In reality, performance is slowed and made less accurate by tiny interruptions.</p>
+      <p><strong class="para-label">C</strong> Switching costs are especially important in digital environments, where switching is encouraged by design. Notifications, search results, messages and updates compete for attention, and each one offers the promise of a quick reward. The problem is not just time. Such interruptions break the thread of a person&rsquo;s thinking. After looking away from a demanding task, the individual has to reconstruct what they were doing, what decision they were about to make and which details mattered. This explains why a short interruption can have an effect that lasts longer than the interruption itself. A message that takes five seconds to read may leave a longer mental trace, especially if it changes the person&rsquo;s mood or creates an obligation to respond.</p>
+      <p><strong class="para-label">D</strong> A further difficulty is that people often misjudge their multitasking ability. Someone who switches constantly between media may feel alert and active, but that feeling should not be confused with effectiveness. Some studies have found links between heavy media multitasking and poorer performance on measures such as working memory or sustained attention, although findings are not perfectly consistent. This uncertainty matters. It would be too simple to claim that every frequent multitasker has damaged their attention span, or that digital media alone explains modern distraction. The safer conclusion is that heavy multitasking is associated with attentional difficulties in some contexts, and researchers are still trying to establish when and why this relationship appears.</p>
+      <p><strong class="para-label">E</strong> The distinction between association and cause is often ignored in popular discussions of multitasking. If people who use several media at once perform worse on certain attention tasks, this does not prove that the media use caused the weakness. It is possible that people who already find it hard to focus are more likely to seek frequent stimulation. It is also possible that both effects operate together: a person with weaker attentional control may multitask more, and repeated multitasking may then reinforce habits of distraction. The evidence is strongest when it shows the immediate cost of switching between demanding tasks. It is less settled when it tries to explain long-term changes in attention. This does not mean that all forms of multitasking are equally harmful.</p>
+      <p><strong class="para-label">F</strong> In real life, people often have to monitor several things at once, and some professions depend on this skill. Nurses, pilots and emergency workers may need to track changing information from different sources. However, successful performance in these settings is usually not casual multitasking. It depends on training, routines, prioritisation and clear systems for deciding which signal matters most. Experts are not free from the limits of attention; they have learned ways to manage those limits. The practical lesson is not to aim for perfect single-tasking. That would be unrealistic. The more useful lesson is that attention should be treated as a limited resource rather than an endless supply. Tasks that require careful thought, accurate reading, complex decisions or creative problem-solving deserve protected time. The modern world encourages the comforting belief that productivity means keeping everything open at once. The evidence suggests the opposite: in many cases, doing one thing properly is not old-fashioned discipline, but a more intelligent response to how the mind actually works.</p>
+    </div>
+
+  </div>
+
+  <div id="resizer"><div class="handle">&#8942;&#8942;</div></div>
+
+  <div id="questions-panel">
+<div id="qs-0">
+<div class="q-section">
+<div class="q-section-header">Questions 1&ndash;5</div>
+<div class="q-section-intro">Choose the correct letter, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>.</div>
+<div class="question" id="q1"><div class="q-num">1</div><div class="q-body"><div class="q-text">What point does the writer make in the first paragraph?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q1','A')"><span class="radio-dot"></span>A Consumers are mainly responsible for food waste.</label><label class="mcq-opt" onclick="selectMCQ(this,'q1','B')"><span class="radio-dot"></span>B Packaging is often more harmful than the food it contains.</label><label class="mcq-opt" onclick="selectMCQ(this,'q1','C')"><span class="radio-dot"></span>C Packaging can affect food waste before food reaches the home.</label><label class="mcq-opt" onclick="selectMCQ(this,'q1','D')"><span class="radio-dot"></span>D Most food waste happens during transport and retail display.</label></div></div></div>
+<div class="question" id="q2"><div class="q-num">2</div><div class="q-body"><div class="q-text">Why can protective packaging be environmentally justified?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q2','A')"><span class="radio-dot"></span>A It is usually made from recyclable materials.</label><label class="mcq-opt" onclick="selectMCQ(this,'q2','B')"><span class="radio-dot"></span>B It may do less environmental damage than the food itself.</label><label class="mcq-opt" onclick="selectMCQ(this,'q2','C')"><span class="radio-dot"></span>C It reduces the amount of energy needed to produce food.</label><label class="mcq-opt" onclick="selectMCQ(this,'q2','D')"><span class="radio-dot"></span>D It allows consumers to choose food that is more sustainable.</label></div></div></div>
+<div class="question" id="q3"><div class="q-num">3</div><div class="q-body"><div class="q-text">The writer uses the example of the cucumber to show that</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q3','A')"><span class="radio-dot"></span>A plastic film is always the best way to protect fresh vegetables.</label><label class="mcq-opt" onclick="selectMCQ(this,'q3','B')"><span class="radio-dot"></span>B unpackaged food is usually less attractive to consumers.</label><label class="mcq-opt" onclick="selectMCQ(this,'q3','C')"><span class="radio-dot"></span>C a small amount of packaging may reduce environmental impact.</label><label class="mcq-opt" onclick="selectMCQ(this,'q3','D')"><span class="radio-dot"></span>D cucumbers are more easily damaged than most other vegetables.</label></div></div></div>
+<div class="question" id="q4"><div class="q-num">4</div><div class="q-body"><div class="q-text">What does the writer say about physical protection?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q4','A')"><span class="radio-dot"></span>A It reduces waste caused by accidental damage.</label><label class="mcq-opt" onclick="selectMCQ(this,'q4','B')"><span class="radio-dot"></span>B It is most useful for products with a long shelf life.</label><label class="mcq-opt" onclick="selectMCQ(this,'q4','C')"><span class="radio-dot"></span>C It is mainly needed after food has been bought.</label><label class="mcq-opt" onclick="selectMCQ(this,'q4','D')"><span class="radio-dot"></span>D It depends more on retail workers than on designers.</label></div></div></div>
+<div class="question" id="q5"><div class="q-num">5</div><div class="q-body"><div class="q-text">What does the writer say needs to be avoided?</div><div class="mcq-options"><label class="mcq-opt" onclick="selectMCQ(this,'q5','A')"><span class="radio-dot"></span>A producing food that requires a large amount of packaging</label><label class="mcq-opt" onclick="selectMCQ(this,'q5','B')"><span class="radio-dot"></span>B creating packaging that uses material unnecessarily</label><label class="mcq-opt" onclick="selectMCQ(this,'q5','C')"><span class="radio-dot"></span>C using packaging materials that affect the quality of the food</label><label class="mcq-opt" onclick="selectMCQ(this,'q5','D')"><span class="radio-dot"></span>D making packaging that is difficult for consumers to remove</label></div></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 6&ndash;13</div>
+<div class="q-section-intro">Complete the summary below. Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</div>
+<div class="info-box notes"><span class="box-title">Packaging features that help reduce waste</span>
+Packaging materials may work as <strong>6</strong> <input class="fill-input inline" id="q6" oninput="markFill('q6')" style="width:160px" placeholder="&hellip;"> protecting food from oxygen, moisture or light. Inside modified-atmosphere packaging, the surrounding <strong>7</strong> <input class="fill-input inline" id="q7" oninput="markFill('q7')" style="width:140px" placeholder="&hellip;"> are changed in order to delay spoilage. Other designs may use <strong>8</strong> <input class="fill-input inline" id="q8" oninput="markFill('q8')" style="width:180px" placeholder="&hellip;"> or films that allow air to pass through to help preserve the quality of food.<br><br>
+Smaller packs and <strong>9</strong> <input class="fill-input inline" id="q9" oninput="markFill('q9')" style="width:180px" placeholder="&hellip;"> can help households avoid opening or buying more food than they need. However, the potential for increased <strong>10</strong> <input class="fill-input inline" id="q10" oninput="markFill('q10')" style="width:160px" placeholder="&hellip;"> needs to be carefully considered. Other useful features make food easier to store and use. For example, a sauce bottle may help prevent the contents being wasted to make sure that as little product as possible is <strong>11</strong> <input class="fill-input inline" id="q11" oninput="markFill('q11')" style="width:140px" placeholder="&hellip;">.<br><br>
+Finally, packaging can reduce waste by giving consumers clearer information. Date labels are sometimes misunderstood, especially in terms of the difference between safety and <strong>12</strong> <input class="fill-input inline" id="q12" oninput="markFill('q12')" style="width:140px" placeholder="&hellip;">. Storage advice can also help consumers keep food in good condition. Things like labels that respond when a product goes off can act as <strong>13</strong> <input class="fill-input inline" id="q13" oninput="markFill('q13')" style="width:180px" placeholder="&hellip;">.
+</div>
+</div>
+</div>
+<div id="qs-1" style="display:none">
+<div class="q-section">
+<div class="q-section-header">Questions 14&ndash;18</div>
+<div class="q-section-intro">Do the following statements agree with the information given in Reading Passage 2? Write <strong>TRUE</strong> if the statement agrees with the information, <strong>FALSE</strong> if the statement contradicts the information, or <strong>NOT GIVEN</strong> if there is no information on this.</div>
+<div class="question" id="q14"><div class="q-num">14</div><div class="q-body"><div class="q-text">Deserts can be identified by the materials they are composed of.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q14','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q14','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q14','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q15"><div class="q-num">15</div><div class="q-body"><div class="q-text">Some deserts receive very little rain but a fair amount of snow.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q15','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q15','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q15','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q16"><div class="q-num">16</div><div class="q-body"><div class="q-text">During dry periods, deserts can seem to expand temporarily.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q16','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q16','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q16','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q17"><div class="q-num">17</div><div class="q-body"><div class="q-text">Desertification happens when dust covers fertile soil.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q17','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q17','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q17','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q18"><div class="q-num">18</div><div class="q-body"><div class="q-text">Desertification is an increasing problem for farmers.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q18','TRUE')"><span class="radio-dot"></span>TRUE</button><button class="tfn-btn" onclick="selectTFN(this,'q18','FALSE')"><span class="radio-dot"></span>FALSE</button><button class="tfn-btn" onclick="selectTFN(this,'q18','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 19&ndash;24</div>
+<div class="q-section-intro">Look at the following statements (Questions 19&ndash;24) and the list of deserts below. Match each statement with the correct desert, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>. You may use any letter more than once.</div>
+<div class="info-box"><span class="box-title">List of Deserts</span>
+<strong>A</strong> The Sahara<br>
+<strong>B</strong> The Atacama Desert<br>
+<strong>C</strong> The Gobi Desert<br>
+<strong>D</strong> Antarctica
+</div>
+<div class="question" id="q19"><div class="q-num">19</div><div class="q-body"><div class="q-text">It has areas where atmospheric moisture can support plant life.</div><select class="dd-select" id="dd-q19" data-opts="A,B,C,D" data-ph="Select a desert&hellip;" onchange="selectDropdown(this,'q19')"></select></div></div>
+<div class="question" id="q20"><div class="q-num">20</div><div class="q-body"><div class="q-text">It borders a dry region whose appearance changes in wet years.</div><select class="dd-select" id="dd-q20" data-opts="A,B,C,D" data-ph="Select a desert&hellip;" onchange="selectDropdown(this,'q20')"></select></div></div>
+<div class="question" id="q21"><div class="q-num">21</div><div class="q-body"><div class="q-text">It may grow when conditions encourage agriculture in the wrong place.</div><select class="dd-select" id="dd-q21" data-opts="A,B,C,D" data-ph="Select a desert&hellip;" onchange="selectDropdown(this,'q21')"></select></div></div>
+<div class="question" id="q22"><div class="q-num">22</div><div class="q-body"><div class="q-text">It has areas that are dry partly due to high wind.</div><select class="dd-select" id="dd-q22" data-opts="A,B,C,D" data-ph="Select a desert&hellip;" onchange="selectDropdown(this,'q22')"></select></div></div>
+<div class="question" id="q23"><div class="q-num">23</div><div class="q-body"><div class="q-text">It experiences significant temperature contrasts throughout the year.</div><select class="dd-select" id="dd-q23" data-opts="A,B,C,D" data-ph="Select a desert&hellip;" onchange="selectDropdown(this,'q23')"></select></div></div>
+<div class="question" id="q24"><div class="q-num">24</div><div class="q-body"><div class="q-text">It comes to life when existing water becomes available.</div><select class="dd-select" id="dd-q24" data-opts="A,B,C,D" data-ph="Select a desert&hellip;" onchange="selectDropdown(this,'q24')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 25&ndash;27</div>
+<div class="q-section-intro">Answer the questions using <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</div>
+<div class="question"><div class="q-num">25</div><div class="q-body"><div class="q-text">What do scientists use to study large regions of desert?</div><input class="fill-input" id="q25" oninput="markFill('q25')" placeholder="&hellip;"></div></div>
+<div class="question"><div class="q-num">26</div><div class="q-body"><div class="q-text">What can make recovery difficult when its levels increase?</div><input class="fill-input" id="q26" oninput="markFill('q26')" placeholder="&hellip;"></div></div>
+<div class="question"><div class="q-num">27</div><div class="q-body"><div class="q-text">What should be encouraged to grow in drylands?</div><input class="fill-input" id="q27" oninput="markFill('q27')" placeholder="&hellip;"></div></div>
+</div>
+</div>
+<div id="qs-2" style="display:none">
+<div class="q-section">
+<div class="q-section-header">Questions 28&ndash;33</div>
+<div class="q-section-intro">Reading Passage 3 has six paragraphs, <strong>A&ndash;F</strong>. Choose the correct heading for each paragraph from the list of headings below. Write the correct number, <strong>i&ndash;viii</strong>, in boxes 28&ndash;33 on your answer sheet.</div>
+<div class="info-box"><span class="box-title">List of Headings</span>
+<strong>i</strong> Why confidence in multitasking may be misplaced<br>
+<strong>ii</strong> How mental effort is renewed after a break<br>
+<strong>iii</strong> Mistaking the link for the cause<br>
+<strong>iv</strong> Why some distractions matter more than their duration<br>
+<strong>v</strong> The false appeal of doing several things at once<br>
+<strong>vi</strong> The need to recognise attention as a finite capacity<br>
+<strong>vii</strong> Evidence that multitasking permanently changes the brain<br>
+<strong>viii</strong> Why some task combinations create greater difficulty
+</div>
+<div class="question" id="q28"><div class="q-num">28</div><div class="q-body"><div class="q-text">Paragraph A</div><select class="dd-select" id="dd-q28" data-opts="i,ii,iii,iv,v,vi,vii,viii" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q28')"></select></div></div>
+<div class="question" id="q29"><div class="q-num">29</div><div class="q-body"><div class="q-text">Paragraph B</div><select class="dd-select" id="dd-q29" data-opts="i,ii,iii,iv,v,vi,vii,viii" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q29')"></select></div></div>
+<div class="question" id="q30"><div class="q-num">30</div><div class="q-body"><div class="q-text">Paragraph C</div><select class="dd-select" id="dd-q30" data-opts="i,ii,iii,iv,v,vi,vii,viii" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q30')"></select></div></div>
+<div class="question" id="q31"><div class="q-num">31</div><div class="q-body"><div class="q-text">Paragraph D</div><select class="dd-select" id="dd-q31" data-opts="i,ii,iii,iv,v,vi,vii,viii" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q31')"></select></div></div>
+<div class="question" id="q32"><div class="q-num">32</div><div class="q-body"><div class="q-text">Paragraph E</div><select class="dd-select" id="dd-q32" data-opts="i,ii,iii,iv,v,vi,vii,viii" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q32')"></select></div></div>
+<div class="question" id="q33"><div class="q-num">33</div><div class="q-body"><div class="q-text">Paragraph F</div><select class="dd-select" id="dd-q33" data-opts="i,ii,iii,iv,v,vi,vii,viii" data-ph="Select a heading&hellip;" onchange="selectDropdown(this,'q33')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 34&ndash;37</div>
+<div class="q-section-intro">Complete each sentence with the correct ending, <strong>A&ndash;E</strong>, below.</div>
+<div class="info-box"><strong>A</strong> rebuilding the focus and context of the original task.<br>
+<strong>B</strong> receiving a quick reward from a new source of information.<br>
+<strong>C</strong> using a range of different types of thinking processes.<br>
+<strong>D</strong> operating with relatively little conscious attention.<br>
+<strong>E</strong> replacing one set of goals and information with another.
+</div>
+<div class="question" id="q34"><div class="q-num">34</div><div class="q-body"><div class="q-text">Simple, familiar activities can sometimes be done together due to</div><select class="dd-select" id="dd-q34" data-opts="A,B,C,D,E" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q34')"></select></div></div>
+<div class="question" id="q35"><div class="q-num">35</div><div class="q-body"><div class="q-text">Problems are more likely when two tasks both involve</div><select class="dd-select" id="dd-q35" data-opts="A,B,C,D,E" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q35')"></select></div></div>
+<div class="question" id="q36"><div class="q-num">36</div><div class="q-body"><div class="q-text">Switching between tasks becomes costly because it means</div><select class="dd-select" id="dd-q36" data-opts="A,B,C,D,E" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q36')"></select></div></div>
+<div class="question" id="q37"><div class="q-num">37</div><div class="q-body"><div class="q-text">Digital interruptions can have a longer effect as a result of</div><select class="dd-select" id="dd-q37" data-opts="A,B,C,D,E" data-ph="Select an ending&hellip;" onchange="selectDropdown(this,'q37')"></select></div></div>
+</div>
+<div class="q-section">
+<div class="q-section-header">Questions 38&ndash;40</div>
+<div class="q-section-intro">Do the following statements agree with the views of the writer in the reading passage? Write <strong>YES</strong> if the statement agrees with the views of the writer, <strong>NO</strong> if the statement contradicts the views of the writer, or <strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this.</div>
+<div class="question" id="q38"><div class="q-num">38</div><div class="q-body"><div class="q-text">Current research shows that digital media is usually to blame for problems with attention.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q38','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q38','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q38','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q39"><div class="q-num">39</div><div class="q-body"><div class="q-text">People with weaker attentional control should try not to use several forms of media at the same time.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q39','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q39','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q39','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+<div class="question" id="q40"><div class="q-num">40</div><div class="q-body"><div class="q-text">Trained professionals are able to avoid normal attentional limits.</div><div class="tfn-options horizontal"><button class="tfn-btn" onclick="selectTFN(this,'q40','YES')"><span class="radio-dot"></span>YES</button><button class="tfn-btn" onclick="selectTFN(this,'q40','NO')"><span class="radio-dot"></span>NO</button><button class="tfn-btn" onclick="selectTFN(this,'q40','NOT GIVEN')"><span class="radio-dot"></span>NOT GIVEN</button></div></div></div>
+</div>
+</div>
+  </div>
+</div>
+
+<div id="bottombar">
+  <div class="part-tabs">
+    <div class="part-tab active" id="ptab-0" onclick="switchPassage(0)">Part 1: <span class="count" id="pcount-0">0 of 13</span></div>
+    <div class="part-tab" id="ptab-1" onclick="switchPassage(1)">Part 2: <span class="count" id="pcount-1">0 of 14</span></div>
+    <div class="part-tab" id="ptab-2" onclick="switchPassage(2)">Part 3: <span class="count" id="pcount-2">0 of 13</span></div>
+  </div>
+  <div class="q-circles" id="q-circles"></div>
+  <div class="nav-arrows">
+    <button class="nav-arrow" onclick="prevQ()">&lsaquo;</button>
+    <button class="nav-arrow" onclick="nextQ()">&rsaquo;</button>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="submit-modal">
+  <div class="modal">
+    <h2>Submit Your Test?</h2>
+    <p>You are about to submit your test. This action cannot be undone.</p>
+    <div class="score-grid" id="score-grid" style="display:none">
+      <div class="score-card"><div class="val" id="sc-answered">0</div><div class="lbl">Answered</div></div>
+      <div class="score-card"><div class="val" id="sc-unanswered">40</div><div class="lbl">Unanswered</div></div>
+      <div class="score-card"><div class="val" id="sc-pct">0%</div><div class="lbl">Completion</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="closeModal()">Cancel</button>
+      <button class="btn-modal primary" onclick="submitTest()">Submit Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="results-modal">
+  <div class="modal">
+    <h2>Test Complete</h2>
+    <p id="results-cand"></p>
+    <div class="score-grid">
+      <div class="score-card"><div class="val" id="r-correct" style="color:var(--success)">&mdash;</div><div class="lbl">Correct</div></div>
+      <div class="score-card"><div class="val" id="r-wrong" style="color:var(--accent-red)">&mdash;</div><div class="lbl">Incorrect</div></div>
+      <div class="score-card"><div class="val" id="r-unanswered">&mdash;</div><div class="lbl">Unanswered</div></div>
+    </div>
+    <div style="margin:14px 0 12px;background:var(--accent);border-radius:12px;padding:18px 22px;text-align:center;color:#fff">
+      <div style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-bottom:4px">IELTS Band Score</div>
+      <div id="r-band" style="font-size:48px;font-weight:700;line-height:1">&mdash;</div>
+      <div id="r-band-label" style="font-size:13px;margin-top:6px;opacity:.85">&mdash;</div>
+    </div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:6px">Your Answers vs Correct Answers</div>
+    <div class="ans-table-wrap"><table class="ans-table"><thead><tr><th>Q</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr></thead><tbody id="ans-table-body"></tbody></table></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:10px">Green = correct &middot; Red = incorrect &middot; Band scores are approximate for Academic Reading.</p>
+    <p id="pdf-status" style="font-size:13px;color:var(--success);margin-top:8px;font-weight:500"></p>
+    <div class="modal-btns">
+      <button class="btn-modal" onclick="redownloadPDF()">Download PDF again</button>
+      <button class="btn-modal primary" onclick="document.getElementById('results-modal').classList.add('hidden')">Close &amp; Review</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   ANSWER KEY (from candidate notebook)
+   ============================================================ */
+var ANSWERS = {
+  q1:'C', q2:'B', q3:'C', q4:'A', q5:'B',
+  q6:'barriers', q7:'gases', q8:'absorbent pads', q9:'divided compartments',
+  q10:'packaging use', q11:'discarded', q12:'quality', q13:'freshness indicators',
+  q14:'FALSE', q15:'FALSE', q16:'TRUE', q17:'FALSE', q18:'NOT GIVEN',
+  q19:'B', q20:'A', q21:'C', q22:'D', q23:'C', q24:'D',
+  q25:'satellite images', q26:'Salt', q27:'Native plants',
+  q28:'v', q29:'viii', q30:'iv', q31:'i', q32:'iii', q33:'vi',
+  q34:'D', q35:'C', q36:'E', q37:'A',
+  q38:'NO', q39:'NOT GIVEN', q40:'NO'
+};
+
+var ALT = {
+  q6:['barriers','barrier'],
+  q7:['gases','gas'],
+  q8:['absorbent pads','absorbent pad','pads'],          // (absorbent) is optional
+  q9:['divided compartments','compartments'],           // (divided) is optional
+  q10:['packaging use','packaging'],                    // (use) is optional
+  q11:['discarded'],
+  q12:['quality'],
+  q13:['freshness indicators','freshness indicator','indicators'],
+  q25:['satellite images','satellite image'],
+  q26:['Salt','salt'],
+  q27:['Native plants','native plants','native plant']
+};
+
+var PART_RANGES = [[1,13],[14,27],[28,40]];
+var userAnswers = {}, currentPassage = 0, submitted = false;
+var candidateName='', candidateNumber='';
+var seconds = 60*60;
+var timerEl = document.getElementById('timer');
+var timerInterval = null;
+
+/* Fill dropdowns */
+(function initSelects(){
+  document.querySelectorAll('select[data-opts],select[data-words]').forEach(function(s){
+    var ph = document.createElement('option');
+    ph.value = ''; ph.disabled = true; ph.selected = true;
+    ph.innerHTML = s.getAttribute('data-ph') || 'Select\u2026';
+    s.appendChild(ph);
+    var words = s.getAttribute('data-words');
+    if(words){
+      words.split(',').forEach(function(p){
+        var kv = p.split(':');
+        var o = document.createElement('option');
+        o.value = kv[0]; o.textContent = kv[0] + ' \u2013 ' + kv[1];
+        s.appendChild(o);
+      });
+    } else {
+      s.getAttribute('data-opts').split(',').forEach(function(v){
+        var o = document.createElement('option');
+        o.value = v; o.textContent = v;
+        s.appendChild(o);
+      });
+    }
+  });
+})();
+
+/* ============================================================
+   AUTO-SAVE
+   ============================================================ */
+var STORAGE_KEY = 'ielts_reading_315_session';
+var autosaveInterval = null;
+var autosaveListenersAdded = false;
+var autosaveIndicator = document.getElementById('autosave-indicator');
+var autosaveText = document.getElementById('autosave-text');
+
+function showAutosaveSaving(){
+  autosaveIndicator.classList.add('show','saving');
+  autosaveText.textContent = 'Saving\u2026';
+}
+function showAutosaveSaved(){
+  autosaveIndicator.classList.add('show');
+  autosaveIndicator.classList.remove('saving');
+  var t = new Date();
+  autosaveText.textContent = 'Saved ' + t.toTimeString().slice(0,8);
+  setTimeout(function(){ autosaveIndicator.classList.remove('show'); }, 2500);
+}
+function getPassageWidth(){
+  var pw = document.getElementById('passage-panel');
+  return pw ? (pw.style.width || pw.offsetWidth + 'px') : '';
+}
+function saveSession(silent){
+  if(submitted) return;
+  if(!silent) showAutosaveSaving();
+  try{
+    var data = {
+      version: 3,
+      timestamp: Date.now(),
+      candidateName: candidateName,
+      candidateNumber: candidateNumber,
+      seconds: seconds,
+      currentPassage: currentPassage,
+      userAnswers: userAnswers,
+      notepad: document.getElementById('notepad-text').value,
+      passageWidth: getPassageWidth(),
+      started: true
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    if(!silent) showAutosaveSaved();
+  }catch(e){ console.warn('Autosave failed:', e); }
+}
+function loadSession(){
+  try{
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return null;
+    var d = JSON.parse(raw);
+    if(!d || !d.started) return null;
+    return d;
+  }catch(e){ return null; }
+}
+function clearSession(){ try{ localStorage.removeItem(STORAGE_KEY); }catch(e){} }
+function formatTime(sec){
+  var m = Math.floor(sec/60), s = sec%60;
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+
+(function checkSavedSession(){
+  var saved = loadSession();
+  if(!saved) return;
+  var banner = document.getElementById('resume-banner');
+  var info = document.getElementById('resume-info');
+  var answered = 0;
+  for(var i=1;i<=40;i++){ if(saved.userAnswers && saved.userAnswers['q'+i]) answered++; }
+  var when = new Date(saved.timestamp).toLocaleString();
+  info.innerHTML = '<strong>' + escapeHtml(saved.candidateName || 'Anonymous') + '</strong> &middot; ' + answered + '/40 answered &middot; ' + formatTime(saved.seconds) + ' remaining<br><span style="opacity:.75">Saved ' + when + '</span>';
+  banner.classList.add('show');
+  document.getElementById('cand-name').value = saved.candidateName || '';
+  document.getElementById('cand-num').value = saved.candidateNumber || '';
+})();
+
+function resumeTest(){
+  var saved = loadSession();
+  if(!saved){ startTest(); return; }
+  candidateName = saved.candidateName || 'Anonymous';
+  candidateNumber = saved.candidateNumber || 'N/A';
+  seconds = saved.seconds || 60*60;
+  userAnswers = saved.userAnswers || {};
+  currentPassage = saved.currentPassage || 0;
+  if(saved.notepad) document.getElementById('notepad-text').value = saved.notepad;
+  if(saved.passageWidth){ document.getElementById('passage-panel').style.width = saved.passageWidth; }
+
+  document.getElementById('start-screen').classList.add('hidden');
+  restoreAnswersUI();
+  buildCircles();
+  updatePartCounts();
+  if(currentPassage !== 0) switchPassage(currentPassage);
+  updateTimerDisplay();
+  startTimer();
+  startAutosave();
+  showAutosaveSaved();
+}
+function discardSaved(){
+  clearSession();
+  document.getElementById('resume-banner').classList.remove('show');
+  document.getElementById('cand-name').value = '';
+  document.getElementById('cand-num').value = '';
+}
+
+function restoreAnswersUI(){
+  for(var id in userAnswers){
+    var val = userAnswers[id];
+    if(!val) continue;
+    var dd = document.getElementById('dd-'+id);
+    if(dd){ dd.value = val; dd.classList.add('answered'); continue; }
+    var fi = document.getElementById(id);
+    if(fi && fi.tagName === 'INPUT'){ fi.value = val; fi.classList.add('answered'); continue; }
+    var tfnWrap = document.querySelector('#'+id+' .tfn-options');
+    if(tfnWrap){
+      tfnWrap.querySelectorAll('.tfn-btn').forEach(function(b){
+        if(b.textContent.trim() === val) b.classList.add('selected');
+      });
+      continue;
+    }
+    var mcqWrap = document.querySelector('#'+id+' .mcq-options');
+    if(mcqWrap){
+      mcqWrap.querySelectorAll('.mcq-opt').forEach(function(l){
+        if(l.textContent.trim().charAt(0) === val) l.classList.add('selected');
+      });
+    }
+  }
+}
+
+function startAutosave(){
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  autosaveInterval = setInterval(function(){ saveSession(false); }, 5000);
+  if(autosaveListenersAdded) return;
+  autosaveListenersAdded = true;
+  document.addEventListener('visibilitychange', function(){ if(document.hidden) saveSession(true); });
+  window.addEventListener('beforeunload', function(){ saveSession(true); });
+}
+
+function startTest(){
+  candidateName = document.getElementById('cand-name').value.trim() || 'Anonymous';
+  candidateNumber = document.getElementById('cand-num').value.trim() || 'N/A';
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('resume-banner').classList.remove('show');
+  clearSession();
+  buildCircles();
+  updatePartCounts();
+  startTimer();
+  startAutosave();
+  saveSession(true);
+}
+function startTimer(){
+  if(timerInterval) clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(function(){
+    if(submitted) return;
+    seconds--;
+    if(seconds <= 0){ clearInterval(timerInterval); submitTest(); return; }
+    updateTimerDisplay();
+  }, 1000);
+}
+function updateTimerDisplay(){
+  timerEl.textContent = formatTime(Math.max(0,seconds));
+  timerEl.classList.toggle('warn', seconds < 300);
+}
+
+function switchPassage(idx){
+  currentPassage = idx;
+  document.querySelectorAll('.part-tab').forEach(function(t,i){ t.classList.toggle('active', i===idx); });
+  document.querySelectorAll('.passage-content').forEach(function(p,i){ p.classList.toggle('active', i===idx); });
+  document.querySelectorAll('#qs-0,#qs-1,#qs-2').forEach(function(q,i){ q.style.display = i===idx ? '' : 'none'; });
+  buildCircles();
+  document.getElementById('questions-panel').scrollTop = 0;
+  document.getElementById('passage-panel').scrollTop = 0;
+  saveSession(true);
+}
+function buildCircles(){
+  var wrap = document.getElementById('q-circles');
+  wrap.innerHTML = '';
+  var range = PART_RANGES[currentPassage];
+  var start = range[0], end = range[1];
+  for(var i=start;i<=end;i++){
+    var d = document.createElement('div');
+    d.className = 'q-circle';
+    d.textContent = i;
+    var a = userAnswers['q'+i];
+    if(a && a.toString().trim()) d.classList.add('answered');
+    d.onclick = (function(n){ return function(){ scrollToQ(n); }; })(i);
+    wrap.appendChild(d);
+  }
+}
+function updatePartCounts(){
+  PART_RANGES.forEach(function(r, idx){
+    var s = r[0], e = r[1], a = 0;
+    for(var i=s;i<=e;i++){ if(userAnswers['q'+i] && userAnswers['q'+i].toString().trim()) a++; }
+    document.getElementById('pcount-'+idx).textContent = a + ' of ' + (e-s+1);
+  });
+}
+function scrollToQ(num){
+  var p = num<=13?0:num<=27?1:2;
+  if(p !== currentPassage) switchPassage(p);
+  setTimeout(function(){
+    var el = document.getElementById('q'+num);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+  },50);
+}
+function prevQ(){ document.getElementById('questions-panel').scrollBy({top:-240,behavior:'smooth'}); }
+function nextQ(){ document.getElementById('questions-panel').scrollBy({top:240,behavior:'smooth'}); }
+
+function selectTFN(btn, qId, val){
+  btn.closest('.tfn-options').querySelectorAll('.tfn-btn').forEach(function(b){ b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectMCQ(label, qId, val){
+  label.closest('.mcq-options').querySelectorAll('.mcq-opt').forEach(function(l){ l.classList.remove('selected'); });
+  label.classList.add('selected');
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function selectDropdown(sel, qId){
+  var val = sel.value;
+  sel.classList.toggle('answered', !!val);
+  userAnswers[qId] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+function markFill(id){
+  var el = document.getElementById(id);
+  var val = el.value.trim();
+  el.classList.toggle('answered', val.length > 0);
+  userAnswers[id] = val;
+  updatePartCounts(); buildCircles(); saveSession(true);
+}
+
+/* ============================================================
+   HIGHLIGHT / NOTE TOOLBAR
+   ============================================================ */
+var _savedRange = null;
+function hideSelToolbar(){ var tb=document.getElementById('sel-toolbar'); if(tb) tb.style.display='none'; _savedRange=null; }
+function showSelToolbar(x,y){
+  var tb=document.getElementById('sel-toolbar'); if(!tb) return;
+  tb.style.display='block';
+  var tw=tb.offsetWidth||140, th=tb.offsetHeight||36;
+  var left=x-tw/2, top=y-th-10;
+  if(left+tw>window.innerWidth-8) left=window.innerWidth-tw-8;
+  if(left<8) left=8;
+  if(top<60) top=y+12;
+  tb.style.left=left+'px'; tb.style.top=top+'px';
+}
+function getPassageSelection(){
+  var sel=window.getSelection();
+  if(!sel||sel.isCollapsed||sel.rangeCount===0) return null;
+  var range=sel.getRangeAt(0);
+  var p1=document.getElementById('passage-panel');
+  var p2=document.getElementById('questions-panel');
+  var node=range.commonAncestorContainer;
+  if(!((p1&&p1.contains(node))||(p2&&p2.contains(node)))) return null;
+  if(!sel.toString().trim()) return null;
+  var frag=range.cloneContents();
+  if(frag.querySelector && frag.querySelector('input,select,textarea,button,label')) return null;
+  return {sel:sel,range:range};
+}
+function onPassageMouseUp(e){
+  setTimeout(function(){
+    var data=getPassageSelection();
+    if(!data){ var tb=document.getElementById('sel-toolbar'); if(e&&e.target&&tb&&tb.contains(e.target)) return; hideSelToolbar(); return; }
+    _savedRange=data.range.cloneRange();
+    var rect=data.range.getBoundingClientRect();
+    showSelToolbar(rect.left+rect.width/2, rect.top);
+  },10);
+}
+function applyMark(cls){
+  if(!_savedRange) return;
+  try{ var m=document.createElement('mark'); m.className=cls; _savedRange.surroundContents(m); }
+  catch(e){ try{ var f=_savedRange.extractContents(); var m2=document.createElement('mark'); m2.className=cls; m2.appendChild(f); _savedRange.insertNode(m2); }catch(e2){} }
+  var s=window.getSelection(); if(s) s.removeAllRanges();
+  hideSelToolbar();
+}
+(function(){
+  var hl=document.getElementById('sel-hl-btn');
+  if(hl) hl.addEventListener('mousedown',function(e){e.preventDefault();applyMark('hl');});
+  var nb=document.getElementById('sel-note-btn');
+  if(nb) nb.addEventListener('mousedown',function(e){
+    e.preventDefault();
+    var text=_savedRange?_savedRange.toString().trim():'';
+    applyMark('hl-note');
+    if(text){ var ta=document.getElementById('notepad-text'); if(ta){ ta.value+=(ta.value&&!ta.value.endsWith('\n')?'\n':'')+'\u2022 '+text; saveSession(true); var p=document.getElementById('notepad-panel'); if(p&&p.classList.contains('hidden')) toggleNotepad(); } }
+  });
+  var pp=document.getElementById('passage-panel');
+  if(pp) pp.addEventListener('mouseup',onPassageMouseUp);
+  var qp=document.getElementById('questions-panel');
+  if(qp) qp.addEventListener('mouseup',onPassageMouseUp);
+  document.addEventListener('mousedown',function(e){ var tb=document.getElementById('sel-toolbar'); if(!tb||tb.style.display==='none') return; if(tb.contains(e.target)) return; setTimeout(function(){ var s=window.getSelection(); if(!s||s.isCollapsed) hideSelToolbar(); },150); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') hideSelToolbar(); });
+  if(pp) pp.addEventListener('scroll',hideSelToolbar);
+  if(qp) qp.addEventListener('scroll',hideSelToolbar);
+})();
+
+function toggleNotepad(){
+  var panel=document.getElementById('notepad-panel');
+  var btn=document.getElementById('notepad-btn');
+  panel.classList.toggle('hidden');
+  btn.classList.toggle('active', !panel.classList.contains('hidden'));
+  if(!panel.classList.contains('hidden')) document.getElementById('notepad-text').focus();
+  saveSession(true);
+}
+function toggleFullscreen(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function(){});
+  else document.exitFullscreen().catch(function(){});
+}
+document.getElementById('notepad-text').addEventListener('input', function(){ saveSession(true); });
+
+/* ============================================================
+   SCORING
+   ============================================================ */
+function getBandScore(c){
+  if(c>=39) return {band:'9.0',level:'Expert User'};
+  if(c>=37) return {band:'8.5',level:'Very Good User'};
+  if(c>=35) return {band:'8.0',level:'Very Good User'};
+  if(c>=33) return {band:'7.5',level:'Good User'};
+  if(c>=30) return {band:'7.0',level:'Good User'};
+  if(c>=27) return {band:'6.5',level:'Competent User'};
+  if(c>=23) return {band:'6.0',level:'Competent User'};
+  if(c>=19) return {band:'5.5',level:'Modest User'};
+  if(c>=15) return {band:'5.0',level:'Modest User'};
+  if(c>=13) return {band:'4.5',level:'Limited User'};
+  if(c>=10) return {band:'4.0',level:'Limited User'};
+  return {band:'3.5',level:'Extremely Limited'};
+}
+function normalize(s){
+  return (s||'').toString().trim().toLowerCase().replace(/[()]/g,'').replace(/\s+/g,' ').replace(/\.$/,'');
+}
+function checkCorrect(id){
+  var ans = ANSWERS[id];
+  var user = (userAnswers[id]||'').toString().trim();
+  if(!user) return null;
+  var nU = normalize(user);
+  if(ALT[id]){ for(var k=0;k<ALT[id].length;k++){ if(nU === normalize(ALT[id][k])) return true; } }
+  return nU === normalize(ans);
+}
+function correctAnswerLabel(id){
+  return ANSWERS[id];
+}
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function confirmSubmit(){
+  var count=0;
+  for(var i=1;i<=40;i++){ if(userAnswers['q'+i]&&userAnswers['q'+i].toString().trim()) count++; }
+  document.getElementById('sc-answered').textContent=count;
+  document.getElementById('sc-unanswered').textContent=40-count;
+  document.getElementById('sc-pct').textContent=Math.round(count/40*100)+'%';
+  document.getElementById('score-grid').style.display='grid';
+  document.getElementById('submit-modal').classList.remove('hidden');
+}
+function closeModal(){ document.getElementById('submit-modal').classList.add('hidden'); }
+
+function submitTest(){
+  submitted=true;
+  if(timerInterval) clearInterval(timerInterval);
+  if(autosaveInterval) clearInterval(autosaveInterval);
+  document.getElementById('submit-modal').classList.add('hidden');
+  clearSession();
+
+  var correct=0, wrong=0, unanswered=0;
+  var tbody=document.getElementById('ans-table-body');
+  tbody.innerHTML='';
+  var pdfRows=[];
+
+  for(var num=1;num<=40;num++){
+    var id='q'+num;
+    var result=checkCorrect(id);
+    var userRaw=(userAnswers[id]||'').toString().trim();
+    var correctAns=correctAnswerLabel(id);
+
+    var yourCell, resultCell, resText;
+    if(result===null){
+      unanswered++;
+      yourCell='<span class="blank">&mdash;</span>';
+      resultCell='<span class="blank">Unanswered</span>';
+      resText='Unanswered';
+    } else if(result){
+      correct++;
+      yourCell='<span class="ok">'+escapeHtml(userRaw)+'</span>';
+      resultCell='<span class="ok">&#10003; Correct</span>';
+      resText='Correct';
+    } else {
+      wrong++;
+      yourCell='<span class="bad">'+escapeHtml(userRaw||'-')+'</span>';
+      resultCell='<span class="bad">&#10007; Incorrect</span>';
+      resText='Incorrect';
+    }
+
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td style="font-weight:700;color:var(--accent)">'+num+'</td><td>'+yourCell+'</td><td><strong>'+escapeHtml(correctAns)+'</strong></td><td>'+resultCell+'</td>';
+    tbody.appendChild(tr);
+    pdfRows.push([String(num), userRaw||'-', correctAns, resText]);
+  }
+
+  document.getElementById('r-correct').textContent=correct;
+  document.getElementById('r-wrong').textContent=wrong;
+  document.getElementById('r-unanswered').textContent=unanswered;
+  var bs=getBandScore(correct);
+  document.getElementById('r-band').textContent=bs.band;
+  document.getElementById('r-band-label').textContent=bs.level+' \u00B7 '+correct+' / 40 correct';
+  document.getElementById('results-cand').textContent='Candidate: '+candidateName+'  \u00B7  Number: '+candidateNumber;
+  document.getElementById('results-modal').classList.remove('hidden');
+  window._lastPdfData={correct:correct,wrong:wrong,unanswered:unanswered,bs:bs,pdfRows:pdfRows};
+  try{
+    generateResultsPDF(correct,wrong,unanswered,bs,pdfRows);
+    document.getElementById('pdf-status').textContent='Candidate response PDF downloaded.';
+  }catch(e){
+    document.getElementById('pdf-status').textContent='PDF download failed. Use the button below.';
+    document.getElementById('pdf-status').style.color='var(--accent-red)';
+  }
+}
+function redownloadPDF(){
+  if(!window._lastPdfData) return;
+  var d=window._lastPdfData;
+  try{ generateResultsPDF(d.correct,d.wrong,d.unanswered,d.bs,d.pdfRows); }catch(e){}
+}
+
+function generateResultsPDF(correct,wrong,unanswered,bandInfo,rows){
+  var jsPDF=window.jspdf.jsPDF;
+  var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  var pageWidth=doc.internal.pageSize.getWidth();
+  doc.setFillColor(30,58,95); doc.rect(0,0,pageWidth,28,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(16); doc.setFont('helvetica','bold');
+  doc.text('IELTS Academic Reading \u00B7 Test 315',14,12);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Candidate Response Report',14,20);
+  doc.text(new Date().toLocaleString(),pageWidth-14,20,{align:'right'});
+  doc.setTextColor(26,24,20); doc.setFontSize(11); doc.setFont('helvetica','bold');
+  doc.text('Candidate Name:',14,38); doc.setFont('helvetica','normal'); doc.text(candidateName||'Anonymous',52,38);
+  doc.setFont('helvetica','bold'); doc.text('Candidate Number:',14,45); doc.setFont('helvetica','normal'); doc.text(candidateNumber||'-',58,45);
+  doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.text('Score Summary',14,56);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Correct: '+correct+'    Incorrect: '+wrong+'    Unanswered: '+unanswered,14,64);
+  doc.setFont('helvetica','bold'); doc.setTextColor(30,58,95); doc.setFontSize(14);
+  doc.text('Band Score: '+bandInfo.band+'  ('+bandInfo.level+')',14,72);
+  doc.setTextColor(26,24,20); doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text(correct+' / 40 correct',14,79);
+  doc.autoTable({
+    startY:86, head:[['Q','Your Answer','Correct Answer','Result']], body:rows, theme:'grid',
+    styles:{fontSize:8,cellPadding:2.2,overflow:'linebreak',valign:'middle'},
+    headStyles:{fillColor:[30,58,95],textColor:255,fontStyle:'bold',fontSize:8},
+    columnStyles:{0:{cellWidth:18,halign:'center'},1:{cellWidth:50},2:{cellWidth:70},3:{cellWidth:35,halign:'center'}},
+    didParseCell:function(data){
+      if(data.section==='body'&&data.column.index===3){
+        var t=data.cell.raw||'';
+        if(t.indexOf('Correct')!==-1 && t.indexOf('Incorrect')===-1){data.cell.styles.textColor=[5,150,105];data.cell.styles.fontStyle='bold';}
+        else if(t.indexOf('Incorrect')!==-1){data.cell.styles.textColor=[225,29,72];data.cell.styles.fontStyle='bold';}
+        else {data.cell.styles.textColor=[107,114,128];data.cell.styles.fontStyle='italic';}
+      }
+    },
+    margin:{left:14,right:14}
+  });
+  var finalY=doc.lastAutoTable.finalY+12;
+  doc.setFontSize(8); doc.setTextColor(107,114,128);
+  doc.text('This report shows your answers against the official answer key.',14,finalY);
+  var safeName=(candidateName||'Candidate').replace(/[^a-zA-Z0-9]/g,'_').slice(0,20);
+  var safeNum=(candidateNumber||'NA').replace(/[^a-zA-Z0-9]/g,'_').slice(0,15);
+  doc.save('IELTS_Test315_'+safeName+'_'+safeNum+'_'+new Date().toISOString().slice(0,10)+'.pdf');
+}
+
+/* ============================================================
+   RESIZER
+   ============================================================ */
+var resizer=document.getElementById('resizer');
+var passPanel=document.getElementById('passage-panel');
+var isResizing=false,startX,startW;
+resizer.addEventListener('mousedown',function(e){ isResizing=true; startX=e.clientX; startW=passPanel.offsetWidth; resizer.classList.add('dragging'); document.body.style.userSelect='none'; document.body.style.cursor='col-resize'; });
+document.addEventListener('mousemove',function(e){ if(!isResizing) return; var dx=e.clientX-startX; passPanel.style.width=Math.min(Math.max(startW+dx,280),window.innerWidth-320)+'px'; });
+document.addEventListener('mouseup',function(){ if(isResizing){ isResizing=false; resizer.classList.remove('dragging'); document.body.style.userSelect=''; document.body.style.cursor=''; saveSession(true); } });
+
+(function(){
+  var saved = loadSession();
+  if(saved && saved.passageWidth){ document.getElementById('passage-panel').style.width = saved.passageWidth; }
+})();
+</script>
+</body>
+</html>
